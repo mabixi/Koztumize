@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<nav>
+<aside>
   {% for cat in models.keys() %}
   <h2>{{ cat }}</h2>
     <ul>
@@ -9,5 +9,5 @@
       {% endfor %}
     </ul>
   {% endfor %}
-</nav>
+</aside>
 {% endblock content %}
