@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 <aside>
-  {% for cat in models.keys() %}
-  <h2>{{ cat }}</h2>
+  {% for category in models.keys() %}
+  <h2>{{ category }}</h2>
     <ul>
-      {% for modele in models[cat]  %}
-      <li><a href="">{{ modele }}</a></li>
+      {% for model in models[category] %}
+      <li><a href="{{ url_for('edit', category=category, filename=model[:-4]) }}">{{ model[:-4] }}</a></li>
       {% endfor %}
     </ul>
   {% endfor %}
