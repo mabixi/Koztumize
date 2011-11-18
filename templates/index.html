@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<nav>
+  Courrier :
+  <ul>
+    {% for modele in range(list_courrier|length) %}
+    {% set link = list_courrier[modele] %}
+    <li><a href="static/courrier/{{link}}">{{link}}</a></li>
+    {% endfor %}
+  </ul>
+  Factures :
+  <ul>
+    {% for modele in  range(list_facture|length) %}
+    <li><a href="">{{list_facture[facture]}}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endblock content %}

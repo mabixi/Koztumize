@@ -1,0 +1,30 @@
+/*
+  ----------
+  - Footer -
+  ----------
+*/
+
+footer {
+  font-family: sans-serif;
+  margin-top: 50px;
+  padding: 3px 0 0 0;
+  text-align: center;
+}
+
+footer ul {
+  background: url(img/footer.png) no-repeat top center;
+  padding: 20px 0;
+}
+
+footer li { 
+  display: inline;
+}
+
+footer li a {
+  color: #5F8FE1 !important;
+  padding: 0 5px;
+}
+
+footer li a:hover {
+  color: black !important;
+}

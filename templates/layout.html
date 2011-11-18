@@ -1,0 +1,20 @@
+<!Doctype html>
+<html>
+  <head>  
+    <title>Facture</title>
+    <link href="{{url_for('static',filename='style.css')}}" media="screen" type="text/css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>{% block header %}{% endblock header %}</header>
+    <section>
+      {% block content %}
+      {% endblock content %}
+    </section>
+    <footer>
+      <ul>
+        <li><a href="http://community.kozea.org/">A Kozea Project</a></li>
+        <li><a href="http://validator.w3.org/check?uri=referer">Optimized for Standards</a></li>
+      </ul>
+    </footer>
+  </body>
+</html>
