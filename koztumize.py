@@ -44,7 +44,7 @@ class Editable(Directive):
     has_content = False
 
     def run(self):
-        content = '<div contenteditable="true" class="editable">%s</div>' % self.arguments[0] if self.arguments else ''
+        content = '<div contenteditable="true" class="editable" onclick="if(this.innerHTML==\'%s\')this.innerHTML=\'\'">%s</div>' % (self.arguments[0] if self.arguments else '', self.arguments[0] if self.arguments else '')
         return [docutils.nodes.raw('', content, format='html')]
 
 directives.register_directive('editable', Editable)
