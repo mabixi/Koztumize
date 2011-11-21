@@ -3,6 +3,7 @@
 from __future__ import with_statement
 from flask import Flask, request, redirect, url_for, render_template, flash
 from docutils.writers.html4css1 import Writer
+from docutils.parsers.rst import directives, Directive
 import docutils.core
 import os
 
@@ -27,12 +28,26 @@ def edit(category, filename):
 
 
 def rest_to_html(category, filename):
+    args = {'stylesheet_path': 'static/style.css'}
     parts = docutils.core.publish_parts(
         source=open(os.path.join(
             'static', 'model', category, filename + '.rst')).read(),
-        writer=Writer())
-    text = parts['html_body']
+        writer=Writer(), settings_overrides=args)
+    text = parts['whole']
     return text
+
+
+class Editable(Directive):
+    required_arguments = 0
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = '<p contenteditable="true">---</p>'
+        return [docutils.nodes.raw('', content, format='html')]
+
+directives.register_directive('editable', Editable)
 
 
 if __name__ == '__main__':

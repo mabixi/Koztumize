@@ -1,11 +1,13 @@
-
 Destinataire
 ============
  Kozea, 1 rue Marie-Louise et Louis Baumer
 
 Objet
 =====
- edite moi Edith
+
+Qui aime les poneys ? 
+
+.. editable::
 
 Civilités
 =========
