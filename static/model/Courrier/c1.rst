@@ -1,31 +1,19 @@
 |date|
 
-Destinataire
-============
-.. editable::
-
-Objet
-=====
-.. editable::
+.. editable:: Destinataire
 
 Référence
-=========
-.. editable::
+  .. editable:: Ref
 
-Civilités
-=========
-.. editable::
+Objet
+  .. editable:: Obj
 
-Corps
-=====
-.. editable::
+.. editable:: Civilités
 
-Formule de salutation
-=====================
-.. editable::
 
-Signature
-=========
-.. editable::
+.. editable:: Corps
+
+
+.. editable:: Formule de salutation
 
 .. |date| date:: %d %b %Y
