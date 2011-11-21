@@ -1,14 +1,31 @@
+|date|
+
 Destinataire
 ============
- Kozea, 1 rue Marie-Louise et Louis Baumer
+.. editable::
 
 Objet
 =====
+.. editable::
 
-Qui aime les poneys ? 
-
+Référence
+=========
 .. editable::
 
 Civilités
 =========
- Mademoiselle, Madame ou Monsieur
+.. editable::
+
+Corps
+=====
+.. editable::
+
+Formule de salutation
+=====================
+.. editable::
+
+Signature
+=========
+.. editable::
+
+.. |date| date:: %d %b %Y

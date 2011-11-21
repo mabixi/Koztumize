@@ -44,7 +44,7 @@ class Editable(Directive):
     has_content = False
 
     def run(self):
-        content = '<p contenteditable="true">---</p>'
+        content = '<p contenteditable="true" class="editable"></p>'
         return [docutils.nodes.raw('', content, format='html')]
 
 directives.register_directive('editable', Editable)
