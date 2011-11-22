@@ -1,14 +1,15 @@
+
 |date|
 
 .. editable:: Destinataire
 
-Référence
+Reference
   .. editable:: Ref
 
 Objet
   .. editable:: Obj
 
-.. editable:: Civilités
+.. editable:: Civilites
 
 
 .. editable:: Corps

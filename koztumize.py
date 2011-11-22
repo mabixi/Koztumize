@@ -6,6 +6,7 @@ from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 import docutils.core
 import os
+import weasy
 
 
 app = Flask(__name__)
@@ -14,17 +15,36 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     models = {}
+    html = request.args.get('html')
 
-    for categ in os.listdir('static/model'):
-        models[categ] = []
-        for model in os.listdir('static/model/' + categ):
-            models[categ].append(model)
-    return render_template('index.html', models=models)
+    if html:
+        x = open('templates/print.html', 'w')
+        x.write(html)
+        x.close()
+        document = weasy.PDFDocument.from_file('http://localhost:5000/')
+        document.write_to('result.pdf')
+        return  render_template('print.html')
+    else:
+        for categ in os.listdir('static/model'):
+            models[categ] = []
+            for model in os.listdir('static/model/' + categ):
+                models[categ].append(model)
+        return render_template('index.html', models=models)
 
 
 @app.route('/edit/<category>/<filename>')
 def edit(category, filename):
+    return render_template('base.html', category=category, filename=filename)
+
+
+@app.route('/model/<category>/<filename>')
+def model(category, filename):
     return rest_to_html(category, filename)
+
+
+def html():
+    html = request.args.get('html')
+    raise
 
 
 def rest_to_html(category, filename):
@@ -48,6 +68,19 @@ class Editable(Directive):
         return [docutils.nodes.raw('', content, format='html')]
 
 directives.register_directive('editable', Editable)
+
+
+class Toolbar(Directive):
+    required_arguments = 0
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = '<div class="toolbar"><input type="button" value="Generer le PDF" onclick="send(document.body.innerHTML);"/></div>'
+        return [docutils.nodes.raw('', content, format='html')]
+
+directives.register_directive('toolbar', Toolbar)
 
 
 if __name__ == '__main__':
