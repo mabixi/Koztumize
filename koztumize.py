@@ -43,18 +43,6 @@ def model(category, filename):
     return rest_to_html(category, filename)
 
 
-@app.route('/generate')
-def generate():
-    html = request.args.get('html')
-
-    if html:
-        document = weasy.PDFDocument.from_string(
-            html, user_stylesheets=[
-                cssutils.parseFile('static/style.css')])
-        document.write_to('tmp/result.pdf')
-        return send_file('tmp/result.pdf')
-
-
 def rest_to_html(category, filename):
     args = {'stylesheet_path': 'static/style.css'}
     parts = docutils.core.publish_parts(

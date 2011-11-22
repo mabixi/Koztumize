@@ -1,0 +1,51 @@
+/*
+  -------------
+  - HTML/Body -
+  -------------
+*/
+html{
+    
+}
+
+body{
+    background:#5F8FE1;
+    font-family:sans-serif;
+    margin:0;
+    padding:0;
+}
+
+/*
+  -----------
+  - Section -
+  -----------
+*/
+
+body>section{
+    position:relative;
+    top:0;
+    left:0;
+    padding:0.25em;
+    text-align:center;
+}
+
+input[type=button]{
+    background:#222;
+    border:1px solid #222;
+    color:#fff;
+    border-radius:5px;
+    font-weight:bold;
+    
+}
+
+iframe{
+  position:relative;
+  border:1px solid #222;
+  width:90%;
+  left:5%;
+}
+
+/*
+  ----------
+  - Footer -
+  ----------
+*/
