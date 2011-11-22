@@ -1,3 +1,13 @@
+@font-face{
+    font-family: 'ubuntu';
+    src:url('Ubuntu.ttf');
+}
+
+@font-face{
+    font-family: 'josefin';
+    src:url('Josefin.otf');
+}
+
 /*
   -------------
   - HTML/Body -
@@ -8,8 +18,8 @@ html{
 }
 
 body{
-    background:#fff;
-    font-family:sans-serif;
+    background:url('img/bkgd.png');
+    font-family:'ubuntu', sans-serif;
 }
 
 /*
@@ -27,18 +37,29 @@ section>aside{
     margin:auto;
     width:60%;
     padding:1em;
-    border-left:1px solid #111;
 }
 
 section>aside h2{
-    background:rgba(200,200,200,0.5);
+    background:rgba(254,217,143,0.2);
     border-radius:5px;
     padding:0.2em;
-    text-shadow:0 0 8px #000;
+    text-shadow:0 0 0.03em #000;
+    font-family:'josefin';
 }
 
 section>aside ul{
-    background:
+    list-style:none;
+    font-family:'ubuntu',sans-serif;
+}
+
+section>aside ul li{
+    padding:0.25em;
+}
+
+section>aside ul li a{
+    color:#222;
+    text-decoration:none;
+    font-family:'ubuntu',sans-serif;
 }
 /*
   -----------
@@ -99,7 +120,8 @@ section>aside ul{
   ----------
 */
 footer {
-  font-family: sans-serif;
+  font-family:'josefin', sans-serif;
+  font-size:1em;
   margin-top: 50px;
   padding: 3px 0 0 0;
   text-align: center;
@@ -115,7 +137,7 @@ footer li {
 }
 
 footer li a {
-  color: #5F8FE1 !important;
+  color: #222 !important;
   padding: 0 5px;
 }
 
