@@ -20,14 +20,11 @@ def index():
     html = request.args.get('html')
 
     if html:
-        x = open('templates/print.html', 'w')
-        x.write(html)
-        x.close()
-        document = weasy.PDFDocument.from_file(
-            'templates/print.html', user_stylesheets=[
+        document = weasy.PDFDocument.from_string(
+            html, user_stylesheets=[
                 cssutils.parseFile('static/style.css')])
-        document.write_to('result.pdf')
-        return send_file('result.pdf')
+        document.write_to('tmp/result.pdf')
+        return send_file('tmp/result.pdf')
     else:
         for categ in os.listdir('static/model'):
             models[categ] = []
@@ -44,11 +41,6 @@ def edit(category, filename):
 @app.route('/model/<category>/<filename>')
 def model(category, filename):
     return rest_to_html(category, filename)
-
-
-def html():
-    html = request.args.get('html')
-    raise
 
 
 def rest_to_html(category, filename):
@@ -72,19 +64,6 @@ class Editable(Directive):
         return [docutils.nodes.raw('', content, format='html')]
 
 directives.register_directive('editable', Editable)
-
-
-class Toolbar(Directive):
-    required_arguments = 0
-    optional_arguments = 0
-    final_argument_whitespace = True
-    has_content = False
-
-    def run(self):
-        content = '<div class="toolbar"><input type="button" value="Generer le PDF" onclick="send(document.body.innerHTML);"/></div>'
-        return [docutils.nodes.raw('', content, format='html')]
-
-directives.register_directive('toolbar', Toolbar)
 
 
 if __name__ == '__main__':
