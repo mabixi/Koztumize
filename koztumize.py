@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import with_statement
-from flask import Flask, request, redirect, url_for, render_template, flash
+from flask import (Flask, request, redirect, url_for, render_template, flash,
+                   send_file)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 import docutils.core
 import os
 import weasy
+import cssutils
 
 
 app = Flask(__name__)
@@ -21,9 +23,11 @@ def index():
         x = open('templates/print.html', 'w')
         x.write(html)
         x.close()
-        document = weasy.PDFDocument.from_file('http://localhost:5000/')
+        document = weasy.PDFDocument.from_file(
+            'templates/print.html', user_stylesheets=[
+                cssutils.parseFile('static/style.css')])
         document.write_to('result.pdf')
-        return  render_template('print.html')
+        return send_file('result.pdf')
     else:
         for categ in os.listdir('static/model'):
             models[categ] = []
