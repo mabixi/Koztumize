@@ -30,6 +30,20 @@ def index():
         return render_template('index.html', models=models)
 
 
+@app.route('/generate', methods=('POST', 'GET'))
+def generate():
+    document = weasy.PDFDocument.from_string(
+            request.form['html_content'], user_stylesheets=[
+                cssutils.parseFile('static/model.css')])
+    document.write_to('tmp/result.pdf')
+    return send_file('tmp/result.pdf')
+
+
+@app.route('/download')
+def download():
+    return send_file('tmp/result.pdf')
+
+
 @app.route('/edit/<category>/<filename>')
 def edit(category, filename):
     return render_template('base.html', category=category, filename=filename)
@@ -57,13 +71,9 @@ class Editable(Directive):
     has_content = False
 
     def run(self):
-        content = '''
-            <div contenteditable="true" class="editable"
-                 onclick="if(this.innerHTML==\'%s\')this.innerHTML=\'\'">
-              %s
-            </div>''' % (
-                self.arguments[0] if self.arguments else '',
-                self.arguments[0] if self.arguments else '')
+        content = (
+        '<div contenteditable="true" title="%s"></div>' % (
+            self.arguments[0] if self.arguments else ''))
         return [docutils.nodes.raw('', content, format='html')]
 
 directives.register_directive('editable', Editable)

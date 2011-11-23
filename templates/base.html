@@ -2,15 +2,26 @@
 <meta charset="UTF-8" />
 <head>
   <title>Koztumize - {{ filename }} </title>
-  <link href="{{url_for('static',filename='style.css')}}" media="screen" type="text/css" rel="stylesheet" />
+  <link href="{{url_for('static',filename='style.css')}}" media="screen" type="text/css" rel="stylesheet" />  
 </head>
 <body>
   <header><h2>{{ filename }}</h2></header>
   <section class="toolbar">
-    <a href="{{ url_for('index') }}">> Retour</a>
-    <input type="button" value="Générer le PDF" onclick="window.location.href='http://localhost:5000/?html='+document.getElementById('iframe').contentDocument.body.innerHTML;"/>
-    <input type="button" value="Réinitialiser" onclick="window.location.reload();"/>
-    <input type="button" value="Prévisualiser le PDF" onclick="window.location.href='http://localhost:5000/?html='+document.getElementById('iframe').contentDocument.body.innerHTML;"/>
+    <ul>
+      <li><a href="{{ url_for('index') }}">> Retour</a>
+      <li>
+        <form action="{{ url_for('generate') }}" method="post">    
+          <input type="hidden"id="html_content" value="" name="html_content"  />
+          <input type="submit" value="Générer le PDF" onclick="document.getElementById('html_content').value=document.getElementById('iframe').contentDocument.body.innerHTML;" name="generate"/>
+        </form>
+      </li>
+      <li>
+        <input type="button" value="Réinitialiser" onclick="window.location.reload();"/>
+      </li>
+      <li>
+        <input type="button" value="Télécharger le PDF" onclick="document.location.href='{{ url_for('download') }}'"/>
+      </li>
+    <ul>
   </section>
   <iframe id="iframe" src="http://localhost:5000/model/{{ category }}/{{ filename }}" width="100%" height="600"></iframe>
   <footer></footer>
