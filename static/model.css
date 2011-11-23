@@ -1,19 +1,24 @@
 /*
-  -------------
-  - HTML/Body -
-  -------------
+  ----------
+  - Iframe -
+  ----------
 */
-html{
-    
-}
 
-body{
+div[contenteditable=true] {
+    padding:0.25em;
+    min-height:2em;
+    max-width:30em;
     background:#fff;
-    margin:0;
 }
 
-/*
-  ----------
-  - Common -
-  ----------
-*/
+div[contenteditable=true]:hover{
+    border:1px solid #eee;
+}
+
+div[contenteditable=true]:empty:before {
+    content: attr(title);
+    display: block;
+    margin-bottom: -1em;
+    height: 1em;
+    opacity: 0.2;
+}
