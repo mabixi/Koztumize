@@ -20,6 +20,7 @@ html{
 body{
     background:url('img/bkgd.png');
     font-family:'ubuntu', sans-serif;
+    margin:0;
 }
 
 /*
@@ -27,10 +28,22 @@ body{
   - Common -
   ----------
 */
+header>h1{
+    font-family:'josefin';
+    text-align:center;
+    font-size:2.1em;
+    padding:0.3em;
+    background:rgba(255,255,255,0.25);
+    border:1px solid #fff;
+}
 
 h1,h2,h3,h4,h5,h6{
     font-family:sans-serif;
     color:#111;
+}
+
+a:hover{
+    text-decoration:underline;
 }
 
 section>aside{

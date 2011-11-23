@@ -1,5 +1,21 @@
 /*
   -------------
+  - Font Face -
+  -------------
+*/
+@font-face{
+    font-family: 'ubuntu';
+    src:url('Ubuntu.ttf');
+}
+
+@font-face{
+    font-family: 'josefin';
+    src:url('Josefin.otf');
+}
+
+
+/*
+  -------------
   - HTML/Body -
   -------------
 */
@@ -19,6 +35,13 @@ body{
   - Section -
   -----------
 */
+header>h2{
+    font-family:'josefin';
+    text-align:center;
+    padding:0.3em;
+    background:rgba(255,255,255,0.25);
+    border:1px solid #fff;
+}
 
 body>section{
     position:relative;
@@ -26,6 +49,15 @@ body>section{
     left:0;
     padding:0.25em;
     text-align:center;
+}
+
+body>section>a{
+    position:relative;
+    left:-20em;
+    font-size:0.8em;
+    font-family:'josefin',sans-serif;
+    letter-spacing:0.05em;
+    color:#222;
 }
 
 input[type=button]{

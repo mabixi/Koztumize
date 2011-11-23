@@ -1,11 +1,13 @@
 <!Doctype html>
 <meta charset="UTF-8" />
 <head>
+  <title>Koztumize - {{ filename }} </title>
   <link href="{{url_for('static',filename='base.css')}}" media="screen" type="text/css" rel="stylesheet" />
 </head>
 <body>
-  <header></header>
+  <header><h2>{{ filename }}</h2></header>
   <section>
+    <a href="{{ url_for('index') }}">> Retour</a>
     <input type="button" value="Générer le PDF" onclick="window.location.href='http://localhost:5000/?html='+document.getElementById('iframe').contentDocument.body.innerHTML;"/>
     <input type="button" value="Réinitialiser" onclick="window.location.reload();"/>
     <input type="button" value="Prévisualiser le PDF" onclick="window.location.href='http://localhost:5000/?html='+document.getElementById('iframe').contentDocument.body.innerHTML;"/>
