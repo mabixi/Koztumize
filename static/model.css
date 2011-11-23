@@ -20,5 +20,5 @@ div[contenteditable=true]:empty:before {
     display: block;
     margin-bottom: -1em;
     height: 1em;
-    opacity: 0.2;
+    opacity: 0.3;
 }
