@@ -17,19 +17,10 @@ app = Flask(__name__)  # pylint: disable=C0103
 @app.route('/')
 def index():
     """Index is the main route of the application."""
-    html = request.args.get('html')
-
-    if html:
-        document = weasy.PDFDocument.from_string(
-            html, user_stylesheets=[
-                cssutils.parseFile('static/model.css')])
-        document.write_to('tmp/result.pdf')
-        return send_file('tmp/result.pdf')
-    else:
-        models = {
-            category: os.listdir('static/model/' + category)
-            for category in os.listdir('static/model')}
-        return render_template('index.html', models=models)
+    models = {
+    category: os.listdir('static/model/' + category)
+        for category in os.listdir('static/model')}
+    return render_template('index.html', models=models)
 
 
 @app.route('/generate', methods=('POST', 'GET'))
@@ -60,7 +51,7 @@ def model(category, filename):
 
 def rest_to_html(category, filename):
     """Transform the content of a .rst file in HTML"""
-    args = {'stylesheet_path': 'static/style.css'}
+    args = {'stylesheet_path': 'static/model.css'}
     parts = docutils.core.publish_parts(
         source=open(os.path.join(
             'static', 'model', category, filename + '.rst')).read(),

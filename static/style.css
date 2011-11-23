@@ -166,6 +166,7 @@ section>aside ul li a{
     color:#222;
     text-decoration:none;
     font-family:'ubuntu',sans-serif;
+<<<<<<< HEAD
 }/*
   -----------
   - Classes -
@@ -187,7 +188,6 @@ div[contenteditable=true]:empty:before {
     height: 1em;
     opacity: 0.4;
 }
-
 
 /*
   ----------

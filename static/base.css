@@ -1,38 +1,24 @@
 /*
-  -------------
-  - Font Face -
-  -------------
-*/
-
-
-
-/*
-  -------------
-  - HTML/Body -
-  -------------
-*/
-html{
-    
-}
-
-body{
-    margin:0;
-    padding:0;
-}
-
-/*
-  -----------
-  - Section -
-  -----------
-*/
-
-
-
-
-
-
-/*
   ----------
-  - Footer -
+  - Iframe -
   ----------
 */
+
+div[contenteditable=true] {
+    padding:0.25em;
+    min-height:2em;
+    max-width:30em;
+    background:#fff;
+}
+
+div[contenteditable=true]:hover{
+    border:1px solid #eee;
+}
+
+div[contenteditable=true]:empty:before {
+    content: attr(title);
+    display: block;
+    margin-bottom: -1em;
+    height: 1em;
+    opacity: 0.2;
+}
