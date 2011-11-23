@@ -93,7 +93,7 @@ header>h2{
 }
 
 /* toolbar */
-body>section{
+section.toolbar{
     position:relative;
     top:0;
     left:0;
@@ -101,7 +101,7 @@ body>section{
     text-align:center;
 }
 
-body>section>a{
+section.toolbar>a{
     position:relative;
     left:-20em;
     font-size:0.8em;
@@ -110,7 +110,7 @@ body>section>a{
     color:#222;
 }
 
-input[type=button]{
+section.toolbar input[type=button]{
     background:#222;
     border:1px solid #222;
     color:#fff;

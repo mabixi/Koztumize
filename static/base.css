@@ -3,15 +3,7 @@
   - Font Face -
   -------------
 */
-@font-face{
-    font-family: 'ubuntu';
-    src:url('Ubuntu.ttf');
-}
 
-@font-face{
-    font-family: 'josefin';
-    src:url('Josefin.otf');
-}
 
 
 /*
@@ -24,8 +16,6 @@ html{
 }
 
 body{
-    background:url('img/bkgd.png');
-    font-family:sans-serif;
     margin:0;
     padding:0;
 }
