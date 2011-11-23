@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+"""koztumize.py is used to launch the application Koztumize."""
 
 from flask import (
     Flask, request, render_template, send_file)
@@ -15,6 +16,7 @@ app = Flask(__name__)  # pylint: disable=C0103
 
 @app.route('/')
 def index():
+    """Index is the main route of the application."""
     html = request.args.get('html')
 
     if html:
@@ -46,15 +48,18 @@ def download():
 
 @app.route('/edit/<category>/<filename>')
 def edit(category, filename):
+    """This is the route where you can edit the models."""
     return render_template('base.html', category=category, filename=filename)
 
 
 @app.route('/model/<category>/<filename>')
 def model(category, filename):
+    """This is the route that returns the model."""
     return rest_to_html(category, filename)
 
 
 def rest_to_html(category, filename):
+    """Transform the content of a .rst file in HTML"""
     args = {'stylesheet_path': 'static/style.css'}
     parts = docutils.core.publish_parts(
         source=open(os.path.join(
@@ -65,6 +70,7 @@ def rest_to_html(category, filename):
 
 
 class Editable(Directive):
+    """A rest directive who create an editable div in HTML"""
     required_arguments = 0
     optional_arguments = 1
     final_argument_whitespace = True
