@@ -22,7 +22,7 @@ def index():
     if html:
         document = weasy.PDFDocument.from_string(
             html, user_stylesheets=[
-                cssutils.parseFile('static/style.css')])
+                cssutils.parseFile('static/model.css')])
         document.write_to('tmp/result.pdf')
         return send_file('tmp/result.pdf')
     else:

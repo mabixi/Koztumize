@@ -35,47 +35,11 @@ body{
   - Section -
   -----------
 */
-header>h2{
-    font-family:'josefin';
-    text-align:center;
-    padding:0.3em;
-    background:rgba(255,255,255,0.25);
-    border:1px solid #fff;
-}
 
-body>section{
-    position:relative;
-    top:0;
-    left:0;
-    padding:0.25em;
-    text-align:center;
-}
 
-body>section>a{
-    position:relative;
-    left:-20em;
-    font-size:0.8em;
-    font-family:'josefin',sans-serif;
-    letter-spacing:0.05em;
-    color:#222;
-}
 
-input[type=button]{
-    background:#222;
-    border:1px solid #222;
-    color:#fff;
-    border-radius:5px;
-    font-weight:bold;
-    
-}
 
-iframe{
-  position:relative;
-  border:1px solid #222;
-  width:90%;
-  left:5%;
-  background:#fff;
-}
+
 
 /*
   ----------

@@ -14,12 +14,11 @@
   -------------
 */
 html{
-    
+    background:url('img/bkgd.png');
 }
 
 body{
-    background:url('img/bkgd.png');
-    font-family:'ubuntu', sans-serif;
+    
     margin:0;
 }
 
@@ -28,23 +27,18 @@ body{
   - Common -
   ----------
 */
-header>h1{
-    font-family:'josefin';
-    text-align:center;
-    font-size:2.1em;
-    padding:0.3em;
-    background:rgba(255,255,255,0.25);
-    border:1px solid #fff;
+a{
+    text-decoration:none;
 }
-
-h1,h2,h3,h4,h5,h6{
-    font-family:sans-serif;
-    color:#111;
-}
-
 a:hover{
     text-decoration:underline;
 }
+
+/* 
+   ---------------
+   - Index style -
+   ---------------
+*/
 
 section>aside{
     margin:auto;
@@ -75,6 +69,94 @@ section>aside ul li a{
     font-family:'ubuntu',sans-serif;
 }
 /*
+  -------------
+  - Edit Page -
+  -------------
+*/
+
+/* page titles */
+header>h1{
+    font-family:'josefin';
+    text-align:center;
+    font-size:2.1em;
+    padding:0.3em;
+    background:rgba(255,255,255,0.25);
+    border:1px solid #fff;
+}
+
+header>h2{
+    font-family:'josefin';
+    text-align:center;
+    padding:0.3em;
+    background:rgba(255,255,255,0.25);
+    border:1px solid #fff;
+}
+
+/* toolbar */
+body>section{
+    position:relative;
+    top:0;
+    left:0;
+    padding:0.25em;
+    text-align:center;
+}
+
+body>section>a{
+    position:relative;
+    left:-20em;
+    font-size:0.8em;
+    font-family:'josefin',sans-serif;
+    letter-spacing:0.05em;
+    color:#222;
+}
+
+input[type=button]{
+    background:#222;
+    border:1px solid #222;
+    color:#fff;
+    border-radius:5px;
+    font-weight:bold;
+    
+}
+
+/* iframe */
+iframe{
+  position:relative;
+  border:1px solid #222;
+  width:90%;
+  left:5%;
+  background:#fff;
+}
+
+/* index style */
+section>aside{
+    margin:auto;
+    width:60%;
+    padding:1em;
+}
+
+section>aside h2{
+    background:rgba(254,217,143,0.2);
+    border-radius:5px;
+    padding:0.2em;
+    text-shadow:0 0 0.03em #000;
+    font-family:'josefin';
+}
+
+section>aside ul{
+    list-style:none;
+    font-family:'ubuntu',sans-serif;
+}
+
+section>aside ul li{
+    padding:0.25em;
+}
+
+section>aside ul li a{
+    color:#222;
+    text-decoration:none;
+    font-family:'ubuntu',sans-serif;
+}/*
   -----------
   - Classes -
   -----------
@@ -88,9 +170,9 @@ section>aside ul li a{
 }
 
 /*
-  -------
-  - Ids -
-  -------
+  ----------
+  - Iframe -
+  ----------
 */
 #expediteur{
     position:absolute;
