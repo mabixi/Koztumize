@@ -11,7 +11,8 @@
       <li><a href="{{ url_for('index') }}">> Retour</a>
       <li>
         <form action="{{ url_for('generate') }}" method="post">    
-          <input type="hidden"id="html_content" value="" name="html_content"  />
+          <input type="hidden"id="html_content" value="" name="html_content" />
+          <input type="hidden"id="html_content" value="{{ filename }}" name="filename" />
           <input type="submit" value="Générer le PDF" onclick="document.getElementById('html_content').value=document.getElementById('iframe').contentDocument.body.innerHTML;" name="generate"/>
         </form>
       </li>

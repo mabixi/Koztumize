@@ -1,6 +1,5 @@
 @import url("model.css");
 
 div[title=Obj]{
-    position:relative;
-    top:2em;
+    color:#222;
 }

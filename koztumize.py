@@ -27,7 +27,9 @@ def index():
 def generate():
     document = weasy.PDFDocument.from_string(
             request.form['html_content'], user_stylesheets=[
-                cssutils.parseFile('static/model.css')])
+                cssutils.parseFile(
+                    'static/model_styles/'
+                    + request.form['filename'] + '.css')])
     document.write_to('tmp/result.pdf')
     return send_file('tmp/result.pdf')
 
@@ -51,7 +53,10 @@ def model(category, filename):
 
 def rest_to_html(category, filename):
     """Transform the content of a .rst file in HTML"""
-    args = {'stylesheet_path': 'static/model.css'}
+    args = {
+        'stylesheet': '/static/model_styles/' + filename + '.css',
+        'stylesheet_path': None,
+        'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
         source=open(os.path.join(
             'static', 'model', category, filename + '.rst')).read(),
