@@ -1,4 +1,3 @@
-
 |date|
 
 .. editable:: Destinataire
