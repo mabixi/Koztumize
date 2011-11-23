@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python2
 
-from __future__ import with_statement
-from flask import (Flask, request, redirect, url_for, render_template, flash,
-                   send_file)
+from flask import (
+    Flask, request, render_template, send_file)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 import docutils.core
@@ -11,12 +10,11 @@ import weasy
 import cssutils
 
 
-app = Flask(__name__)
+app = Flask(__name__)  # pylint: disable=C0103
 
 
 @app.route('/')
 def index():
-    models = {}
     html = request.args.get('html')
 
     if html:
@@ -26,10 +24,9 @@ def index():
         document.write_to('tmp/result.pdf')
         return send_file('tmp/result.pdf')
     else:
-        for categ in os.listdir('static/model'):
-            models[categ] = []
-            for model in os.listdir('static/model/' + categ):
-                models[categ].append(model)
+        models = {
+            category: os.listdir('static/model/' + category)
+            for category in os.listdir('static/model')}
         return render_template('index.html', models=models)
 
 
@@ -60,7 +57,13 @@ class Editable(Directive):
     has_content = False
 
     def run(self):
-        content = '<div contenteditable="true" class="editable" onclick="if(this.innerHTML==\'%s\')this.innerHTML=\'\'">%s</div>' % (self.arguments[0] if self.arguments else '', self.arguments[0] if self.arguments else '')
+        content = '''
+            <div contenteditable="true" class="editable"
+                 onclick="if(this.innerHTML==\'%s\')this.innerHTML=\'\'">
+              %s
+            </div>''' % (
+                self.arguments[0] if self.arguments else '',
+                self.arguments[0] if self.arguments else '')
         return [docutils.nodes.raw('', content, format='html')]
 
 directives.register_directive('editable', Editable)
