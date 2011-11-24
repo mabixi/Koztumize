@@ -23,7 +23,7 @@ def test_edit(client):
 
 @with_client
 def test_model(client):
-    """Test the edit page."""
+    """Test the model page."""
     models = {
     category: os.listdir('static/model/' + category)
         for category in os.listdir('static/model')}
