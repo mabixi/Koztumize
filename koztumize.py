@@ -80,7 +80,7 @@ class Editable(Directive):
 
 directives.register_directive('editable', Editable)
 
+app.secret_key = 'MNOPQR'
 
 if __name__ == '__main__':
-    app.secret_key = 'MNOPQR'
     app.run(debug=True)
