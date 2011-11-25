@@ -80,7 +80,7 @@ class Editable(Directive):
         return [docutils.nodes.raw('', content, format='html')]
 
 
-class Editable(Directive):
+class Checkbox(Directive):
     """A rest directive who create a checkbox in HTML"""
     required_arguments = 0
     optional_arguments = 0
