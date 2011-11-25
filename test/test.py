@@ -1,3 +1,7 @@
+"""
+Test for Koztumize (all the routes are tested)
+"""
+
 from .helpers import with_client, request
 import os
 
@@ -29,11 +33,10 @@ def test_model(client):
         for category in os.listdir('static/model')}
     for category in models.keys():
         for  model in models[category]:
-            response = request(
-                client.get, '/model/' + category + '/' + model[:-4])
+            request(client.get, '/model/' + category + '/' + model[:-4])
 
 
 @with_client
 def test_generate(client):
     """Test the PDF generation."""
-    response = client.post('/generate')
+    client.post('/generate')
