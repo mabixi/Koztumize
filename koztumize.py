@@ -8,7 +8,6 @@ from docutils.parsers.rst import directives, Directive
 import docutils.core
 import os
 import weasy
-import cssutils
 
 
 app = Flask(__name__)  # pylint: disable=C0103
