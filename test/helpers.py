@@ -12,12 +12,13 @@ def with_client(function):
     return wraps(function)(lambda: function(app.test_client()))
 
 
-def request(method, route, status_code=200, content_type='text/html'):
+def request(method, route, status_code=200, content_type='text/html',
+            data=None):
     """
     Create the test_client  and check status code and content_type.
 
     """
-    response = method(route)
+    response = method(route, data=data)
     eq_(response.status_code, status_code)
     assert content_type in response.content_type
     return response
