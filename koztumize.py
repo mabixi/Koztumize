@@ -23,8 +23,10 @@ def index():
     return render_template('index.html', models=models)
 
 
-@app.route('/generate', methods=('POST', 'GET'))
+@app.route('/generate', methods=('POST',))
 def generate():
+    """The route where document .PDF is made with the given HTML and
+    the document is return to the client."""
     document = weasy.PDFDocument.from_string(
             request.form['html_content'], user_stylesheets=[
                 cssutils.parseFile(
@@ -36,6 +38,7 @@ def generate():
 
 @app.route('/download')
 def download():
+    """This is the route where you can download the last generated document."""
     return send_file('tmp/result.pdf')
 
 
