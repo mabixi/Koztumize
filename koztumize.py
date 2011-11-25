@@ -79,6 +79,19 @@ class Editable(Directive):
             self.arguments[0] if self.arguments else ''))
         return [docutils.nodes.raw('', content, format='html')]
 
+
+class Editable(Directive):
+    """A rest directive who create an editable div in HTML"""
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = '<input type="checkbox"/>'
+        return [docutils.nodes.raw('', content, format='html')]
+
+directives.register_directive('checkbox', Checkbox)
 directives.register_directive('editable', Editable)
 
 app.secret_key = 'MNOPQR'
