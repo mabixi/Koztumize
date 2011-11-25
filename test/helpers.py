@@ -15,6 +15,7 @@ def with_client(function):
 def request(method, route, status_code=200, content_type='text/html'):
     """
     Create the test_client  and check status code and content_type.
+
     """
     response = method(route)
     eq_(response.status_code, status_code)
