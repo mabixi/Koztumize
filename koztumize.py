@@ -81,9 +81,9 @@ class Editable(Directive):
 
 
 class Editable(Directive):
-    """A rest directive who create an editable div in HTML"""
+    """A rest directive who create a checkbox in HTML"""
     required_arguments = 0
-    optional_arguments = 1
+    optional_arguments = 0
     final_argument_whitespace = True
     has_content = False
 
