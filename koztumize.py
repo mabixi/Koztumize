@@ -79,22 +79,7 @@ class Editable(Directive):
             self.arguments[0] if self.arguments else ''))
         return [docutils.nodes.raw('', content, format='html')]
 
-
-class TextArea(Directive):
-    """A rest directive who create an textarea in HTML"""
-    required_arguments = 0
-    optional_arguments = 1
-    final_argument_whitespace = True
-    has_content = False
-
-    def run(self):
-        content = (
-        '<textarea title="%s"></textarea>' % (
-            self.arguments[0] if self.arguments else ''))
-        return [docutils.nodes.raw('', content, format='html')]
-
 directives.register_directive('editable', Editable)
-directives.register_directive('textarea', TextArea)
 
 app.secret_key = 'MNOPQR'
 
