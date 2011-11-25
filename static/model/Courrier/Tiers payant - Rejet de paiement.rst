@@ -1,12 +1,13 @@
 |date|
 
-.. editable:: Nom de la pharmacie
-
-.. editable:: Adresse mandataire
 
 .. editable:: Nom destinataire
 
 .. editable:: Adresse destinataire
+
+Mandaté par :
+
+.. editable:: Adresse mandataire
 
 .. editable:: Numéros de factures
 

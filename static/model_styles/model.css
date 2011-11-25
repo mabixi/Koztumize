@@ -25,3 +25,12 @@ div[contenteditable=true]:empty:before {
 }
 
 }
+
+html{
+    font-family:sans-serif;
+
+}
+
+p{
+    text-align:justify;
+}
