@@ -2,7 +2,7 @@
 """koztumize.py is used to launch the application Koztumize."""
 
 from flask import (
-    Flask, request, render_template, send_file)
+    Flask, request, render_template, send_file, url_for)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 import docutils.core
@@ -18,7 +18,7 @@ app = Flask(__name__)  # pylint: disable=C0103
 def index():
     """Index is the main route of the application."""
     models = {
-    category: os.listdir('static/model/' + category)
+        category: os.listdir('static/model/' + category)
         for category in os.listdir('static/model')}
     return render_template('index.html', models=models)
 
@@ -27,11 +27,7 @@ def index():
 def generate():
     """The route where document .PDF is made with the given HTML and
     the document is return to the client."""
-    document = weasy.PDFDocument.from_string(
-            request.form['html_content'], user_stylesheets=[
-                cssutils.parseFile(
-                    'static/model_styles/'
-                    + request.form['filename'] + '.css')])
+    document = weasy.PDFDocument.from_string(request.form['html_content'])
     document.write_to('tmp/result.pdf')
     return send_file('tmp/result.pdf')
 
@@ -57,7 +53,9 @@ def model(category, filename):
 def rest_to_html(category, filename):
     """Transform the content of a .rst file in HTML"""
     args = {
-        'stylesheet': '/static/model_styles/' + filename + '.css',
+        'stylesheet': url_for('static',
+                               filename='model_styles/' + filename + '.css',
+                               _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
@@ -81,9 +79,24 @@ class Editable(Directive):
             self.arguments[0] if self.arguments else ''))
         return [docutils.nodes.raw('', content, format='html')]
 
+
+class TextArea(Directive):
+    """A rest directive who create an textarea in HTML"""
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = (
+        '<textarea title="%s"></textarea>' % (
+            self.arguments[0] if self.arguments else ''))
+        return [docutils.nodes.raw('', content, format='html')]
+
 directives.register_directive('editable', Editable)
+directives.register_directive('textarea', TextArea)
 
 app.secret_key = 'MNOPQR'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
