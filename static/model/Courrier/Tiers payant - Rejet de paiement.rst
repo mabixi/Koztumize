@@ -9,17 +9,15 @@ Mandaté par :
 
 .. editable:: Nom de la Pharmacie et Adresse mandataire
 
-Objet :
 
-.. editable:: Objet
+===============  ==========================
+Objet :          .. editable:: Objet
+Bénéficiaire:    .. editable:: Bénéficiaire
+Référence :      .. editable:: Référence
+===============  ==========================
 
-Bénéficiaire : 
 
-.. editable:: Bénéficiaire
 
-Référence :
-
-.. editable:: Référence
 
 .. editable:: Civilités
 
@@ -29,29 +27,12 @@ Référence :
 
 du dossier de dispense d'avance de frais médicaux (tiers payant) dont vous avez bénéficié, nous vous invitons à vous rendre à la pharmacie muni des documents suivants ou de nous les faire parvenir par tout moyen à votre convenance :
 
-.. checkbox::
-
-Attestation Vitale valide en
-
-.. editable:: Date validité
-
-.. checkbox::
-
-Attestation CMU valide en
-
-.. editable:: Date validité
-
-.. checkbox::
-
-Carte mutuelle valide en
-
-.. editable:: Date validité
-
-.. checkbox::
-
-Autre
-
-.. editable:: Précisez
+==============  ==============================  ==============================
+.. checkbox::    Attestation Vitale valide en    .. editable:: Date validité
+.. checkbox::       Attestation CMU valide en    .. editable:: Date validité
+.. checkbox::        Carte mutuelle valide en    .. editable:: Date validité
+.. checkbox::                        Autre...    .. editable:: Précisez
+==============  ==============================  ==============================
 
 À défaut de pouvoir fournir les documents demandés, nous vous remercions de bien vouloir régler directement la pharmacie la somme rejetée par votre caisse et restant due, à savoir
 

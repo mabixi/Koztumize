@@ -5,11 +5,23 @@
 */
 @media screen{
 
+table,tr,th,td{
+    border:none;
+    vertical-align:top;
+    text-align:right;
+}
+
+table tr td:last-child{
+    text-align:left;
+}
+
 div[contenteditable=true] {
+    position:relative;
     padding:0.25em;
     min-height:2em;
     max-width:30em;
     background:#fff;
+    top:-0.25em;
 }
 
 div[contenteditable=true]:hover{
