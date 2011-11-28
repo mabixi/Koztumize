@@ -52,18 +52,20 @@ def model(category, filename):
 def rest_to_html(category, filename):
     """Transform the content of a .rst file in HTML"""
     stylesheet = ''
-    a = docutils.core.publish_doctree(source=open(
+    dom_tree = docutils.core.publish_doctree(source=open(
         'static/model/Courrier/' + filename + '.rst').read()).asdom()
-    list_field = a.getElementsByTagName('field')
+    list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
-        if (field.childNodes
-        .item(0).childNodes.item(0).nodeValue == 'stylesheet'):
-            stylesheet = ("http://localhost:5000/"
-            + field.childNodes.item(1).childNodes.item(0).childNodes.item(0)
-            .nodeValue)
+        if (field.childNodes.item(0).childNodes.item(0).nodeValue ==
+            'stylesheet'):
+            stylesheet = (
+                field.childNodes.item(1).childNodes.item(0)
+                .childNodes.item(0).nodeValue)
 
     args = {
-        'stylesheet': stylesheet,
+        'stylesheet': url_for('static',
+                               filename='model_styles/' + stylesheet + '.css',
+                               _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
@@ -96,7 +98,10 @@ class Checkbox(Directive):
     has_content = False
 
     def run(self):
-        content = '<input type="checkbox"/>'
+        content = (
+            '<input type="checkbox" '
+            'onChange="this.setAttribute('
+            '\'checked\', this.checked?\'checked\':\'\');"/>')
         return [docutils.nodes.raw('', content, format='html')]
 
 directives.register_directive('checkbox', Checkbox)

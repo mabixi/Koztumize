@@ -1,5 +1,6 @@
-|date|
+:stylesheet: Tiers payant
 
+|date|
 
 .. editable:: Nom destinataire
 

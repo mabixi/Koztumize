@@ -1,4 +1,4 @@
-:stylesheet: static/model_styles/courrier-defaut.css
+:stylesheet: courrier-defaut
 
 |date|
 

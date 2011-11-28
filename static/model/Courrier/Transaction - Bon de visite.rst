@@ -1,3 +1,5 @@
+:stylesheet: Tiers payant
+
 Carte professionnelle n°082844 / Organisme de garantie : S.O.C.A.F.
 
 Je soussigné(e),
