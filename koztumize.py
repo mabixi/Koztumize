@@ -51,10 +51,19 @@ def model(category, filename):
 
 def rest_to_html(category, filename):
     """Transform the content of a .rst file in HTML"""
+    stylesheet = ''
+    a = docutils.core.publish_doctree(source=open(
+        'static/model/Courrier/' + filename + '.rst').read()).asdom()
+    list_field = a.getElementsByTagName('field')
+    for field in list_field:
+        if (field.childNodes
+        .item(0).childNodes.item(0).nodeValue == 'stylesheet'):
+            stylesheet = ("http://localhost:5000/"
+            + field.childNodes.item(1).childNodes.item(0).childNodes.item(0)
+            .nodeValue)
+
     args = {
-        'stylesheet': url_for('static',
-                               filename='model_styles/' + filename + '.css',
-                               _external=True),
+        'stylesheet': stylesheet,
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(

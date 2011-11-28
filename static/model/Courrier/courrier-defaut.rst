@@ -1,3 +1,5 @@
+:stylesheet: static/model_styles/courrier-defaut.css
+
 |date|
 
 .. editable:: Destinataire
