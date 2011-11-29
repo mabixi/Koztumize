@@ -8,6 +8,7 @@ from docutils.parsers.rst import directives, Directive
 import docutils.core
 import os
 import weasy
+from tempfile import NamedTemporaryFile
 
 
 app = Flask(__name__)  # pylint: disable=C0103
@@ -27,8 +28,10 @@ def generate():
     """The route where document .PDF is made with the given HTML and
     the document is return to the client."""
     document = weasy.PDFDocument.from_string(request.form['html_content'])
-    document.write_to('tmp/result.pdf')
-    return send_file('tmp/result.pdf')
+    temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
+    document.write_to(temp_file)
+    return send_file(temp_file.name, as_attachment=True,
+                     attachment_filename=request.form['filename'] + '.pdf')
 
 
 @app.route('/download')
