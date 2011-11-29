@@ -34,12 +34,6 @@ def generate():
                      attachment_filename=request.form['filename'] + '.pdf')
 
 
-@app.route('/download')
-def download():
-    """This is the route where you can download the last generated document."""
-    return send_file('tmp/result.pdf')
-
-
 @app.route('/edit/<category>/<filename>')
 def edit(category, filename):
     """This is the route where you can edit the models."""

@@ -43,5 +43,5 @@ def test_generate(client):
     data = '<html>'
     response = request(
         client.post, '/generate', content_type='application/pdf',
-        data={'html_content': data})
+        data={'html_content': data, 'filename': 'test'})
     assert response.data[:4] == '%PDF'
