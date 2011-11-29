@@ -53,7 +53,7 @@ def rest_to_html(category, filename):
     """Transform the content of a .rst file in HTML"""
     stylesheet = ''
     dom_tree = docutils.core.publish_doctree(source=open(
-        'static/model/Courrier/' + filename + '.rst').read()).asdom()
+        'static/model/' + category + '/' + filename + '.rst').read()).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
         if (field.childNodes.item(0).childNodes.item(0).nodeValue ==
