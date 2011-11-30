@@ -18,8 +18,8 @@ def test_index(client):
 def test_edit(client):
     """Test the edit page."""
     models = {
-        category: os.listdir('static/model/' + category)
-        for category in os.listdir('static/model')}
+        category: os.listdir('static/domain/test/model/' + category)
+        for category in os.listdir('static/domain/test/model')}
     for category in models.keys():
         for model in models[category]:
             response = request(client.get, '/edit/' + category + '/' + model)
@@ -30,8 +30,8 @@ def test_edit(client):
 def test_model(client):
     """Test the model page."""
     models = {
-        category: os.listdir('static/model/' + category)
-        for category in os.listdir('static/model')}
+        category: os.listdir('static/domain/test/model/' + category)
+        for category in os.listdir('static/domain/test/model')}
     for category in models.keys():
         for model in models[category]:
             request(client.get, '/model/' + category + '/' + model[:-4])

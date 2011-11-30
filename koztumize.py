@@ -70,7 +70,7 @@ def rest_to_html(category, filename):
                 field.childNodes.item(1).childNodes.item(0)
                 .childNodes.item(0).nodeValue)
 
-    args = {
+    arguments = {
         'stylesheet': url_for('static',
                               filename='domain/' + g.domain +
                               '/model_styles/' + stylesheet + '.css',
@@ -80,7 +80,7 @@ def rest_to_html(category, filename):
     parts = docutils.core.publish_parts(
         source=open(os.path.join('static', 'domain', g.domain,
                                  'model', category, filename + '.rst'))
-        .read(), writer=Writer(), settings_overrides=args)
+        .read(), writer=Writer(), settings_overrides=arguments)
     text = parts['whole']
     return text
 

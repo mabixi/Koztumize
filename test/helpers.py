@@ -2,9 +2,12 @@
 Helpers for tests, with definition of decorator and function.
 
 """
+import koztumize
 from koztumize import app
 from functools import wraps
 from nose.tools import eq_
+
+koztumize.DOMAIN = 'test'
 
 
 def with_client(function):
