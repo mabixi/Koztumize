@@ -10,15 +10,32 @@ div[title="Règlement (en €)"]{
     
 }
 
+table.docutils{
+}
+
+table.docutils tr>td:first-child{
+    text-align:right;
+}
+
+table tr>td+td{
+    text-align:right;
+    width:auto;
+}
+
+table.docutils tr>td+td+td{
+    text-align:left;
+}
+
 input[type="checkbox"]{
     display: block;
     width: 10px;
     height: 10px;
+    border: solid black 1px;
     background: red;
-
     color: blue;
 }
-
 input[type="checkbox"]:checked{
-    background: blue;
+    background: green;
+    border: solid black 1px;
 }
+

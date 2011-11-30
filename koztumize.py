@@ -2,24 +2,34 @@
 """koztumize.py is used to launch the application Koztumize."""
 
 from flask import (
-    Flask, request, render_template, send_file, url_for)
+    Flask, request, render_template, send_file, url_for, g)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 import docutils.core
 import os
 import weasy
 from tempfile import NamedTemporaryFile
+import argparse
 
 
+DOMAIN = None
 app = Flask(__name__)  # pylint: disable=C0103
+
+
+@app.before_request
+def before_request():
+    """Set variables before each request."""
+    g.domain = DOMAIN or request.host.split('.')[0]
 
 
 @app.route('/')
 def index():
     """Index is the main route of the application."""
     models = {
-        category: os.listdir('static/model/' + category)
-        for category in os.listdir('static/model')}
+        category: os.listdir(os.path.join('static', 'domain',
+                                          g.domain, 'model', category))
+        for category in os.listdir(os.path.join('static', 'domain',
+                                                g.domain, 'model'))}
     return render_template('index.html', models=models)
 
 
@@ -49,8 +59,9 @@ def model(category, filename):
 def rest_to_html(category, filename):
     """Transform the content of a .rst file in HTML"""
     stylesheet = ''
-    dom_tree = docutils.core.publish_doctree(source=open(
-        'static/model/' + category + '/' + filename + '.rst').read()).asdom()
+    dom_tree = docutils.core.publish_doctree(source=open(os.path.join(
+        'static', 'domain', g.domain, 'model',
+         category, filename + '.rst')).read()).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
         if (field.childNodes.item(0).childNodes.item(0).nodeValue ==
@@ -61,14 +72,15 @@ def rest_to_html(category, filename):
 
     args = {
         'stylesheet': url_for('static',
-                               filename='model_styles/' + stylesheet + '.css',
+                              filename='domain/' + g.domain +
+                              '/model_styles/' + stylesheet + '.css',
                                _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
-        source=open(os.path.join(
-            'static', 'model', category, filename + '.rst')).read(),
-        writer=Writer(), settings_overrides=args)
+        source=open(os.path.join('static', 'domain', g.domain,
+                                 'model', category, filename + '.rst'))
+        .read(), writer=Writer(), settings_overrides=args)
     text = parts['whole']
     return text
 
@@ -107,4 +119,8 @@ directives.register_directive('editable', Editable)
 app.secret_key = 'MNOPQR'
 
 if __name__ == '__main__':
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('project', nargs='?', help='project name')
+    args = arg_parser.parse_args()
+    DOMAIN = getattr(args, 'project')
     app.run(debug=True, threaded=True)
