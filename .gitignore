@@ -3,3 +3,4 @@ env
 .coverage
 build
 *.pdf
+static/domain
