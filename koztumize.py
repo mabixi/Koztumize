@@ -119,8 +119,8 @@ directives.register_directive('editable', Editable)
 app.secret_key = 'MNOPQR'
 
 if __name__ == '__main__':
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser()  # pylint: disable=C0103
     arg_parser.add_argument('project', nargs='?', help='project name')
-    args = arg_parser.parse_args()
+    args = arg_parser.parse_args()  # pylint: disable=C0103
     DOMAIN = getattr(args, 'project')
     app.run(debug=True, threaded=True)
