@@ -6,6 +6,7 @@ Test for Koztumize (all the routes are tested)
 import os
 
 from .helpers import with_client, request
+from koztumize import g, app
 
 
 @with_client
@@ -35,7 +36,9 @@ def test_model(client):
         for category in os.listdir('static/domain/test/model')}
     for category in models.keys():
         for model in models[category]:
-            request(client.get, '/model/' + category + '/' + model[:-4])
+            response = request(client.get, os.path.join(
+               'model', category,  model[:-4]))
+            assert 'test.css' in response.data
 
 
 @with_client

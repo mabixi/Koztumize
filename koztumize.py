@@ -36,7 +36,7 @@ def index():
 @app.route('/generate', methods=('POST',))
 def generate():
     """The route where document .PDF is made with the given HTML and
-    the document is return to the client."""
+the document is return to the client."""
     document = weasy.PDFDocument.from_string(request.form['html_content'])
     temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
     document.write_to(temp_file)
@@ -67,8 +67,8 @@ def model(category, filename):
 
     arguments = {
         'stylesheet': url_for('static',
-                              filename='domain/' + g.domain +
-                              '/model_styles/' + stylesheet + '.css',
+                              filename=os.path.join('domain', g.domain,
+                              'model_styles', stylesheet + '.css'),
                                _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
@@ -81,7 +81,7 @@ def model(category, filename):
 
 
 class Editable(Directive):
-    """A rest directive who create an editable div in HTML"""
+    """A rest directive who create an editable div in HTML."""
     required_arguments = 0
     optional_arguments = 1
     final_argument_whitespace = True
@@ -95,7 +95,7 @@ class Editable(Directive):
 
 
 class Checkbox(Directive):
-    """A rest directive who create a checkbox in HTML"""
+    """A rest directive who create a checkbox in HTML."""
     required_arguments = 0
     optional_arguments = 0
     final_argument_whitespace = True
@@ -113,7 +113,7 @@ directives.register_directive('editable', Editable)
 
 app.secret_key = 'MNOPQR'
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()  # pylint: disable=C0103
     arg_parser.add_argument('project', nargs='?', help='project name')
     args = arg_parser.parse_args()  # pylint: disable=C0103
