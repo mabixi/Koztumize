@@ -3,4 +3,5 @@ env
 .coverage
 build
 *.pdf
-static/domain
+static/domain/kozea
+static/domain/keleos
