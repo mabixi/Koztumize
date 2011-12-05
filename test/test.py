@@ -4,7 +4,7 @@ Test for Koztumize (all the routes are tested)
 """
 import os
 from .helpers import with_client, request
-from koztumize import rest_to_html
+from koztumize import rest_to_html, g, app
 
 
 @with_client
@@ -47,6 +47,6 @@ def test_generate(client):
     assert response.data[:4] == '%PDF'
 
 
-def test_rest_to_html('TEST', 'test.rst'):
+def test_rest_to_html():
     """Test the HTML generation from a .rst model."""
-    
+    response = rest_to_html('Test', 'test', 'test')

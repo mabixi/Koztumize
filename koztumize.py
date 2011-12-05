@@ -2,7 +2,7 @@
 """koztumize.py is used to launch the application Koztumize."""
 
 from flask import (
-    Flask, request, render_template, send_file, url_for, g)
+    Flask, request, render_template, send_file, url_for, g, current_app)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 import docutils.core
@@ -53,14 +53,14 @@ def edit(category, filename):
 @app.route('/model/<category>/<filename>')
 def model(category, filename):
     """This is the route that returns the model."""
-    return rest_to_html(category, filename)
+    return rest_to_html(category, filename, g.domain)
 
 
-def rest_to_html(category, filename):
+def rest_to_html(category, filename, domain):
     """Transform the content of a .rst file in HTML"""
     stylesheet = ''
     dom_tree = docutils.core.publish_doctree(source=open(os.path.join(
-        'static', 'domain', g.domain, 'model',
+        'static', 'domain', domain, 'model',
          category, filename + '.rst')).read()).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
@@ -69,17 +69,17 @@ def rest_to_html(category, filename):
             stylesheet = (
                 field.childNodes.item(1).childNodes.item(0)
                 .childNodes.item(0).nodeValue)
-
     arguments = {
-        'stylesheet': url_for('static',
-                              filename='domain/' + g.domain +
+        'stylesheet': url_for(
+            'static', filename='domain/' + domain +
                               '/model_styles/' + stylesheet + '.css',
                                _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
-        source=open(os.path.join('static', 'domain', g.domain,
-                                 'model', category, filename + '.rst'))
+        source=open(os.path.join(
+            'static', 'domain', domain, 'model', category,
+            filename + '.rst'))
         .read(), writer=Writer(), settings_overrides=arguments)
     text = parts['whole']
     return text
