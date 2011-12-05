@@ -6,10 +6,7 @@ Test for Koztumize (all the routes are tested)
 import os
 
 from .helpers import with_client, request
-<<<<<<< HEAD
-from koztumize import rest_to_html, g, app
-=======
->>>>>>> 5219700e3197ce54a986248969396154349fd878
+from koztumize import g, app
 
 
 @with_client
@@ -39,7 +36,9 @@ def test_model(client):
         for category in os.listdir('static/domain/test/model')}
     for category in models.keys():
         for model in models[category]:
-            request(client.get, '/model/' + category + '/' + model[:-4])
+            response = request(client.get, os.path.join(
+               'model', category,  model[:-4]))
+            assert 'test.css' in response.data
 
 
 @with_client
@@ -50,11 +49,3 @@ def test_generate(client):
         client.post, '/generate', content_type='application/pdf',
         data={'html_content': data, 'filename': 'test'})
     assert response.data[:4] == '%PDF'
-<<<<<<< HEAD
-
-
-def test_rest_to_html():
-    """Test the HTML generation from a .rst model."""
-    response = rest_to_html('Test', 'test', 'test')
-=======
->>>>>>> 5219700e3197ce54a986248969396154349fd878
