@@ -53,11 +53,6 @@ def edit(category, filename):
 @app.route('/model/<category>/<filename>')
 def model(category, filename):
     """This is the route that returns the model."""
-    return rest_to_html(category, filename)
-
-
-def rest_to_html(category, filename):
-    """Transform the content of a .rst file in HTML"""
     stylesheet = ''
     dom_tree = docutils.core.publish_doctree(source=open(os.path.join(
         'static', 'domain', g.domain, 'model',
