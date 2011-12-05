@@ -6,7 +6,6 @@ Test for Koztumize (all the routes are tested)
 import os
 
 from .helpers import with_client, request
-from koztumize import g, app
 
 
 @with_client
