@@ -25,3 +25,4 @@ def request(method, route, status_code=200, content_type='text/html',
     eq_(response.status_code, status_code)
     assert content_type in response.content_type
     return response
+ 
