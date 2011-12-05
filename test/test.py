@@ -2,9 +2,9 @@
 Test for Koztumize (all the routes are tested)
 
 """
-
-from .helpers import with_client, request
 import os
+from .helpers import with_client, request
+from koztumize import rest_to_html
 
 
 @with_client
@@ -45,3 +45,8 @@ def test_generate(client):
         client.post, '/generate', content_type='application/pdf',
         data={'html_content': data, 'filename': 'test'})
     assert response.data[:4] == '%PDF'
+
+
+def test_rest_to_html('TEST', 'test.rst'):
+    """Test the HTML generation from a .rst model."""
+    
