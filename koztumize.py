@@ -26,11 +26,6 @@ def before_request():
 @app.route('/')
 def index():
     """Index is the main route of the application."""
-    git = Git("~/Koztumize/static/archive",
-              "git://github.com/Kozea/Koztumize.git",
-              quiet=False)
-
-    git.pull('origin', 'master')
     models = {
         category: os.listdir(os.path.join('static', 'archive',
  'domain', g.domain, 'model', category))
