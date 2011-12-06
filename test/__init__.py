@@ -1,4 +1,0 @@
-"""
-Testing suite for Koztumize.
-
-"""
