@@ -25,7 +25,7 @@ def before_request():
 
 @app.route('/')
 def index():
-    git = Git("~/Koztumize/static/archive/models",
+    git = Git("~/Koztumize/static/archive",
               "git://github.com/Kozea/Koztumize.git",
               quiet=False)
 
@@ -35,8 +35,8 @@ def index():
     models = {
         category: os.listdir(os.path.join('static', 'archive',
  'domain', g.domain, 'model', category))
-        for category in os.listdir(os.path.join('archive', 'models',
-'static', 'domain', g.domain, 'model'))}
+        for category in os.listdir(os.path.join('static', 'archive', 'domain',
+                                                g.domain, 'model'))}
     return render_template('index.html', models=models)
 
 
