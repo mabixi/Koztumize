@@ -1,15 +1,16 @@
 #!/usr/bin/env python2
 """koztumize.py is used to launch the application Koztumize."""
 
+from brigit import Git
+import os
+import weasy
+import argparse
+import docutils.core
 from flask import (
     Flask, request, render_template, send_file, url_for, g)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
-import docutils.core
-import os
-import weasy
 from tempfile import NamedTemporaryFile
-import argparse
 
 
 DOMAIN = None
@@ -24,12 +25,18 @@ def before_request():
 
 @app.route('/')
 def index():
-    """Index is the main route of the application."""
+    git = Git("~/Koztumize/static/archive/models",
+              "git://github.com/Kozea/Koztumize.git",
+              quiet=False)
+
+    # Then you can use all of your git command like this:
+    git.checkout('archive')
+    git.pull()
     models = {
-        category: os.listdir(os.path.join('static', 'domain',
-                                          g.domain, 'model', category))
-        for category in os.listdir(os.path.join('static', 'domain',
-                                                g.domain, 'model'))}
+        category: os.listdir(os.path.join('static', 'archive',
+ 'domain', g.domain, 'model', category))
+        for category in os.listdir(os.path.join('archive', 'models',
+'static', 'domain', g.domain, 'model'))}
     return render_template('index.html', models=models)
 
 
@@ -55,7 +62,7 @@ def model(category, filename):
     """This is the route that returns the model."""
     stylesheet = ''
     dom_tree = docutils.core.publish_doctree(source=open(os.path.join(
-        'static', 'domain', g.domain, 'model',
+        'static', 'archive', 'domain', g.domain, 'model',
          category, filename + '.rst')).read()).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
@@ -67,13 +74,15 @@ def model(category, filename):
 
     arguments = {
         'stylesheet': url_for('static',
-                              filename=os.path.join('domain', g.domain,
+                              filename=os.path.join('archive',
+                                                    'domain', g.domain,
                               'model_styles', stylesheet + '.css'),
                                _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
-        source=open(os.path.join('static', 'domain', g.domain,
+        source=open(os.path.join('static', 'archive',
+                                  'domain', g.domain,
                                  'model', category, filename + '.rst'))
         .read(), writer=Writer(), settings_overrides=arguments)
     text = parts['whole']
