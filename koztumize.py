@@ -27,9 +27,9 @@ def before_request():
 def index():
     """Index is the main route of the application."""
     models = {
-        category: os.listdir(os.path.join('static', 'archive',
- 'domain', g.domain, 'model', category))
-        for category in os.listdir(os.path.join('static', 'archive', 'domain',
+        category: os.listdir(os.path.join('static', 'domain', g.domain,
+'model', category))
+        for category in os.listdir(os.path.join('static', 'domain',
                                                 g.domain, 'model'))}
     return render_template('index.html', models=models)
 
@@ -56,7 +56,7 @@ def model(category, filename):
     """This is the route that returns the model."""
     stylesheet = ''
     dom_tree = docutils.core.publish_doctree(source=open(os.path.join(
-        'static', 'archive', 'domain', g.domain, 'model',
+        'static', 'domain', g.domain, 'model',
          category, filename + '.rst')).read()).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
@@ -68,15 +68,13 @@ def model(category, filename):
 
     arguments = {
         'stylesheet': url_for('static',
-                              filename=os.path.join('archive',
-                                                    'domain', g.domain,
+                              filename=os.path.join('domain', g.domain,
                               'model_styles', stylesheet + '.css'),
                                _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
-        source=open(os.path.join('static', 'archive',
-                                  'domain', g.domain,
+        source=open(os.path.join('static', 'domain', g.domain,
                                  'model', category, filename + '.rst'))
         .read(), writer=Writer(), settings_overrides=arguments)
     text = parts['whole']
