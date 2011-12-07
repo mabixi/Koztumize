@@ -16,6 +16,14 @@
         </form>
       </li>
       <li>
+      <form action="{{ url_for('save') }}" method="post">    
+        <input type="hidden" id="save_html_content" value="" name="html_content" />
+        <input type="hidden" value="{{ filename }}" name="filename" />
+        <input type="hidden" value="{{ category }}" name="category" />
+        <input type="submit" value="Enregistrer le document" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save"/>
+      </form>
+      </li>
+      <li>
         <input type="button" value="Réinitialiser" onclick="window.location.reload();"/>
       </li>
       <li>

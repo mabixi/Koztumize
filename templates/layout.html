@@ -9,6 +9,15 @@
   </head>
   <body>
     <header>{% block header %}{% endblock header %}</header>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <aside>
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+      </aside>
+      {% endif %}
+    {% endwith %}
     <section>
       {% block content %}
       {% endblock content %}

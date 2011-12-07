@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 """koztumize.py is used to launch the application Koztumize."""
+
 
 from brigit import Git
 import os
@@ -7,7 +9,7 @@ import weasy
 import argparse
 import docutils.core
 from flask import (
-    Flask, request, render_template, send_file, url_for, g)
+    Flask, request, render_template, send_file, url_for, g, redirect, flash)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
@@ -15,6 +17,8 @@ from tempfile import NamedTemporaryFile
 
 DOMAIN = None
 app = Flask(__name__)  # pylint: disable=C0103
+PATH = os.path.expanduser('~/archive')
+git = Git(PATH)
 
 
 @app.before_request
@@ -43,6 +47,65 @@ the document is return to the client."""
     document.write_to(temp_file)
     return send_file(temp_file.name, as_attachment=True,
                      attachment_filename=request.form['filename'] + '.pdf')
+
+
+@app.route('/archive')
+def archive():
+    """Archive."""
+    archived_models = {
+        category: os.listdir(os.path.join(PATH, g.domain, category))
+        for category in os.listdir(os.path.join(PATH, g.domain))}
+    return render_template('archive.html', archived_models=archived_models)
+
+
+@app.route('/modify/<category>/<filename>/<version>')
+def modify(category, filename, version):
+    """This is the route where you can modify your models."""
+    file_path = os.path.join(g.domain, category, filename + '.html')
+    git.checkout("HEAD~" + version, file_path)
+    hist = list(git.pretty_log(file_path))
+    date_commit = []
+    for commit in range(len(hist)):
+        date_commit.append(
+            hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M"))
+    return render_template('modify.html', category=category,
+                           filename=filename, date_commit=date_commit)
+
+
+@app.route('/file/<category>/<filename>')
+def file(category, filename):
+    """The route which read the archived .html."""
+    file_content = open(os.path.join(
+        PATH, g.domain, category, filename + '.html')).read()
+    return file_content
+
+
+@app.route('/save', methods=('POST',))
+def save():
+    """This is the route where you can edit save your changes."""
+    edited_file = request.form['filename'] + '.html'
+    if not os.path.exists(os.path.join(PATH, g.domain)):
+        os.mkdir(os.path.join(PATH, g.domain))
+    if not os.path.exists(os.path.join(PATH, g.domain,
+                                       request.form['category'])):
+        os.mkdir(os.path.join(PATH, g.domain, request.form['category']))
+    open(os.path.join(
+        PATH, g.domain, request.form['category'], edited_file),
+         'w').write(request.form['html_content'])
+    open(os.path.expanduser(os.path.join(PATH, edited_file)), "a+").close()
+
+    try:
+        git.add(".")
+        git.commit("-a", message="Modify " + edited_file)
+        git.push()
+    except Exception:
+        flash(u"Erreur : Le fichier n'a pas été modifié.")
+
+    history = git.shortlog(os.path.join(g.domain,
+                                          request.form['category'],
+                                          edited_file))
+    return redirect(url_for('modify', category=request.form['category'],
+                           filename=request.form['filename'], version=0))
 
 
 @app.route('/edit/<category>/<filename>')
