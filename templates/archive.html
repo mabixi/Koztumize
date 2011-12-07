@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block header %}
+<h1>Vos archives</h1>
+{% endblock header %}
+{% block content %}
+<aside>
+  {% for category in archived_models.keys() %}
+  <h2>{{ category }}</h2>
+    <ul>
+      {% for model in archived_models[category] %}
+      <li><a href="{{ url_for('modify', category=category, filename=model[:-5], version=0) }}">{{ model[:-5] }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</aside>
+{% endblock content %}

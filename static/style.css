@@ -110,7 +110,7 @@ section.toolbar ul{
 section.toolbar ul li{
     display:inline-block;
 }
-section.toolbar a{
+section.toolbar>ul>li>a{
     position:relative;
     left:-20em;
     font-size:0.8em;
@@ -127,6 +127,40 @@ section.toolbar input[type=submit]{
     border-radius:5px;
     font-weight:bold;
     cursor:pointer;
+}
+
+#btn_version{
+    width:14.09em;
+    border-bottom-right-radius:0px;
+    border-bottom-left-radius:0px;
+    cursor:default;
+}
+
+#hist{
+    display:none;
+    background:#222;
+    font-family:'helvetica',sans-serif;
+    position:absolute;
+    z-index:100;
+    list-style:none;
+    width:13em;
+    height:7em;
+    overflow-y:auto;
+}
+
+#hist li{
+    display:list-item;
+    margin:0;
+    padding:0.25em;
+}
+
+#hist a{
+    color:#777;
+}
+
+#hist a:hover{
+    text-decoration:none;
+    color:#fff;
 }
 
 /* iframe */
