@@ -3,7 +3,7 @@
 """koztumize.py is used to launch the application Koztumize."""
 
 
-from brigit import Git
+from brigit import Git, GitException
 import os
 import weasy
 import argparse
@@ -18,7 +18,7 @@ from tempfile import NamedTemporaryFile
 DOMAIN = None
 app = Flask(__name__)  # pylint: disable=C0103
 PATH = os.path.expanduser('~/archive')
-git = Git(PATH)
+git = Git(PATH)   # pylint: disable=C0103
 
 
 @app.before_request
@@ -73,7 +73,7 @@ def modify(category, filename, version):
 
 
 @app.route('/file/<category>/<filename>')
-def file(category, filename):
+def reader(category, filename):
     """The route which read the archived .html."""
     file_content = open(os.path.join(
         PATH, g.domain, category, filename + '.html')).read()
@@ -98,13 +98,10 @@ def save():
         git.add(".")
         git.commit("-a", message="Modify " + edited_file)
         git.push()
-        flash(u"Enregistrement effectué.")
-    except Exception:
-        flash(u"Erreur : Le fichier n'a pas été modifié.")
+        flash(u"Enregistrement effectué.", 'ok')
+    except GitException:
+        flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
 
-    history = git.shortlog(os.path.join(g.domain,
-                                          request.form['category'],
-                                          edited_file))
     return redirect(url_for('modify', category=request.form['category'],
                            filename=request.form['filename'], version=0))
 

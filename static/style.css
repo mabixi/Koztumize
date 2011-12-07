@@ -68,6 +68,28 @@ section>aside ul li a{
     text-decoration:none;
     font-family:'ubuntu',sans-serif;
 }
+
+aside>p.error{
+    background:rgba(244,41,41,0.55);
+    border:1px solid #B31B1B;
+    color:#B31B1B;
+    max-width:30em;
+    margin:0 auto;
+    text-align:center;
+    font-family:sans-serif;
+    font-weight:bold;
+}
+
+aside>p.ok{
+    background:rgba(40,196,1,0.55);
+    border:1px solid #21A200;
+    color:#21A200;
+    max-width:30em;
+    margin:0 auto;
+    text-align:center;
+    font-family:sans-serif;
+    font-weight:bold;
+}
 /*
   -------------
   - Edit Page -

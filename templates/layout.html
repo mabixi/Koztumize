@@ -9,11 +9,11 @@
   </head>
   <body>
     <header>{% block header %}{% endblock header %}</header>
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
       <aside>
-      {% for message in messages %}
-        <p>{{ message }}</p>
+      {% for style,message in messages %}
+        <p class="{{ style }}">{{ message }}</p>
       {% endfor %}
       </aside>
       {% endif %}
