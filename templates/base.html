@@ -7,7 +7,6 @@
   {% block content %}
   <section class="toolbar">
     <ul>
-      <li><a href="{{ url_for('index') }}">> Retour</a>
       <li>
         <form action="{{ url_for('generate') }}" method="post">    
           <input type="hidden"id="html_content" value="" name="html_content" />
