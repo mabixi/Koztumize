@@ -16,26 +16,31 @@ from tempfile import NamedTemporaryFile
 
 
 DOMAIN = None
+ARCHIVE = os.path.join(os.path.expanduser('~/archive'))
 app = Flask(__name__)  # pylint: disable=C0103
-PATH = os.path.expanduser('~/archive')
-git = Git(PATH)   # pylint: disable=C0103
 
 
 @app.before_request
 def before_request():
     """Set variables before each request."""
     g.domain = DOMAIN or request.host.split('.')[0]
+    g.git = Git(os.path.join(ARCHIVE, g.domain))
 
 
 @app.route('/')
 def index():
     """Index is the main route of the application."""
+    return redirect(url_for('new'))
+
+
+@app.route('/new')
+def new():
+    """This is the route where you choose the model you want to edit."""
+    path_model = os.path.join('static', 'domain', g.domain, 'model')
     models = {
-        category: os.listdir(os.path.join('static', 'domain', g.domain,
-'model', category))
-        for category in os.listdir(os.path.join('static', 'domain',
-                                                g.domain, 'model'))}
-    return render_template('index.html', models=models)
+        category: os.listdir(os.path.join(path_model, category))
+        for category in os.listdir(path_model)}
+    return render_template('new.html', models=models)
 
 
 @app.route('/generate', methods=('POST',))
@@ -53,17 +58,17 @@ the document is return to the client."""
 def archive():
     """Archive."""
     archived_models = {
-        category: os.listdir(os.path.join(PATH, g.domain, category))
-        for category in os.listdir(os.path.join(PATH, g.domain))}
+        category: os.listdir(os.path.join(g.git.path, category))
+        for category in os.listdir(g.git.path)}
     return render_template('archive.html', archived_models=archived_models)
 
 
 @app.route('/modify/<category>/<filename>/<version>')
 def modify(category, filename, version):
     """This is the route where you can modify your models."""
-    file_path = os.path.join(g.domain, category, filename + '.html')
-    git.checkout("HEAD~" + version, file_path)
-    hist = list(git.pretty_log(file_path))
+    file_path = os.path.join(g.git.path, category, filename + '.html')
+    g.git.checkout("HEAD~" + version, file_path)
+    hist = list(g.git.pretty_log(file_path))
     date_commit = []
     for commit in range(len(hist)):
         date_commit.append(
@@ -76,29 +81,29 @@ def modify(category, filename, version):
 def reader(category, filename):
     """The route which read the archived .html."""
     file_content = open(os.path.join(
-        PATH, g.domain, category, filename + '.html')).read()
+        g.git.path, category, filename + '.html')).read()
     return file_content
 
 
 @app.route('/save', methods=('POST',))
 def save():
     """This is the route where you can edit save your changes."""
-    edited_file = request.form['filename'] + '.html'
-    if not os.path.exists(os.path.join(PATH, g.domain)):
-        os.mkdir(os.path.join(PATH, g.domain))
-    if not os.path.exists(os.path.join(PATH, g.domain,
-                                       request.form['category'])):
-        os.mkdir(os.path.join(PATH, g.domain, request.form['category']))
-    open(os.path.join(
-        PATH, g.domain, request.form['category'], edited_file),
-         'w').write(request.form['html_content'].encode("utf-8"))
-    open(os.path.join(
-        PATH, g.domain, request.form['category'], edited_file), "a+").close()
 
+    edited_file = request.form['filename'] + '.html'
+    path_domain = os.path.join(g.git.path, g.domain)
+    path_category = os.path.join(path_domain, request.form['category'])
+    path_file = os.path.join(path_category, edited_file)
+    if not os.path.exists(path_domain):
+        os.mkdir(path_domain)
+    if not os.path.exists(path_category):
+        os.mkdir(path_category)
+    open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
+    open(path_file, "a+").close()
     try:
-        git.add(".")
-        git.commit("-a", message="Modify " + edited_file)
-        git.push()
+        g.git.add(os.path.join(g.domain,
+                               request.form['category'], edited_file))
+        g.git.commit(message="Modify " + edited_file)
+        g.git.push()
         flash(u"Enregistrement effectué.", 'ok')
     except GitException:
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
@@ -116,10 +121,11 @@ def edit(category, filename):
 @app.route('/model/<category>/<filename>')
 def model(category, filename):
     """This is the route that returns the model."""
+    path_rest = os.path.join('static', 'domain',
+                             g.domain, 'model', category, filename + '.rst')
     stylesheet = ''
-    dom_tree = docutils.core.publish_doctree(source=open(os.path.join(
-        'static', 'domain', g.domain, 'model',
-         category, filename + '.rst')).read()).asdom()
+    dom_tree = docutils.core.publish_doctree(source=open(path_rest)
+                                             .read()).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
         if (field.childNodes.item(0).childNodes.item(0).nodeValue ==
@@ -127,12 +133,8 @@ def model(category, filename):
             stylesheet = (
                 field.childNodes.item(1).childNodes.item(0)
                 .childNodes.item(0).nodeValue)
-
     arguments = {
-        'stylesheet': url_for('static',
-                              filename=os.path.join('domain', g.domain,
-                              'model_styles', stylesheet + '.css'),
-                               _external=True),
+        'stylesheet': url_for('static', filename=path_rest, _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(

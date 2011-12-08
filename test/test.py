@@ -5,7 +5,8 @@ Test for Koztumize (all the routes are tested)
 
 import os
 
-from .helpers import with_client, request
+from flask import g
+from .helpers import with_client, with_git, request
 
 
 @with_client
@@ -51,19 +52,22 @@ def test_generate(client):
     assert response.data[:4] == '%PDF'
 
 
+@with_git
 @with_client
-def test_archive(client):
+def test_archive(client, git):
     """Test the archive page."""
     response = request(client.get, '/archive')
     assert '<html>' in response.data
 
 
+@with_git
 @with_client
-def test_modify(client):
+def test_modify(client, git):
     """Test the modify page."""
     models = {
-        category: os.listdir(os.path.expanduser('~/archive/test/') + category)
-        for category in os.listdir(os.path.expanduser('~/archive/test'))}
+        category: os.listdir(os.path.join(git.path, category))
+        for category in os.listdir(git.path)
+        if not category.startswith(".")}
     for category in models.keys():
         for model in models[category]:
             response = request(client.get,
@@ -72,22 +76,25 @@ def test_modify(client):
             assert '<html>' in response.data
 
 
+@with_git
 @with_client
-def test_reader(client):
+def test_reader(client, git):
     """Test the html reader"""
     models = {
-        category: os.listdir(os.path.expanduser('~/archive/test/') + category)
-        for category in os.listdir(os.path.expanduser('~/archive/test'))}
+        category: os.listdir(os.path.join(git.path, category))
+        for category in os.listdir(git.path)
+        if not category.startswith(".")}
     for category in models.keys():
         for model in models[category]:
             response = request(client.get,
                                os.path.join('file', category, model[:-5]))
-    assert '<head>' in response.data
+            assert '<head>' in response.data
 
 
+@with_git
 @with_client
-def test_save(client):
+def test_save(client, git):
     """Test the save page."""
     data = '<head>'
-    response = request(client.post, '/save', status_code=302, data={
+    response = request(client.post, '/save', data={
         'html_content': data, 'filename': 'test', 'category': 'test'})
