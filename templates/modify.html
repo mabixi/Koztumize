@@ -7,7 +7,6 @@
   {% block content %}
   <section class="toolbar">
     <ul>
-      <li><a href="javascript:void(0);" onclick="javascript:history.back();">> Retour</a>
       <li>
         <form action="{{ url_for('generate') }}" method="post">    
           <input type="hidden"id="gen_html_content" value="" name="html_content" />

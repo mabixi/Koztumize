@@ -2,15 +2,12 @@
 {% block header %}
 <h1>Koztumize</h1>
 {% endblock header %}
-{% block content %}
-<aside>
-  {% for category in models.keys() %}
-  <h2>{{ category }}</h2>
+<nav>
     <ul>
-      {% for model in models[category] %}
-      <li><a href="{{ url_for('edit', category=category, filename=model[:-4]) }}">{{ model[:-4] }}</a></li>
-      {% endfor %}
+      <li><a href="{{ url_for('new') }}">Créer un nouveau document</a></li>
+      <li><a href="{{ url_for('archive') }}">Accéder à vos documents enregistrés</a></li>  
     </ul>
-  {% endfor %}
-</aside>
+  </nav>
+{% block content %}
+  
 {% endblock content %}
