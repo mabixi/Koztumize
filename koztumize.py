@@ -121,10 +121,10 @@ def edit(category, filename):
 @app.route('/model/<category>/<filename>')
 def model(category, filename):
     """This is the route that returns the model."""
-    path_rest = os.path.join('static', 'domain',
-                             g.domain, 'model', category, filename + '.rst')
+    path_file = os.path.join('static', 'domain',
+                             g.domain, 'model', category, filename)
     stylesheet = ''
-    dom_tree = docutils.core.publish_doctree(source=open(path_rest)
+    dom_tree = docutils.core.publish_doctree(source=open(path_file + '.rst')
                                              .read()).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
@@ -134,12 +134,15 @@ def model(category, filename):
                 field.childNodes.item(1).childNodes.item(0)
                 .childNodes.item(0).nodeValue)
     arguments = {
-        'stylesheet': url_for('static', filename=path_rest, _external=True),
+        'stylesheet': url_for('static',
+                              filename=os.path.join('domain', g.domain,
+                                                     'model_styles',
+                                                     filename + '.css'),
+                              _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
-        source=open(os.path.join('static', 'domain', g.domain,
-                                 'model', category, filename + '.rst'))
+        source=open(path_file + '.rst')
         .read(), writer=Writer(), settings_overrides=arguments)
     text = parts['whole']
     return text
