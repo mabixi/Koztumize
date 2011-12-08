@@ -92,7 +92,8 @@ def save():
     open(os.path.join(
         PATH, g.domain, request.form['category'], edited_file),
          'w').write(request.form['html_content'].encode("utf-8"))
-    open(os.path.expanduser(os.path.join(PATH, edited_file)), "a+").close()
+    open(os.path.join(
+        PATH, g.domain, request.form['category'], edited_file), "a+").close()
 
     try:
         git.add(".")
