@@ -5,7 +5,6 @@ Test for Koztumize (all the routes are tested)
 
 import os
 
-from flask import g
 from .helpers import with_client, with_git, request
 
 

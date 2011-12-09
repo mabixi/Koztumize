@@ -90,7 +90,7 @@ def save():
     """This is the route where you can edit save your changes."""
 
     edited_file = request.form['filename'] + '.html'
-    path_domain = os.path.join(g.git.path, g.domain)
+    path_domain = os.path.join(g.git.path)
     path_category = os.path.join(path_domain, request.form['category'])
     path_file = os.path.join(path_category, edited_file)
     if not os.path.exists(path_domain):
@@ -100,8 +100,7 @@ def save():
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
     try:
-        g.git.add(os.path.join(g.domain,
-                               request.form['category'], edited_file))
+        g.git.add(path_file)
         g.git.commit(message="Modify " + edited_file)
         g.git.push()
         flash(u"Enregistrement effectué.", 'ok')
@@ -137,7 +136,7 @@ def model(category, filename):
         'stylesheet': url_for('static',
                               filename=os.path.join('domain', g.domain,
                                                      'model_styles',
-                                                     filename + '.css'),
+                                                     stylesheet + '.css'),
                               _external=True),
         'stylesheet_path': None,
         'embed_stylesheet': False}

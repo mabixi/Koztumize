@@ -4,9 +4,7 @@ Helpers for tests, with definition of decorator and function.
 """
 import koztumize
 import os
-from shutil import rmtree
 from brigit import Git
-from tempfile import mkdtemp
 from koztumize import app
 from functools import wraps
 from nose.tools import eq_
@@ -16,7 +14,9 @@ koztumize.ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
 
 
 def with_git(function):
+    """Allow tests to use git.."""
     def decorator(*args, **kwargs):
+        """Set the git repository to the initial version."""
         git = Git(os.path.join(koztumize.ARCHIVE, koztumize.DOMAIN))
         git.reset('--hard', 'test', '--')
         return function(git=git, *args, **kwargs)
@@ -26,7 +26,7 @@ def with_git(function):
 def with_client(function):
     """Create the test_client."""
     return wraps(function)(
-        lambda *args, **kwargs: function(
+        lambda *args, **kwargs: function(  # pylint: disable=W0142
             client=app.test_client(), *args, **kwargs))
 
 
