@@ -9,9 +9,6 @@ from koztumize import app
 from functools import wraps
 from nose.tools import eq_
 
-koztumize.DOMAIN = 'test'
-koztumize.ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
-
 
 def with_git(function):
     """Allow tests to use git.."""

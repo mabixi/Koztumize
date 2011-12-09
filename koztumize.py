@@ -93,9 +93,9 @@ def save():
     path_domain = os.path.join(g.git.path)
     path_category = os.path.join(path_domain, request.form['category'])
     path_file = os.path.join(path_category, edited_file)
-    if not os.path.exists(path_domain):
+    if not os.path.exists(path_domain):  # pragma: no cover
         os.mkdir(path_domain)
-    if not os.path.exists(path_category):
+    if not os.path.exists(path_category):  # pragma: no cover
         os.mkdir(path_category)
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
@@ -103,7 +103,7 @@ def save():
         g.git.add(path_file)
         g.git.commit(message="Modify " + edited_file)
         g.git.push()
-        flash(u"Enregistrement effectué.", 'ok')
+        flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
     except GitException:
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
 
