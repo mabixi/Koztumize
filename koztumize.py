@@ -123,8 +123,11 @@ def model(category, filename):
     path_file = os.path.join('static', 'domain',
                              g.domain, 'model', category, filename)
     stylesheet = ''
-    dom_tree = docutils.core.publish_doctree(source=open(path_file + '.rst')
-                                             .read()).asdom()
+    source = open(path_file + '.rst').read() + u"""
+
+.. meta::
+   :model: %s/%s""" % (category, filename)
+    dom_tree = docutils.core.publish_doctree(source=source).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
         if (field.childNodes.item(0).childNodes.item(0).nodeValue ==
@@ -141,8 +144,7 @@ def model(category, filename):
         'stylesheet_path': None,
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
-        source=open(path_file + '.rst')
-        .read(), writer=Writer(), settings_overrides=arguments)
+        source=source, writer=Writer(), settings_overrides=arguments)
     text = parts['whole']
     return text
 
