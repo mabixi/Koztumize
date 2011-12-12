@@ -123,7 +123,7 @@ def model(category, filename):
     path_file = os.path.join('static', 'domain',
                              g.domain, 'model', category, filename)
     stylesheet = ''
-    source = open(path_file + '.rst').read() + u"""
+    source = open(path_file + '.rst').read().decode("utf-8") + u"""
 
 .. meta::
    :model: %s/%s""" % (category, filename)
