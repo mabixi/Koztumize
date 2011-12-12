@@ -170,7 +170,7 @@ section.toolbar input[type=submit]{
 }
 
 #btn_version{
-    width:14em;
+    width:15.25em;
     border-bottom-right-radius:0px;
     border-bottom-left-radius:0px;
     cursor:default;
@@ -184,7 +184,7 @@ section.toolbar input[type=submit]{
     position:absolute;
     z-index:100;
     list-style:none;
-    width:13em;
+    width:14em;
     max-height:7em;
     overflow-y:auto;
 }
