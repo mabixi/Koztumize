@@ -25,6 +25,9 @@
         <input type="button" value="Réinitialiser" onclick="window.location.reload();"/>
       </li>
       <li>
+        <input type="button" value="Modèle vierge" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';"/>
+      </li>
+      <li>
         <input type="button" id="btn_version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
         <ul id="hist" onmouseover="document.getElementById('hist').style.display='block';" onmouseout="document.getElementById('hist').style.display='none';">
           {% for commit in date_commit %}
