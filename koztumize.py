@@ -72,7 +72,7 @@ def modify(category, filename, version):
     date_commit = []
     for commit in range(len(hist)):
         date_commit.append(
-            hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M"))
+            hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M:%S"))
     return render_template('modify.html', category=category,
                            filename=filename, date_commit=date_commit)
 
@@ -100,12 +100,12 @@ def save():
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
     try:
-        g.git.add(path_file)
-        g.git.commit(message="Modify " + edited_file)
-        g.git.push()
-        flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
+        g.git.commit(path_file, message="Modify " + edited_file)
     except GitException:
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
+    else:
+        g.git.push()
+        flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
 
     return redirect(url_for('modify', category=request.form['category'],
                            filename=request.form['filename'], version=0))
