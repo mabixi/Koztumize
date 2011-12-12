@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
-{% block head %}
-  <title>Koztumize - {{ filename }} </title>
-  <link href="{{url_for('static',filename='style.css')}}" media="screen" type="text/css" rel="stylesheet" />  
-{% endblock head %}
+  {% block head %}
+    <title>Koztumize - {{ filename }} </title>
+  {% endblock head %}
   {% block header %}<h2>{{ filename }}</h2>{% endblock header %}
   {% block content %}
   <section class="toolbar">
