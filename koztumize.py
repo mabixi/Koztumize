@@ -13,6 +13,7 @@ from flask import (
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
+from HTMLParser import HTMLParser
 
 
 DOMAIN = None
@@ -73,8 +74,11 @@ def modify(category, filename, version):
     for commit in range(len(hist)):
         date_commit.append(
             hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M:%S"))
-    return render_template('modify.html', category=category,
-                           filename=filename, date_commit=date_commit)
+    parser = ModelParser()
+    link = parser.feed(open(
+        '/home/jjames/archive/kozea/Courrier/courrier-defaut.html').read())
+    return render_template('modify.html', category=category, filename=filename,
+                           date_commit=date_commit, link=link)
 
 
 @app.route('/file/<category>/<filename>')
@@ -147,6 +151,18 @@ def model(category, filename):
         source=source, writer=Writer(), settings_overrides=arguments)
     text = parts['whole']
     return text
+
+
+class ModelParser(HTMLParser):
+    """A class which parse the HTML from the model."""
+    def handle_starttag(self, tag, attrs):
+        result = ''
+        if tag == 'meta':
+            meta = dict(attrs)
+            if 'name' in meta.keys():
+                if meta['name'] == "model":
+                    result = meta['content']
+        return result
 
 
 class Editable(Directive):
