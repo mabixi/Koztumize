@@ -8,12 +8,12 @@ import os
 import weasy
 import argparse
 import docutils.core
+from HTMLParser import HTMLParser
 from flask import (
     Flask, request, render_template, send_file, url_for, g, redirect, flash)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
-from HTMLParser import HTMLParser
 
 
 DOMAIN = None
@@ -75,10 +75,10 @@ def modify(category, filename, version):
         date_commit.append(
             hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M:%S"))
     parser = ModelParser()
-    link = parser.feed(open(
-        '/home/jjames/archive/kozea/Courrier/courrier-defaut.html').read())
-    return render_template('modify.html', category=category, filename=filename,
-                           date_commit=date_commit, link=link)
+    link = parser.feed(open(os.path.join(g.git.path, category,
+                                  filename + '.html')).read())
+    return render_template('modify.html', category=category,
+                           filename=filename, date_commit=date_commit)
 
 
 @app.route('/file/<category>/<filename>')
@@ -108,8 +108,12 @@ def save():
     except GitException:
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
-        g.git.push()
-        flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
+        try:
+            g.git.push()
+        except GitException:
+            flash(u"Erreur : Une erreur interne est survenue.", 'error')
+        else:
+            flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
 
     return redirect(url_for('modify', category=request.form['category'],
                            filename=request.form['filename'], version=0))
