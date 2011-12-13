@@ -112,8 +112,7 @@ def save():
     try:
         g.git.add(".")
         g.git.commit(message="Modify " + edited_file)
-    except GitException as e:
-        print e
+    except GitException:
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
         g.git.push()

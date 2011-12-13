@@ -10,6 +10,7 @@ from brigit import Git
 
 
 def setup():  # pragma: no cover
+    """Set up the git repository for the all the tests"""
     koztumize.DOMAIN = 'test'
     koztumize.ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
     domain_path = os.path.join(koztumize.ARCHIVE, koztumize.DOMAIN)
