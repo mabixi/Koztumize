@@ -28,13 +28,13 @@
         <input type="button" id="btn_version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
         <ul id="hist" onmouseover="document.getElementById('hist').style.display='block';" onmouseout="document.getElementById('hist').style.display='none';">
           {% for commit in date_commit %}
-            <li><a href="{{ url_for('modify', category=category, filename=filename, version=date_commit.index(commit)) }}">{{ commit }}</a></li>
+            <li><a href="{{ url_for('modify',path=path, version=date_commit.index(commit)) }}">{{ commit }}</a></li>
           {% endfor %}
         </ul>
       </li>
     <ul>
   </section>
-  <iframe id="iframe" src="{{ url_for('reader',category=category, filename=filename) }}"></iframe>
+  <iframe id="iframe" src="{{ url_for('reader',path=path) }}"></iframe>
   
  
   {% endblock content %}

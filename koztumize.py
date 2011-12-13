@@ -65,33 +65,45 @@ the document is return to the client."""
 
 
 @app.route('/archive')
-def archive():
+@app.route('/archive/<path:path>')
+def archive(path=''):
     """Archive."""
-    archived_models = {
-        category: os.listdir(os.path.join(g.git.path, category))
-        for category in os.listdir(g.git.path)}
-    return render_template('archive.html', archived_models=archived_models)
+    archived_dirs = []
+    archived_files = []
+    for element in os.listdir(os.path.join(ARCHIVE, path)):
+        if os.path.isdir(os.path.join(ARCHIVE, path, element)):
+            if element != '.git':
+                archived_dirs.append(os.path.join(path, element))
+        else:
+            archived_files.append(os.path.join(path, element))
+    return render_template('archive.html', archived_dirs=archived_dirs,
+                           archived_files=archived_files, path=path)
 
 
-@app.route('/modify/<category>/<filename>/<version>')
-def modify(category, filename, version):
+@app.route('/modify/<path:path>')
+@app.route('/modify/<path:path>/<int:version>')
+def modify(path, version=0):
     """This is the route where you can modify your models."""
-    file_path = os.path.join(g.git.path, category, filename + '.html')
-    g.git.checkout("HEAD~" + version, file_path)
+    file_path = os.path.join(ARCHIVE, path)
+    g.git.checkout("HEAD~%i" % version, file_path)
     hist = list(g.git.pretty_log(file_path))
     date_commit = []
     for commit in range(len(hist)):
         date_commit.append(
             hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M:%S"))
+    parser = ModelParser()
+    parser.feed(open(file_path).read())
+    path_model = parser.result
+    category, filename = path_model.rsplit('/', 1)
     return render_template('modify.html', category=category,
-                           filename=filename, date_commit=date_commit)
+                           filename=filename, date_commit=date_commit,
+                           path=path)
 
 
-@app.route('/file/<category>/<filename>')
-def reader(category, filename):
+@app.route('/file/<path:path>')
+def reader(path):
     """The route which read the archived .html."""
-    file_content = open(os.path.join(
-        g.git.path, category, filename + '.html')).read()
+    file_content = open(os.path.join(ARCHIVE, path)).read()
     return file_content
 
 
@@ -118,8 +130,10 @@ def save():
         g.git.push()
         flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
 
-    return redirect(url_for('modify', category=request.form['category'],
-                           filename=request.form['filename'], version=0))
+    return redirect(url_for('modify',
+                            path=os.path.join(g.domain,
+                                              request.form['category'],
+                                              edited_file), version=0))
 
 
 @app.route('/edit/<category>/<filename>')
@@ -163,13 +177,11 @@ def model(category, filename):
 class ModelParser(HTMLParser):
     """A class which parse the HTML from the model."""
     def handle_starttag(self, tag, attrs):
-        result = ''
         if tag == 'meta':
             meta = dict(attrs)
             if 'name' in meta.keys():
                 if meta['name'] == "model":
-                    result = meta['content']
-        return result
+                    self.result = meta['content']
 
 
 class Editable(Directive):

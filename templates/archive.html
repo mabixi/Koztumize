@@ -7,13 +7,15 @@
 {% endblock header %}
 {% block content %}
 <aside>
-  {% for category in archived_models.keys() %}
-  <h2>{{ category }}</h2>
-    <ul>
-      {% for model in archived_models[category] %}
-      <li><a href="{{ url_for('modify', category=category, filename=model[:-5], version=0) }}">{{ model[:-5] }}</a></li>
-      {% endfor %}
-    </ul>
+  {% for dir in archived_dirs %}
+  <ul>
+    <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>   
+  </ul>
+  {% endfor %}
+  {% for file in archived_files %}
+  <ul>
+      <li><a href="{{ url_for('modify', path=file) }}" class="file">{{ file.split('/')[-1] }}</a></li> 
+  </ul>
   {% endfor %}
 </aside>
 {% endblock content %}
