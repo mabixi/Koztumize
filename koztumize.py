@@ -14,7 +14,16 @@ from flask import (
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
+from log_colorizer import make_colored_stream_handler
+from logging import getLogger
+import logging
 
+
+HANDLER = make_colored_stream_handler()
+getLogger('brigit').addHandler(HANDLER)
+getLogger('werkzeug').addHandler(HANDLER)
+getLogger('werkzeug').setLevel(logging.INFO)
+getLogger('brigit').setLevel(logging.DEBUG)
 
 DOMAIN = None
 ARCHIVE = os.path.join(os.path.expanduser('~/archive'))
@@ -74,9 +83,6 @@ def modify(category, filename, version):
     for commit in range(len(hist)):
         date_commit.append(
             hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M:%S"))
-    parser = ModelParser()
-    link = parser.feed(open(os.path.join(g.git.path, category,
-                                  filename + '.html')).read())
     return render_template('modify.html', category=category,
                            filename=filename, date_commit=date_commit)
 
@@ -104,16 +110,14 @@ def save():
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
     try:
-        g.git.commit(path_file, message="Modify " + edited_file)
-    except GitException:
+        g.git.add(".")
+        g.git.commit(message="Modify " + edited_file)
+    except GitException as e:
+        print e
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
-        try:
-            g.git.push()
-        except GitException:
-            flash(u"Erreur : Une erreur interne est survenue.", 'error')
-        else:
-            flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
+        g.git.push()
+        flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
 
     return redirect(url_for('modify', category=request.form['category'],
                            filename=request.form['filename'], version=0))
