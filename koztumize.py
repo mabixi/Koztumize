@@ -72,7 +72,7 @@ def archive(path=''):
     archived_files = []
     for element in os.listdir(os.path.join(ARCHIVE, path)):
         if os.path.isdir(os.path.join(ARCHIVE, path, element)):
-            if element != '.git':
+            if not element.startswith("."):
                 archived_dirs.append(os.path.join(path, element))
         else:
             archived_files.append(os.path.join(path, element))
