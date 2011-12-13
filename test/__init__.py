@@ -21,6 +21,6 @@ def setup():  # pragma: no cover
     git.init()
     git.remote(
         'add', '-t', 'archive', 'origin',
-        'git://github.com/Kozea/Koztumize.git')
+        'git@github.com:Kozea/Koztumize.git')
     git.pull()
     git.checkout('test')

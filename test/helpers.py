@@ -15,7 +15,6 @@ def with_git(function):
     def decorator(*args, **kwargs):
         """Set the git repository to the initial version."""
         git = Git(os.path.join(koztumize.ARCHIVE, koztumize.DOMAIN))
-        git.reset('--hard', 'test', '--')
         return function(git=git, *args, **kwargs)
     return wraps(function)(decorator)
 

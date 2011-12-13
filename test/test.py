@@ -4,7 +4,6 @@ Test for Koztumize (all the routes are tested)
 """
 
 import os
-
 from .helpers import with_client, with_git, request
 
 
@@ -67,16 +66,9 @@ def test_archive(client, git):
 @with_client
 def test_modify(client, git):
     """Test the modify page."""
-    models = {
-        category: os.listdir(os.path.join(git.path, category))
-        for category in os.listdir(git.path)
-        if not category.startswith(".")}
-    for category in models.keys():
-        for model in models[category]:
-            response = request(client.get,
-                               os.path.join('modify',
-                                            category, model[:-5], '0'))
-            assert '<html>' in response.data
+    response = request(client.get, os.path.join('modify', 'test',
+                                                'test', 'test.html'))
+    assert '<head>' in response.data
 
 
 @with_git
@@ -87,6 +79,7 @@ def test_reader(client, git):
         category: os.listdir(os.path.join(git.path, category))
         for category in os.listdir(git.path)
         if not category.startswith(".")}
+    print(git.path)
     for category in models.keys():
         for model in models[category]:
             response = request(client.get,
