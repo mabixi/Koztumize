@@ -176,6 +176,10 @@ def model(category, filename):
 
 class ModelParser(HTMLParser):
     """A class which parse the HTML from the model."""
+    def __init__(self):
+        self.result = ''
+        HTMLParser.__init__(self)
+
     def handle_starttag(self, tag, attrs):
         if tag == 'meta':
             meta = dict(attrs)
