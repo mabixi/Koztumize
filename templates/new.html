@@ -11,7 +11,7 @@
   <h2>{{ category }}</h2>
     <ul>
       {% for model in models[category] %}
-      <li><a href="{{ url_for('edit', category=category, filename=model[:-4]) }}">{{ model[:-4] }}</a></li>
+      <li><a href="{{ url_for('edit', category=category, filename=model) }}">{{ model.rsplit('.', 1)[0] }}</a></li>
       {% endfor %}
     </ul>
   {% endfor %}

@@ -74,7 +74,7 @@ def archive(path=''):
         if os.path.isdir(os.path.join(ARCHIVE, path, element)):
             if not element.startswith("."):
                 archived_dirs.append(os.path.join(path, element))
-        else:  # pragma: no cover
+        else:
             archived_files.append(os.path.join(path, element))
     return render_template('archive.html', archived_dirs=archived_dirs,
                            archived_files=archived_files, path=path)
@@ -148,7 +148,7 @@ def model(category, filename):
     path_file = os.path.join('static', 'domain',
                              g.domain, 'model', category, filename)
     stylesheet = ''
-    source = open(path_file + '.rst').read().decode("utf-8") + u"""
+    source = open(path_file).read().decode("utf-8") + u"""
 
 .. meta::
    :model: %s/%s""" % (category, filename)

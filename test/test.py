@@ -4,7 +4,8 @@ Test for Koztumize (all the routes are tested)
 """
 
 import os
-from .helpers import with_client, with_git, request
+from .helpers import with_client, with_git, request, koztumize
+from flask import url_for
 
 
 @with_client
@@ -18,30 +19,34 @@ def test_index(client):
 def test_edit(client):
     """Test the edit page."""
     models = {
-        category: os.listdir(os.path.join('static', 'domain',
-                                          'test', 'model', category))
-        for category in os.listdir(os.path.join('static', 'domain',
-                                                'test', 'model'))}
-    for category in models.keys():
-        for model in models[category]:
-            response = request(client.get,
-                               os.path.join('edit', category, model))
-            assert model in response.data
+        category: os.listdir(os.path.join(
+            'static', 'domain', 'test', 'model', category))
+        for category in os.listdir(os.path.join(
+            'static', 'domain', 'test', 'model'))}
+    with client.application.test_request_context():
+        for category in models.keys():
+            for model in models[category]:
+                response = request(
+                    client.get, url_for(
+                        'edit', category=category, filename=model))
+                assert model in response.data
 
 
 @with_client
 def test_model(client):
     """Test the model page."""
     models = {
-        category: os.listdir(os.path.join('static', 'domain',
-                                          'test', 'model', category))
-        for category in os.listdir(os.path.join('static', 'domain',
-                                                'test', 'model'))}
-    for category in models.keys():
-        for model in models[category]:
-            response = request(client.get, os.path.join(
-               'model', category,  model[:-4]))
-            assert 'test.css' in response.data
+        category: os.listdir(os.path.join(
+            'static', 'domain', 'test', 'model', category))
+        for category in os.listdir(os.path.join(
+            'static', 'domain', 'test', 'model'))}
+    with client.application.test_request_context():
+        for category in models.keys():
+            for model in models[category]:
+                response = request(
+                    client.get, url_for(
+                        'model', category=category, filename=model))
+                assert 'test.css' in response.data
 
 
 @with_client
@@ -58,32 +63,35 @@ def test_generate(client):
 @with_client
 def test_archive(client, git):
     """Test the archive page."""
-    response = request(client.get, '/archive')
-    assert '<html>' in response.data
+    with client.application.test_request_context():
+        response = request(client.get, url_for('archive'))
+        assert '<html>' in response.data
 
 
 @with_git
 @with_client
 def test_modify(client, git):
     """Test the modify page."""
-    response = request(client.get, os.path.join('modify', 'test',
-                                                'test', 'test.html'))
-    assert '<head>' in response.data
+    with client.application.test_request_context():
+        response = request(client.get, url_for(
+            'modify', path=os.path.join('test', 'test', 'test.html')))
+        assert '<head>' in response.data
 
 
 @with_git
 @with_client
 def test_reader(client, git):
     """Test the html reader"""
-    models = {
-        category: os.listdir(os.path.join(git.path, category))
-        for category in os.listdir(git.path)
-        if not category.startswith(".")}
-    print(git.path)
-    for category in models.keys():
-        for model in models[category]:
-            response = request(client.get,
-                               os.path.join('file', 'test', category, model))
+    models = []
+    with client.application.test_request_context():
+        for root in os.walk('test/archive/test/test'):
+            for dirs in root[2]:
+                models.append(os.path.join(root[0].rsplit('/')[-1], dirs))
+        for model in models:
+            response = request(client.get, url_for('reader',
+                                                   path=os.path.join(
+                                                       koztumize.DOMAIN,
+                                                       model)))
             assert '<head>' in response.data
 
 
@@ -92,5 +100,5 @@ def test_reader(client, git):
 def test_save(client, git):
     """Test the save page."""
     data = '<html><head><meta name="model" content="test/test"></head></html>'
-    response = request(client.post, '/save', data={
+    request(client.post, '/save', data={
         'html_content': data, 'filename': 'test', 'category': 'test'})
