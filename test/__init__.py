@@ -19,6 +19,7 @@ def setup():  # pragma: no cover
     os.mkdir(domain_path)
     git = Git(domain_path)
     git.init()
+    git.push = lambda *args, **kwargs: None
     git.remote(
         'add', '-t', 'archive', 'origin',
         'git://github.com/Kozea/Koztumize.git')

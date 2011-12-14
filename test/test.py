@@ -83,7 +83,7 @@ def test_reader(client, git):
     for category in models.keys():
         for model in models[category]:
             response = request(client.get,
-                               os.path.join('file', category, 'test', model))
+                               os.path.join('file', 'test', category, model))
             assert '<head>' in response.data
 
 
