@@ -74,7 +74,7 @@ def archive(path=''):
         if os.path.isdir(os.path.join(ARCHIVE, path, element)):
             if not element.startswith("."):
                 archived_dirs.append(os.path.join(path, element))
-        else:
+        else:  # pragma: no cover
             archived_files.append(os.path.join(path, element))
     return render_template('archive.html', archived_dirs=archived_dirs,
                            archived_files=archived_files, path=path)
@@ -124,7 +124,7 @@ def save():
     try:
         g.git.add(".")
         g.git.commit(message="Modify " + edited_file)
-    except GitException:
+    except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
         g.git.push()

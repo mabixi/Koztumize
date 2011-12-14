@@ -91,6 +91,6 @@ def test_reader(client, git):
 @with_client
 def test_save(client, git):
     """Test the save page."""
-    data = '<head>'
+    data = '<html><head><meta name="model" content="test/test"></head></html>'
     response = request(client.post, '/save', data={
         'html_content': data, 'filename': 'test', 'category': 'test'})

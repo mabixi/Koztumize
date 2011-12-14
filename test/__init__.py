@@ -17,9 +17,9 @@ def setup():  # pragma: no cover
     if os.path.exists(domain_path):
         shutil.rmtree(domain_path)
     os.mkdir(domain_path)
+    Git.push = lambda *args, **kwargs: None
     git = Git(domain_path)
     git.init()
-    git.push = lambda *args, **kwargs: None
     git.remote(
         'add', '-t', 'archive', 'origin',
         'git://github.com/Kozea/Koztumize.git')
