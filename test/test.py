@@ -4,7 +4,8 @@ Test for Koztumize (all the routes are tested)
 """
 
 import os
-from .helpers import with_client, with_git, request, koztumize
+from .helpers import with_client, request
+from . import koztumize
 from flask import url_for
 
 
@@ -59,18 +60,16 @@ def test_generate(client):
     assert response.data[:4] == '%PDF'
 
 
-@with_git
 @with_client
-def test_archive(client, git):
+def test_archive(client):
     """Test the archive page."""
     with client.application.test_request_context():
         response = request(client.get, url_for('archive'))
         assert '<html>' in response.data
 
 
-@with_git
 @with_client
-def test_modify(client, git):
+def test_modify(client):
     """Test the modify page."""
     with client.application.test_request_context():
         response = request(client.get, url_for(
@@ -78,9 +77,8 @@ def test_modify(client, git):
         assert '<head>' in response.data
 
 
-@with_git
 @with_client
-def test_reader(client, git):
+def test_reader(client):
     """Test the html reader"""
     models = []
     with client.application.test_request_context():
@@ -95,9 +93,8 @@ def test_reader(client, git):
             assert '<head>' in response.data
 
 
-@with_git
 @with_client
-def test_save(client, git):
+def test_save(client):
     """Test the save page."""
     data = '<html><head><meta name="model" content="test/test"></head></html>'
     request(client.post, '/save', data={

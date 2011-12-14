@@ -2,21 +2,9 @@
 Helpers for tests, with definition of decorator and function.
 
 """
-import koztumize
-import os
-from brigit import Git
 from koztumize import app
 from functools import wraps
 from nose.tools import eq_
-
-
-def with_git(function):
-    """Allow tests to use git.."""
-    def decorator(*args, **kwargs):
-        """Set the git repository to the initial version."""
-        git = Git(os.path.join(koztumize.ARCHIVE, koztumize.DOMAIN))
-        return function(git=git, *args, **kwargs)
-    return wraps(function)(decorator)
 
 
 def with_client(function):
