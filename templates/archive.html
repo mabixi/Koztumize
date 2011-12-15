@@ -14,7 +14,7 @@
   {% endfor %}
   {% for file in archived_files %}
   <ul>
-      <li><a href="{{ url_for('modify', path=file) }}" class="file">{{ file.split('/')[-1] }}</a></li> 
+      <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1] }}</a></li> 
   </ul>
   {% endfor %}
 </aside>

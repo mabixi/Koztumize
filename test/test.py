@@ -73,7 +73,8 @@ def test_modify(client):
     """Test the modify page."""
     with client.application.test_request_context():
         response = request(client.get, url_for(
-            'modify', path=os.path.join('test', 'test', 'test.html')))
+            'modify', path=os.path.join('test', 'test', 'test.html'),
+        version='master'))
         assert '<head>' in response.data
 
 

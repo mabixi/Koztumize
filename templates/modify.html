@@ -28,7 +28,7 @@
         <input type="button" id="btn_version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
         <ul id="hist" onmouseover="document.getElementById('hist').style.display='block';" onmouseout="document.getElementById('hist').style.display='none';">
           {% for commit in date_commit %}
-            <li><a href="{{ url_for('modify',path=path, version=date_commit.index(commit)) }}">{{ commit }}</a></li>
+            <li><a href="{{ url_for('modify', path=path, version=commit['commit']) }}">{{ commit['date'] }}</a></li>
           {% endfor %}
         </ul>
       </li>

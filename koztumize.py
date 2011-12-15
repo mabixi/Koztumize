@@ -81,16 +81,19 @@ def archive(path=''):
 
 
 @app.route('/modify/<path:path>')
-@app.route('/modify/<path:path>/<int:version>')
-def modify(path, version=0):
+@app.route('/modify/<path:path>/<version>')
+def modify(path, version=''):
     """This is the route where you can modify your models."""
     file_path = os.path.join(ARCHIVE, path)
-    g.git.checkout("HEAD~%i" % version, file_path)
+    g.git.checkout("master")
     hist = list(g.git.pretty_log(file_path))
+    g.git.checkout("%s" % version)
     date_commit = []
     for commit in range(len(hist)):
         date_commit.append(
-            hist[commit]['datetime'].strftime("le %d-%m-%Y a %H:%M:%S"))
+            {'date': hist[commit]['datetime']
+             .strftime("le %d-%m-%Y a %H:%M:%S"),
+             'commit': hist[commit]['hash'][:7]})
     parser = ModelParser()
     parser.feed(open(file_path).read())
     path_model = parser.result
@@ -121,8 +124,8 @@ def save():
         os.mkdir(path_category)
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
+    g.git.add(".")
     try:
-        g.git.add(".")
         g.git.commit(message="Modify " + edited_file)
     except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
@@ -133,7 +136,7 @@ def save():
     return redirect(url_for('modify',
                             path=os.path.join(g.domain,
                                               request.form['category'],
-                                              edited_file), version=0))
+                                              edited_file), version='master'))
 
 
 @app.route('/edit/<category>/<filename>')
