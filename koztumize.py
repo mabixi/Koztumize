@@ -17,6 +17,7 @@ from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
 from log_colorizer import make_colored_stream_handler
 from logging import getLogger
+from functools import wraps
 import logging
 import ldap
 from flaskext.sqlalchemy import SQLAlchemy
@@ -63,29 +64,21 @@ def check_auth(username, password):
 def authenticate():
     """Sends a 401 response that enables basic auth"""
     return Response(
-    'Login Required', 401,
-    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        'Login Required', 401,
+        {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
 
-def route(*args, **kwargs):
-    """Decorator acting like a route but with auth checking"""
-    def auth(fun):
-        """Auth decorator"""
-        if hasattr(fun, '_has_auth_'):
-            decorated = fun
+def auth(func):
+    @wraps(func)
+    def auth_func(*args, **kwargs):
+        if session.get('user'):
+            return func(*args, **kwargs)
         else:
-            def decorated(*fargs, **fkwargs):
-                """Auth decoratorated"""
-                auth = request.authorization
-                if not auth or not check_auth(auth.username, auth.password):
-                    return authenticate()
-                return fun(*fargs, **fkwargs)
-            decorated.__name__ = fun.__name__
-            decorated._has__auth_ = True
-
-        app.route(*args, **kwargs)(decorated)
-        return decorated
-    return auth
+            auth = request.authorization
+            if not auth or not check_auth(auth.username, auth.password):
+                return authenticate()
+            return func(*args, **kwargs)
+    return auth_func
 
 
 @app.before_request
@@ -95,17 +88,10 @@ def before_request():
     g.git = Git(os.path.join(ARCHIVE, g.domain))
 
 
-@route('/')
+@app.route('/')
+@auth
 def index():
-    """Index is the main route of the application."""
-    return redirect(url_for('new'))
-
-
-@route('/new')
-def new():
     """This is the route where you choose the model you want to edit."""
-    if not session.get('user'):
-        return redirect(url_for('index'))
     path_model = os.path.join('static', 'domain', g.domain, 'model')
     models = {
         category: os.listdir(os.path.join(path_model, category))
@@ -113,7 +99,8 @@ def new():
     return render_template('new.html', models=models)
 
 
-@route('/generate', methods=('POST',))
+@app.route('/generate', methods=('POST',))
+@auth
 def generate():
     """The route where document .PDF is made with the given HTML and
 the document is return to the client."""
@@ -124,8 +111,9 @@ the document is return to the client."""
                      attachment_filename=request.form['filename'] + '.pdf')
 
 
-@route('/archive')
-@route('/archive/<path:path>')
+@app.route('/archive')
+@app.route('/archive/<path:path>')
+@auth
 def archive(path=''):
     """Archive."""
     archived_dirs = []
@@ -140,8 +128,9 @@ def archive(path=''):
                            archived_files=archived_files, path=path)
 
 
-@route('/modify/<path:path>')
-@route('/modify/<path:path>/<version>')
+@app.route('/modify/<path:path>')
+@app.route('/modify/<path:path>/<version>')
+@auth
 def modify(path, version=''):
     """This is the route where you can modify your models."""
     file_path = os.path.join(ARCHIVE, path)
@@ -165,13 +154,15 @@ def modify(path, version=''):
 
 
 @app.route('/file/<path:path>')
+@auth
 def reader(path):
     """The route which read the archived .html."""
     file_content = open(os.path.join(ARCHIVE, path)).read()
     return file_content
 
 
-@route('/save', methods=('POST',))
+@app.route('/save', methods=('POST',))
+@auth
 def save():
     """This is the route where you can edit save your changes."""
 
@@ -202,13 +193,15 @@ def save():
                                               edited_file), version='master'))
 
 
-@route('/edit/<category>/<filename>')
+@app.route('/edit/<category>/<filename>')
+@auth
 def edit(category, filename):
     """This is the route where you can edit the models."""
     return render_template('base.html', category=category, filename=filename)
 
 
-@route('/model/<category>/<filename>')
+@app.route('/model/<category>/<filename>')
+@auth
 def model(category, filename):
     """This is the route that returns the model."""
     path_file = os.path.join('static', 'domain',
@@ -240,11 +233,12 @@ def model(category, filename):
     return text
 
 
-@route('/logout')
+@app.route('/logout')
+@auth
 def logout():
     """This is the route where the user can log out."""
-    session.pop('user', None)
-    session.pop('usermail', None)
+    session.pop('user')
+    session.pop('usermail')
     return redirect(url_for('index'))
 
 
