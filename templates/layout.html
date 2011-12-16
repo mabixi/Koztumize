@@ -14,6 +14,14 @@
         <li><a href="{{ url_for('archive', path=g.domain) }}">Accéder à vos documents enregistrés</a></li>  
       </ul>
     </nav>
+    <aside>
+      {% if session.user %}
+      <ul>
+        <li>{{ session.user }}</li>
+        <li><a href="{{ url_for('logout') }}">se déconnecter</a></li>
+      </ul>
+      {% endif %}
+    </aside>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
       <aside>

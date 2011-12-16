@@ -15,6 +15,7 @@
 */
 html{
     background:url('img/bkgd.png');
+    margin:0;
 }
 
 body{
@@ -27,6 +28,7 @@ body{
   - Common -
   ----------
 */
+
 a{
     text-decoration:none;
 }
@@ -77,6 +79,35 @@ body>nav>ul>li a{
     text-shadow:0 0 0.05em #555;
 }
 
+/* info user + logout */
+body>aside{
+  position:absolute;
+  top:0;
+  right:1em;
+  margin:0;
+  padding:0;
+}
+
+body>aside>ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+body>aside>ul li{
+  display:inline-block;
+  padding-right:0.5em;
+  padding-left:0.5em;
+}
+
+body>aside>ul li:first-child{
+  border-right:1px solid #222;
+}
+
+body>aside>ul li a{
+  color:#222;
+}
+
 section>aside{
     margin:auto;
     width:60%;
@@ -110,6 +141,7 @@ section>aside ul li a{
     font-family:'ubuntu',sans-serif;
 }
 
+/* error flash message */
 aside>p.error{
     background:rgba(244,41,41,0.55);
     border:1px solid #B31B1B;
@@ -121,6 +153,7 @@ aside>p.error{
     font-weight:bold;
 }
 
+/* ok flash message */
 aside>p.ok{
     background:rgba(40,196,1,0.55);
     border:1px solid #21A200;

@@ -240,6 +240,14 @@ def model(category, filename):
     return text
 
 
+@route('/logout')
+def logout():
+    """This is the route where the user can log out."""
+    session.pop('user', None)
+    session.pop('usermail', None)
+    return redirect(url_for('index'))
+
+
 class ModelParser(HTMLParser):
     """A class which parse the HTML from the model."""
     def __init__(self):
