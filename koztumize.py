@@ -10,14 +10,20 @@ import argparse
 import docutils.core
 from HTMLParser import HTMLParser
 from flask import (
-    Flask, request, render_template, send_file, url_for, g, redirect, flash)
+    Flask, request, render_template, send_file, url_for, current_app,
+    g, redirect, flash, session, Response)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
 from log_colorizer import make_colored_stream_handler
 from logging import getLogger
 import logging
+import ldap
+from flaskext.sqlalchemy import SQLAlchemy
+from model import DATABASE, Koztumuser
 
+LDAP_HOST = "ldap.keleos.fr"
+LDAP_PATH = "ou=People,dc=keleos,dc=fr"
 
 HANDLER = make_colored_stream_handler()
 getLogger('brigit').addHandler(HANDLER)
@@ -28,6 +34,58 @@ getLogger('brigit').setLevel(logging.DEBUG)
 DOMAIN = None
 ARCHIVE = os.path.join(os.path.expanduser('~/archive'))
 app = Flask(__name__)  # pylint: disable=C0103
+app.config.from_object(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
+app.config['SQLALCHEMY_ECHO'] = True
+db = SQLAlchemy(app)
+app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+LDAP = ldap.open(LDAP_HOST)
+
+
+def check_auth(username, password):
+    """This function is called to check if a username /
+    password combination is valid against the LDAP.
+    """
+    user = LDAP.search_s(LDAP_PATH, ldap.SCOPE_ONELEVEL, "uid=%s" % username)
+    if not user or not password:
+        current_app.logger.warn("Unknown user %s" % username)
+        return False
+    try:
+        LDAP.simple_bind_s(user[0][0], password)
+    except ldap.INVALID_CREDENTIALS:
+        current_app.logger.warn("Invalid credentials for %s" % username)
+        return False
+    session["user"] = user[0][1]['cn'][0]
+    session["usermail"] = user[0][1].get('mail', ["none"])[0]
+    return True
+
+
+def authenticate():
+    """Sends a 401 response that enables basic auth"""
+    return Response(
+    'Login Required', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+
+def route(*args, **kwargs):
+    """Decorator acting like a route but with auth checking"""
+    def auth(fun):
+        """Auth decorator"""
+        if hasattr(fun, '_has_auth_'):
+            decorated = fun
+        else:
+            def decorated(*fargs, **fkwargs):
+                """Auth decoratorated"""
+                auth = request.authorization
+                if not auth or not check_auth(auth.username, auth.password):
+                    return authenticate()
+                return fun(*fargs, **fkwargs)
+            decorated.__name__ = fun.__name__
+            decorated._has__auth_ = True
+
+        app.route(*args, **kwargs)(decorated)
+        return decorated
+    return auth
 
 
 @app.before_request
@@ -37,15 +95,17 @@ def before_request():
     g.git = Git(os.path.join(ARCHIVE, g.domain))
 
 
-@app.route('/')
+@route('/')
 def index():
     """Index is the main route of the application."""
     return redirect(url_for('new'))
 
 
-@app.route('/new')
+@route('/new')
 def new():
     """This is the route where you choose the model you want to edit."""
+    if not session.get('user'):
+        return redirect(url_for('index'))
     path_model = os.path.join('static', 'domain', g.domain, 'model')
     models = {
         category: os.listdir(os.path.join(path_model, category))
@@ -53,7 +113,7 @@ def new():
     return render_template('new.html', models=models)
 
 
-@app.route('/generate', methods=('POST',))
+@route('/generate', methods=('POST',))
 def generate():
     """The route where document .PDF is made with the given HTML and
 the document is return to the client."""
@@ -64,8 +124,8 @@ the document is return to the client."""
                      attachment_filename=request.form['filename'] + '.pdf')
 
 
-@app.route('/archive')
-@app.route('/archive/<path:path>')
+@route('/archive')
+@route('/archive/<path:path>')
 def archive(path=''):
     """Archive."""
     archived_dirs = []
@@ -80,8 +140,8 @@ def archive(path=''):
                            archived_files=archived_files, path=path)
 
 
-@app.route('/modify/<path:path>')
-@app.route('/modify/<path:path>/<version>')
+@route('/modify/<path:path>')
+@route('/modify/<path:path>/<version>')
 def modify(path, version=''):
     """This is the route where you can modify your models."""
     file_path = os.path.join(ARCHIVE, path)
@@ -93,7 +153,8 @@ def modify(path, version=''):
         date_commit.append(
             {'date': hist[commit]['datetime']
              .strftime("le %d-%m-%Y a %H:%M:%S"),
-             'commit': hist[commit]['hash'][:7]})
+             'commit': hist[commit]['hash'][:7],
+             'author': hist[commit]['author']['name']})
     parser = ModelParser()
     parser.feed(open(file_path).read())
     path_model = parser.result
@@ -110,7 +171,7 @@ def reader(path):
     return file_content
 
 
-@app.route('/save', methods=('POST',))
+@route('/save', methods=('POST',))
 def save():
     """This is the route where you can edit save your changes."""
 
@@ -126,7 +187,9 @@ def save():
     open(path_file, "a+").close()
     g.git.add(".")
     try:
-        g.git.commit(message="Modify " + edited_file)
+        g.git.commit("--author='" + session['user'] + " <"
+                     + session['usermail'] + ">'",
+                      message="Modify " + edited_file)
     except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
@@ -139,13 +202,13 @@ def save():
                                               edited_file), version='master'))
 
 
-@app.route('/edit/<category>/<filename>')
+@route('/edit/<category>/<filename>')
 def edit(category, filename):
     """This is the route where you can edit the models."""
     return render_template('base.html', category=category, filename=filename)
 
 
-@app.route('/model/<category>/<filename>')
+@route('/model/<category>/<filename>')
 def model(category, filename):
     """This is the route that returns the model."""
     path_file = os.path.join('static', 'domain',
