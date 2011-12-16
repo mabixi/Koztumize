@@ -32,7 +32,7 @@ getLogger('werkzeug').setLevel(logging.INFO)
 getLogger('brigit').setLevel(logging.DEBUG)
 
 DOMAIN = None
-ARCHIVE = os.path.join(os.path.expanduser('~/archive'))
+ARCHIVE = os.path.join(os.path.expanduser('/home/lol/archive'))
 app = Flask(__name__)  # pylint: disable=C0103
 app.config.from_object(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
@@ -55,8 +55,8 @@ def check_auth(username, password):
     except ldap.INVALID_CREDENTIALS:
         current_app.logger.warn("Invalid credentials for %s" % username)
         return False
-    session["user"] = user[0][1]['cn'][0]
-    session["usermail"] = user[0][1].get('mail', ["none"])[0]
+    session["user"] = user[0][1]['cn'][0].decode('utf-8')
+    session["usermail"] = user[0][1].get('mail', ["none"])[0].decode('utf-8')
     return True
 
 
@@ -187,9 +187,9 @@ def save():
     open(path_file, "a+").close()
     g.git.add(".")
     try:
-        g.git.commit("--author='" + session['user'] + " <"
-                     + session['usermail'] + ">'",
-                      message="Modify " + edited_file)
+        g.git.commit(
+            u"--author=%s <%s>'" % (session['user'], session['usermail']),
+            message=u"Modify %s" % edited_file)
     except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
