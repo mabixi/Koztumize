@@ -97,8 +97,21 @@ def index():
     models = {
         category: os.listdir(os.path.join(path_model, category))
         for category in os.listdir(path_model)}
-    history = GitCommit.query.first()
-    raise
+    history_query = DB.session.query(
+        GitCommit.author_name.label('author_name'),
+        GitCommit.author_email.label('author_email'),
+        GitCommit.commit.label('commit'),
+        GitCommit.message.label('message'),
+        GitCommit.date.label('date')).all()
+    history = []
+    for hist in history_query:
+        history.append({
+            'author_name': hist.author_name,
+            'author_email': hist.author_email,
+            'commit': hist.commit[:7],
+            'message': hist.message[7:],
+            'date':  hist.date.strftime(
+                "le %d/%m/%Y à %H:%M:%S").decode('utf-8')})
     return render_template('new.html', models=models, history=history)
 
 
@@ -144,7 +157,7 @@ def modify(path, version=''):
     for commit in range(len(hist)):
         date_commit.append(
             {'date': hist[commit]['datetime']
-             .strftime("le %d-%m-%Y a %H:%M:%S"),
+             .strftime("le %d/%m/%Y à %H:%M:%S").decode('utf-8'),
              'commit': hist[commit]['hash'][:7],
              'author': hist[commit]['author']['name']})
     parser = ModelParser()

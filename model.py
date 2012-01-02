@@ -37,4 +37,4 @@ class GitCommit(DB.Model):
     author_name = DB.Column('author_name', DB.String)
     author_email = DB.Column('author_email', DB.String)
     message = DB.Column('message', DB.String)
-    date = DB.Column('date', DB.String)
+    date = DB.Column('date', DB.DateTime)

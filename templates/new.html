@@ -18,8 +18,8 @@
 </aside>
 <aside class="last_commits">
   <ul>
-    {% for hist in history%}
-    <li><a href="{{  }}">{{ hist}}</a></li>
+    {% for hist in history %}
+    <li>{{ hist['author_name'] }} a modifié {{ hist['message'] }} {{ hist['date'] }} }}</li>
     {% endfor %}
   </ul>
 </aside>
