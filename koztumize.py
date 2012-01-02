@@ -1,7 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-"""koztumize.py is used to launch the application Koztumize."""
+"""
+This file is used to launch the application Koztumize.
 
+"""
 
 from brigit import Git, GitException
 import os
@@ -21,7 +23,7 @@ from functools import wraps
 import logging
 import ldap
 from flaskext.sqlalchemy import SQLAlchemy
-from model import DATABASE, Koztumuser
+from model import DATABASE
 
 LDAP_HOST = "ldap.keleos.fr"
 LDAP_PATH = "ou=People,dc=keleos,dc=fr"
@@ -38,8 +40,7 @@ app = Flask(__name__)  # pylint: disable=C0103
 app.config.from_object(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
 app.config['SQLALCHEMY_ECHO'] = True
-db = SQLAlchemy(app)
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+DB = SQLAlchemy(app)
 LDAP = ldap.open(LDAP_HOST)
 
 
@@ -69,13 +70,16 @@ def authenticate():
 
 
 def auth(func):
+    """Check if the user is logged in, ask for authentication instead."""
     @wraps(func)
     def auth_func(*args, **kwargs):
+        """Decorator of the auth function."""
         if session.get('user'):
             return func(*args, **kwargs)
         else:
-            auth = request.authorization
-            if not auth or not check_auth(auth.username, auth.password):
+            authorization = request.authorization
+            if not authorization or not check_auth(
+                authorization.username, authorization.password):
                 return authenticate()
             return func(*args, **kwargs)
     return auth_func
@@ -237,8 +241,8 @@ def model(category, filename):
 @auth
 def logout():
     """This is the route where the user can log out."""
-    session.pop('user')
-    session.pop('usermail')
+    del(session['user'])
+    del(session['usermail'])
     return redirect(url_for('index'))
 
 
