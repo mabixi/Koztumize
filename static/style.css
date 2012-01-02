@@ -109,12 +109,18 @@ body>aside>ul li a{
 }
 
 section>aside{
-    margin:auto;
     width:60%;
     padding:1em;
+    margin:auto;
     background:rgba(255,255,255,0.2);
     border:thin solid #fff;
     box-shadow:0 0 5px #ddd;
+}
+
+section>aside.index{
+    margin-left:8em;
+    height:25em;
+    overflow:auto;
 }
 
 section>aside h2{
@@ -164,6 +170,68 @@ aside>p.ok{
     font-family:sans-serif;
     font-weight:bold;
 }
+
+/* 
+   ------------
+   - New Page -
+   ------------
+*/
+
+aside.last_commits{
+    float:right;
+    margin-top:-27em;
+    margin-right:7em;
+    width:17%;
+    height:26em;
+    font-family:sans-serif; 
+    padding-right:0;
+    padding-bottom:0;
+}
+
+aside.last_commits>h6{
+    margin:-0.5em 1em 1em 0;
+    padding:0;
+    font-size:0.8em;
+    text-align:center;
+    font-weight:normal;
+    text-transform:uppercase;
+    text-shadow:0px 0 1px #222;
+}
+
+aside.last_commits>div{
+    margin:1em 0 0 0;
+    padding:0;
+    height:24em;
+    overflow:auto;
+    width:100%;
+}
+
+aside.last_commits>div ul{   
+    margin:0;
+    padding:0.5em 0 0.5em 0em;  
+    border-bottom:thin solid rgb(254, 217, 143);
+}
+
+aside.last_commits>div ul:first-child{
+    padding-top:0;
+}
+
+aside.last_commits>div ul:last-child{
+    border:none;
+}
+
+aside.last_commits>div ul li{
+    margin:0;
+    padding:0;
+    font-family:sans-serif;
+    font-size:0.8em;
+}
+
+aside.last_commits>div ul li span.strong{
+    font-weight:700;
+}
+
+
 /*
   -------------
   - Edit Page -
@@ -245,36 +313,6 @@ iframe{
   left:5%;
   background:#fff;
   height:40em;
-}
-
-/* index style */
-section>aside{
-    margin:auto;
-    width:60%;
-    padding:1em;
-}
-
-section>aside h2{
-    background:rgba(254,217,143,0.2);
-    border-radius:5px;
-    padding:0.2em;
-    text-shadow:0 0 0.03em #000;
-    font-family:'josefin';
-}
-
-section>aside ul{
-    list-style:none;
-    font-family:'ubuntu',sans-serif;
-}
-
-section>aside ul li{
-    padding:0.25em;
-}
-
-section>aside ul li a{
-    color:#222;
-    text-decoration:none;
-    font-family:'ubuntu',sans-serif;
 }
 
 /*

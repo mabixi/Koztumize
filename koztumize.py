@@ -102,7 +102,7 @@ def index():
         GitCommit.author_email.label('author_email'),
         GitCommit.commit.label('commit'),
         GitCommit.message.label('message'),
-        GitCommit.date.label('date')).all()
+        GitCommit.date.label('date')).limit(10)
     history = []
     for hist in history_query:
         history.append({

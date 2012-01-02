@@ -6,7 +6,7 @@
 <h1>Créer un nouveau document</h1>
 {% endblock header %}
 {% block content %}
-<aside>
+<aside class="index">
   {% for category in models.keys() %}
   <h2>{{ category }}</h2>
     <ul>
@@ -17,10 +17,15 @@
   {% endfor %}
 </aside>
 <aside class="last_commits">
-  <ul>
+  <h6>Dernières modifications</h6>
+  <div>
     {% for hist in history %}
-    <li>{{ hist['author_name'] }} a modifié {{ hist['message'] }} {{ hist['date'] }} }}</li>
+    <ul>
+        <li><span class="strong">Auteur :</span> {{ hist['author_name'] }}</li>
+        <li><span class="strong">Fichier :</span> {{ hist['message'] }}</li>
+        <li><span class="strong">Date :</span> {{ hist['date'] }}</li>
+    </ul>
     {% endfor %}
-  </ul>
+  </div>
 </aside>
 {% endblock content %}
