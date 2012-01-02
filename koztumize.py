@@ -78,11 +78,7 @@ def auth(func):
         if session.get('user'):
             return func(*args, **kwargs)
         else:
-            authorization = request.authorization
-            if not authorization or not check_auth(
-                authorization.username, authorization.password):
-                return authenticate()
-            return func(*args, **kwargs)
+            return authenticate()
     return auth_func
 
 

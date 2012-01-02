@@ -203,7 +203,7 @@ section.toolbar input[type=submit]{
 }
 
 #btn_version{
-    width:15.25em;
+    width:14em;
     border-bottom-right-radius:0px;
     border-bottom-left-radius:0px;
     cursor:default;
@@ -308,16 +308,16 @@ footer li a:hover {
   color: black !important;
 }
 
-p.before_form {
+section.connection p{
   text-align: center;
 }
 
-form {
+section.connection form{
   width: 20em;
   margin: 0 auto 8em auto;
 }
 
-label {
+section.connection label {
     clear: right;
     color: #222222;
     display: block;
@@ -328,7 +328,7 @@ label {
     width: 45%;
 }
 
-input {
+section.connection input {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid;
     color: #111111;
@@ -339,7 +339,7 @@ input {
     width: 50%;
 }
 
-input[type=submit],input[type=button]
+section.connection input[type=submit],input[type=button]
 {
 	border:2px solid #111;
 	background:#222;
