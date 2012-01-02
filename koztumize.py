@@ -38,8 +38,7 @@ app = Flask(__name__)  # pylint: disable=C0103
 app.config.from_object(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
 app.config['SQLALCHEMY_ECHO'] = True
-db = SQLAlchemy(app)
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+db = SQLAlchemy(app)  # pylint: disable=C0103
 LDAP = ldap.open(LDAP_HOST)
 
 
@@ -69,13 +68,15 @@ def authenticate():
 
 
 def auth(func):
+    """Check if the user is logged."""
     @wraps(func)
     def auth_func(*args, **kwargs):
         if session.get('user'):
             return func(*args, **kwargs)
         else:
-            auth = request.authorization
-            if not auth or not check_auth(auth.username, auth.password):
+            authorization = request.authorization
+            if not authorization or not check_auth(
+                authorization.username, authorization.password):
                 return authenticate()
             return func(*args, **kwargs)
     return auth_func
