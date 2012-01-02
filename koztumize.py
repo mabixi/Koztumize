@@ -23,7 +23,7 @@ from functools import wraps
 import logging
 import ldap
 from flaskext.sqlalchemy import SQLAlchemy
-from model import DATABASE
+from model import DATABASE, GitCommit
 
 LDAP_HOST = "ldap.keleos.fr"
 LDAP_PATH = "ou=People,dc=keleos,dc=fr"
@@ -97,7 +97,9 @@ def index():
     models = {
         category: os.listdir(os.path.join(path_model, category))
         for category in os.listdir(path_model)}
-    return render_template('new.html', models=models)
+    history = GitCommit.query.first()
+    raise
+    return render_template('new.html', models=models, history=history)
 
 
 @app.route('/generate', methods=('POST',))

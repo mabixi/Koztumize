@@ -28,3 +28,13 @@ class Koztumuser(DB.Model):
         self.firstname = firstname
         self.login = login
         self.password = password
+
+
+class GitCommit(DB.Model):
+    """Create the commit table."""
+    __tablename__ = 'gitcommit'
+    commit = DB.Column('hash', DB.String, primary_key=True)
+    author_name = DB.Column('author_name', DB.String)
+    author_email = DB.Column('author_email', DB.String)
+    message = DB.Column('message', DB.String)
+    date = DB.Column('date', DB.String)
