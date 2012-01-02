@@ -16,4 +16,11 @@
     </ul>
   {% endfor %}
 </aside>
+<aside class="last_commits">
+  <ul>
+    {% for hist in history%}
+    <li><a href="{{  }}">{{ hist}}</a></li>
+    {% endfor %}
+  </ul>
+</aside>
 {% endblock content %}
