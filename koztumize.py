@@ -13,7 +13,7 @@ import docutils.core
 from HTMLParser import HTMLParser
 from flask import (
     Flask, request, render_template, send_file, url_for, current_app,
-    g, redirect, flash, session, Response)
+    g, redirect, flash, session)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
@@ -44,10 +44,13 @@ DB = SQLAlchemy(app)
 LDAP = ldap.open(LDAP_HOST)
 
 
-def check_auth(username, password):
+@app.route('/login', methods=('POST',))
+def check_auth():
     """This function is called to check if a username /
     password combination is valid against the LDAP.
     """
+    username = request.form['login']
+    password = request.form['passwd']
     user = LDAP.search_s(LDAP_PATH, ldap.SCOPE_ONELEVEL, "uid=%s" % username)
     if not user or not password:
         current_app.logger.warn("Unknown user %s" % username)
@@ -59,14 +62,12 @@ def check_auth(username, password):
         return False
     session["user"] = user[0][1]['cn'][0].decode('utf-8')
     session["usermail"] = user[0][1].get('mail', ["none"])[0].decode('utf-8')
-    return True
+    return redirect(url_for('index'))
 
 
 def authenticate():
-    """Sends a 401 response that enables basic auth"""
-    return Response(
-        'Login Required', 401,
-        {'WWW-Authenticate': 'Basic realm="Login Required"'})
+    """Authentication."""
+    return render_template('login.html')
 
 
 def auth(func):
@@ -241,9 +242,9 @@ def model(category, filename):
 @auth
 def logout():
     """This is the route where the user can log out."""
-    del(session['user'])
-    del(session['usermail'])
-    return redirect(url_for('index'))
+    session.pop('user')
+    session.pop('usermail')
+    return render_template('login.html')
 
 
 class ModelParser(HTMLParser):

@@ -1,6 +1,18 @@
-{{ extends "layout.html" }}
-<form action="{{ url_for('login') }}" method="post">
-  <label for="login">login</label><input type="text" name="login" id="login"/>
-  <label for="passwd">mot de passe</label><input type="password" name="passwd" id="passwd"/>
+{% extends "layout.html" %}
+
+{% block head %}
+<title>Connexion à Koztumize</title>
+{% endblock head%}
+
+{% block header %}
+<h1>Connexion à Koztumize</h1>
+{% endblock header %}
+
+{% block content %}
+<p class="before_form">Veuillez vous connecter</p>
+<form action="{{ url_for('check_auth') }}" method="post">
+  <label for="login">Nom d'utilisateur</label><input type="text" name="login" id="login"/>
+  <label for="passwd">Mot de passe</label><input type="password" name="passwd" id="passwd"/>
   <input type="submit" name="submitlogin" value="Valider"/>
 </form>
+{% endblock content %}
