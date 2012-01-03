@@ -1,6 +1,6 @@
 @font-face{
-    font-family: 'ubuntu';
-    src:url('Ubuntu.ttf');
+    font-family: 'hanzo';
+    src:url('hanzo.otf');
 }
 
 @font-face{
@@ -134,7 +134,7 @@ section>aside h2{
 
 section>aside ul{
     list-style:none;
-    font-family:'ubuntu',sans-serif;
+    font-family:'hanzo',sans-serif;
 }
 
 section>aside ul li{
@@ -144,7 +144,12 @@ section>aside ul li{
 section>aside ul li a{
     color:#222;
     text-decoration:none;
-    font-family:'ubuntu',sans-serif;
+    font-family:'hanzo',sans-serif;
+}
+
+/* style for dirs */
+.dir{
+  text-transform:uppercase;
 }
 
 /* error flash message */
@@ -170,6 +175,7 @@ aside>p.ok{
     font-family:sans-serif;
     font-weight:bold;
 }
+
 
 /* 
    ------------
