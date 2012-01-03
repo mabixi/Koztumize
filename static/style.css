@@ -153,7 +153,7 @@ section>aside ul li a{
 }
 
 /* error flash message */
-aside>p.error{
+p.error{
     background:rgba(244,41,41,0.55);
     border:1px solid #B31B1B;
     color:#B31B1B;
@@ -165,7 +165,7 @@ aside>p.error{
 }
 
 /* ok flash message */
-aside>p.ok{
+p.ok{
     background:rgba(40,196,1,0.55);
     border:1px solid #21A200;
     color:#21A200;
@@ -192,6 +192,7 @@ aside.last_commits{
     font-family:sans-serif; 
     padding-right:0;
     padding-bottom:0;
+    overflow:hidden;
 }
 
 aside.last_commits>h6{
@@ -204,10 +205,29 @@ aside.last_commits>h6{
     text-shadow:0px 0 1px #222;
 }
 
+aside.last_commits>form{
+    font-size:0.8em;
+    color:#444;
+}
+
+aside.last_commits>form>select{
+    height:1.5em;
+    min-width:8em;
+    background:transparent;
+    border:thin solid #444;
+    color:#444;
+}
+
+aside.last_commits>form>select option{
+    font-size:0.8em;
+    background:transparent;
+    color:#444;
+}
+
 aside.last_commits>div{
     margin:1em 0 0 0;
     padding:0;
-    height:24em;
+    height:22em;
     overflow:auto;
     width:100%;
 }
@@ -216,6 +236,15 @@ aside.last_commits>div ul{
     margin:0;
     padding:0.5em 0 0.5em 0em;  
     border-bottom:thin solid rgb(254, 217, 143);
+}
+
+aside.last_commits>div ul a{
+    color:#111;
+    outline:none;
+}
+
+aside.last_commits>div ul a:hover{
+    text-shadow:0 0 0.05em #666;
 }
 
 aside.last_commits>div ul:first-child{
