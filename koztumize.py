@@ -111,12 +111,21 @@ def index():
 @app.route('/history/get/<author>', methods=('GET',))
 @auth
 def history_get(author=None):
-    history_query = DB.session.query(
-        GitCommit.author_name.label('author_name'),
-        GitCommit.author_email.label('author_email'),
-        GitCommit.commit.label('commit'),
-        GitCommit.message.label('message'),
-        GitCommit.date.label('date')).limit(10)
+    if not author:
+        history_query = DB.session.query(
+            GitCommit.author_name.label('author_name'),
+            GitCommit.author_email.label('author_email'),
+            GitCommit.commit.label('commit'),
+            GitCommit.message.label('message'),
+            GitCommit.date.label('date')).limit(10)
+    else:
+        history_query = DB.session.query(
+            GitCommit.author_name.label('author_name'),
+            GitCommit.author_email.label('author_email'),
+            GitCommit.commit.label('commit'),
+            GitCommit.message.label('message'),
+            GitCommit.date.label('date')).filter(
+                GitCommit.author_name == author).limit(10)
     history = []
     for hist in history_query:
         if (not author or hist[0] == author):
