@@ -35,7 +35,7 @@ getLogger('werkzeug').setLevel(logging.INFO)
 getLogger('brigit').setLevel(logging.DEBUG)
 
 DOMAIN = None
-ARCHIVE = os.path.join(os.path.expanduser('/home/lol/archive'))
+ARCHIVE = os.path.join(os.path.expanduser('~/archive'))
 app = Flask(__name__)  # pylint: disable=C0103
 app.config.from_object(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
@@ -89,7 +89,7 @@ def before_request():
     g.git = Git(os.path.join(ARCHIVE, g.domain))
 
 
-@app.route('/')
+@app.route('/', methods=('GET',))
 @auth
 def index():
     """This is the route where you choose the model you want to edit."""
@@ -97,6 +97,20 @@ def index():
     models = {
         category: os.listdir(os.path.join(path_model, category))
         for category in os.listdir(path_model)}
+    print request.args.get('author_select')
+
+    authors_query = DB.session.query(
+        GitCommit.author_name.label('author_name')).distinct()
+    authors = []
+    for author in authors_query:
+        authors.append({'author_name': author.author_name})
+    return render_template('new.html', models=models, authors=authors)
+
+
+@app.route('/history/get/', methods=('GET',))
+@app.route('/history/get/<author>', methods=('GET',))
+@auth
+def history_get(author=None):
     history_query = DB.session.query(
         GitCommit.author_name.label('author_name'),
         GitCommit.author_email.label('author_email'),
@@ -105,14 +119,16 @@ def index():
         GitCommit.date.label('date')).limit(10)
     history = []
     for hist in history_query:
-        history.append({
-            'author_name': hist.author_name,
-            'author_email': hist.author_email,
-            'commit': hist.commit[:7],
-            'message': hist.message[7:],
-            'date':  hist.date.strftime(
-                "le %d/%m/%Y à %H:%M:%S").decode('utf-8')})
-    return render_template('new.html', models=models, history=history)
+        if (not author or hist[0] == author):
+            history.append({
+                'author_name': hist.author_name,
+                'author_email': hist.author_email,
+                'commit': hist.commit[:7],
+                'message': hist.message.rsplit('/')[-1],
+                'date':  hist.date.strftime(
+                    "le %d/%m/%Y à %H:%M:%S").decode('utf-8'),
+                'link': hist.message[7:]})
+    return render_template('new_ajax.html', history=history)
 
 
 @app.route('/generate', methods=('POST',))
@@ -182,10 +198,12 @@ def reader(path):
 def save():
     """This is the route where you can edit save your changes."""
 
-    edited_file = request.form['filename'] + '.html'
+    edited_file = request.form['filename'][:-4] + '.html'
     path_domain = os.path.join(g.git.path)
     path_category = os.path.join(path_domain, request.form['category'])
     path_file = os.path.join(path_category, edited_file)
+    path_message = os.path.join(
+        g.domain, request.form['category'], edited_file)
     if not os.path.exists(path_domain):  # pragma: no cover
         os.mkdir(path_domain)
     if not os.path.exists(path_category):  # pragma: no cover
@@ -196,7 +214,7 @@ def save():
     try:
         g.git.commit(
             u"--author=%s <%s>'" % (session['user'], session['usermail']),
-            message=u"Modify %s" % edited_file)
+            message=u"Modify %s" % path_message)
     except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
@@ -223,7 +241,7 @@ def model(category, filename):
     path_file = os.path.join('static', 'domain',
                              g.domain, 'model', category, filename)
     stylesheet = ''
-    source = open(path_file + ".rst").read().decode("utf-8") + u"""
+    source = open(path_file).read().decode("utf-8") + u"""
 
 .. meta::
    :model: %s/%s""" % (category, filename)

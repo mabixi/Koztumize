@@ -3,6 +3,7 @@
   <head>  
     <meta charset="UTF-8" />
     <link href="{{url_for('static',filename='style.css')}}" media="screen" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script> 
     {% block head %}
     {% endblock head %}
   </head>
@@ -24,11 +25,9 @@
     </aside>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-      <aside>
       {% for style,message in messages %}
         <p class="{{ style }}">{{ message }}</p>
       {% endfor %}
-      </aside>
       {% endif %}
     {% endwith %}
     <section>
