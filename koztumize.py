@@ -111,32 +111,20 @@ def index():
 @app.route('/history/get/<author>', methods=('GET',))
 @auth
 def history_get(author=None):
-    if not author:
-        history_query = DB.session.query(
-            GitCommit.author_name.label('author_name'),
-            GitCommit.author_email.label('author_email'),
-            GitCommit.commit.label('commit'),
-            GitCommit.message.label('message'),
-            GitCommit.date.label('date')).limit(10)
-    else:
-        history_query = DB.session.query(
-            GitCommit.author_name.label('author_name'),
-            GitCommit.author_email.label('author_email'),
-            GitCommit.commit.label('commit'),
-            GitCommit.message.label('message'),
-            GitCommit.date.label('date')).filter(
-                GitCommit.author_name == author).limit(10)
+    history_query = GitCommit.query
+    if author:
+        history_query = history_query.filter(
+                GitCommit.author_name == author)
     history = []
-    for hist in history_query:
-        if (not author or hist[0] == author):
-            history.append({
-                'author_name': hist.author_name,
-                'author_email': hist.author_email,
-                'commit': hist.commit[:7],
-                'message': hist.message.rsplit('/')[-1],
-                'date':  hist.date.strftime(
-                    "le %d/%m/%Y à %H:%M:%S").decode('utf-8'),
-                'link': hist.message[7:]})
+    for hist in history_query.limit(10).all():
+        history.append({
+            'author_name': hist.author_name,
+            'author_email': hist.author_email,
+            'commit': hist.commit[:7],
+            'message': hist.message.rsplit('/')[-1],
+            'date':  hist.date.strftime(
+                "le %d/%m/%Y à %H:%M:%S").decode('utf-8'),
+            'link': hist.message[7:]})
     return render_template('new_ajax.html', history=history)
 
 
