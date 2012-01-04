@@ -9,10 +9,20 @@ import shutil
 from brigit import Git
 
 
+class FakeLDAP(object):
+    def search_s(self, *args, **kwargs):
+        """XXX"""
+        return[[None, {'cn': ['test'], 'mail': ['mail']}]]
+
+    def simple_bind_s(self, *args, **kwargs):
+        """XXX"""
+
+
 def setup():  # pragma: no cover
     """Set up the git repository for the all the tests"""
     koztumize.DOMAIN = 'test'
     koztumize.ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
+    koztumize.LDAP = FakeLDAP()
     domain_path = os.path.join(koztumize.ARCHIVE, koztumize.DOMAIN)
     if os.path.exists(domain_path):
         shutil.rmtree(domain_path)

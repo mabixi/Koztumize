@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-This file is used to launch the application Koztumize.
+The file which launch the Koztumize application.
 
 """
 
@@ -45,9 +45,10 @@ LDAP = ldap.open(LDAP_HOST)
 
 
 @app.route('/login', methods=('POST',))
-def check_auth():
+def login():
     """This function is called to check if a username /
     password combination is valid against the LDAP.
+
     """
     username = request.form['login']
     password = request.form['passwd']
@@ -65,11 +66,6 @@ def check_auth():
     return redirect(url_for('index'))
 
 
-def authenticate():
-    """Authentication."""
-    return render_template('login.html')
-
-
 def auth(func):
     """Check if the user is logged in, ask for authentication instead."""
     @wraps(func)
@@ -78,7 +74,7 @@ def auth(func):
         if session.get('user'):
             return func(*args, **kwargs)
         else:
-            return authenticate()
+            return render_template('login.html')
     return auth_func
 
 
@@ -111,6 +107,7 @@ def index():
 @app.route('/history/get/<author>', methods=('GET',))
 @auth
 def history_get(author=None):
+    """This is the route where the commit history is done."""
     history_query = GitCommit.query
     if author:
         history_query = history_query.filter(
@@ -131,8 +128,11 @@ def history_get(author=None):
 @app.route('/generate', methods=('POST',))
 @auth
 def generate():
-    """The route where document .PDF is made with the given HTML and
-the document is return to the client."""
+    """
+    The route where the .PDF document is made with the given HTML. /
+    The PDF is returned to the client.
+
+    """
     document = weasy.PDFDocument.from_string(request.form['html_content'])
     temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
     document.write_to(temp_file)
@@ -144,7 +144,7 @@ the document is return to the client."""
 @app.route('/archive/<path:path>')
 @auth
 def archive(path=''):
-    """Archive."""
+    """The route where you can access your archived files."""
     archived_dirs = []
     archived_files = []
     for element in os.listdir(os.path.join(ARCHIVE, path)):
@@ -194,7 +194,7 @@ def reader(path):
 @auth
 def save():
     """This is the route where you can edit save your changes."""
-
+    g.git.checkout("master")
     edited_file = request.form['filename'][:-4] + '.html'
     path_domain = os.path.join(g.git.path)
     path_category = os.path.join(path_domain, request.form['category'])

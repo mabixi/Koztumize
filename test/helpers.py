@@ -9,9 +9,12 @@ from nose.tools import eq_
 
 def with_client(function):
     """Create the test_client."""
-    return wraps(function)(
-        lambda *args, **kwargs: function(  # pylint: disable=W0142
-            client=app.test_client(), *args, **kwargs))
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        client = app.test_client()
+        client.post('login', data={'login': 'test', 'passwd': 'pass'})
+        return function(client=client, *args, **kwargs)
+    return wrapper
 
 
 def request(method, route, status_code=200, content_type='text/html',
@@ -24,4 +27,3 @@ def request(method, route, status_code=200, content_type='text/html',
     eq_(response.status_code, status_code)
     assert content_type in response.content_type
     return response
- 
