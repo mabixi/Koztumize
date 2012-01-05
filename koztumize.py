@@ -34,9 +34,10 @@ getLogger('brigit').setLevel(logging.DEBUG)
 
 
 class Koztumize(Flask):
-
+    """The class which open the ldap."""
     @property
     def ldap(self):
+        """Open the ldap."""
         if not hasattr(self, '_ldap'):
             self._ldap = ldap.open(self.config['LDAP_HOST'])
         return self._ldap
