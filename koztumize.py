@@ -108,7 +108,7 @@ def index():
 @auth
 def history_get(author=None):
     """This is the route where the commit history is done."""
-    history_query = GitCommit.query
+    history_query = GitCommit.query.filter(GitCommit.message.like('Modify%'))
     if author:
         history_query = history_query.filter(
                 GitCommit.author_name == author)
