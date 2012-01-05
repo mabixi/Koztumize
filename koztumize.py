@@ -13,7 +13,7 @@ import docutils.core
 from HTMLParser import HTMLParser
 from flask import (
     Flask, request, render_template, send_file, url_for,
-    g, redirect, flash, session)
+    g, redirect, flash, session, current_app)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
 from tempfile import NamedTemporaryFile
@@ -23,10 +23,8 @@ from functools import wraps
 import logging
 import ldap
 from flaskext.sqlalchemy import SQLAlchemy
-from model import DATABASE, GitCommit
+from model import GitCommit
 
-LDAP_HOST = "ldap.keleos.fr"
-LDAP_PATH = "ou=People,dc=keleos,dc=fr"
 
 HANDLER = make_colored_stream_handler()
 getLogger('brigit').addHandler(HANDLER)
@@ -34,14 +32,17 @@ getLogger('werkzeug').addHandler(HANDLER)
 getLogger('werkzeug').setLevel(logging.INFO)
 getLogger('brigit').setLevel(logging.DEBUG)
 
-DOMAIN = None
-ARCHIVE = os.path.join(os.path.expanduser('~/archive'))
-app = Flask(__name__)  # pylint: disable=C0103
-app.config.from_object(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
-app.config['SQLALCHEMY_ECHO'] = True
+
+class Koztumize(Flask):
+
+    @property
+    def ldap(self):
+        if not hasattr(self, '_ldap'):
+            self._ldap = ldap.open(self.config['LDAP_HOST'])
+        return self._ldap
+
+app = Koztumize(__name__)  # pylint: disable=C0103
 DB = SQLAlchemy(app)
-LDAP = ldap.open(LDAP_HOST)
 
 
 @app.route('/login', methods=('POST',))
@@ -52,12 +53,13 @@ def login():
     """
     username = request.form['login']
     password = request.form['passwd']
-    user = LDAP.search_s(LDAP_PATH, ldap.SCOPE_ONELEVEL, "uid=%s" % username)
+    user = current_app.ldap.search_s(
+        app.config['LDAP_PATH'], ldap.SCOPE_ONELEVEL, "uid=%s" % username)
     if not user or not password:
         flash(u"Erreur : Les identifiants sont incorrects.", 'error')
         return render_template('login.html')
     try:
-        LDAP.simple_bind_s(user[0][0], password)
+        current_app.ldap.simple_bind_s(user[0][0], password)
     except ldap.INVALID_CREDENTIALS:
         flash(u"Erreur : Les identifiants sont incorrects.", 'error')
         return render_template('login.html')
@@ -81,8 +83,8 @@ def auth(func):
 @app.before_request
 def before_request():
     """Set variables before each request."""
-    g.domain = DOMAIN or request.host.split('.')[0]
-    g.git = Git(os.path.join(ARCHIVE, g.domain))
+    g.domain = app.config['DOMAIN'] or request.host.split('.')[0]
+    g.git = Git(os.path.join(app.config['ARCHIVE'], g.domain))
 
 
 @app.route('/', methods=('GET',))
@@ -147,8 +149,8 @@ def archive(path=''):
     """The route where you can access your archived files."""
     archived_dirs = []
     archived_files = []
-    for element in os.listdir(os.path.join(ARCHIVE, path)):
-        if os.path.isdir(os.path.join(ARCHIVE, path, element)):
+    for element in os.listdir(os.path.join(app.config['ARCHIVE'], path)):
+        if os.path.isdir(os.path.join(app.config['ARCHIVE'], path, element)):
             if not element.startswith("."):
                 archived_dirs.append(os.path.join(path, element))
         else:
@@ -162,7 +164,7 @@ def archive(path=''):
 @auth
 def modify(path, version=''):
     """This is the route where you can modify your models."""
-    file_path = os.path.join(ARCHIVE, path)
+    file_path = os.path.join(app.config['ARCHIVE'], path)
     g.git.checkout("master")
     hist = list(g.git.pretty_log(file_path))
     g.git.checkout("%s" % version)
@@ -186,7 +188,7 @@ def modify(path, version=''):
 @auth
 def reader(path):
     """The route which read the archived .html."""
-    file_content = open(os.path.join(ARCHIVE, path)).read()
+    file_content = open(os.path.join(app.config['ARCHIVE'], path)).read()
     return file_content
 
 
@@ -322,7 +324,13 @@ app.secret_key = 'MNOPQR'
 
 if __name__ == '__main__':  # pragma: no cover
     arg_parser = argparse.ArgumentParser()  # pylint: disable=C0103
-    arg_parser.add_argument('project', nargs='?', help='project name')
+    arg_parser.add_argument(
+        '-c', '--config',
+        default='config_default.py',
+        help='Choose your config file')
     args = arg_parser.parse_args()  # pylint: disable=C0103
-    DOMAIN = getattr(args, 'project')
+    CONFIG_FILE = getattr(args, 'config')
+    if CONFIG_FILE:
+        app.config.from_pyfile(CONFIG_FILE)
+    #app.ldap = ldap.open(app.config['LDAP_HOST'])
     app.run(debug=True, threaded=True)
