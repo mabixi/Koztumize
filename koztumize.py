@@ -201,9 +201,9 @@ def save():
     path_file = os.path.join(path_category, edited_file)
     path_message = os.path.join(
         g.domain, request.form['category'], edited_file)
-    if not os.path.exists(path_domain):
+    if not os.path.exists(path_domain):  # pragma: no cover
         os.mkdir(path_domain)
-    if not os.path.exists(path_category):
+    if not os.path.exists(path_category):  # pragma: no cover
         os.mkdir(path_category)
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
