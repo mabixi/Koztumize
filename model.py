@@ -6,7 +6,7 @@ The database is created here.
 from flask import Flask
 from flaskext.sqlalchemy import SQLAlchemy
 
-DATABASE = 'postgresql+psycopg2://koztumize:koztumize@macaron/koztumize'
+DATABASE = 'postgresql+psycopg2://koztumize:koztumize@fondue/koztumize'
 
 app = Flask(__name__)  # pylint: disable=C0103
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE

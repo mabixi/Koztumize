@@ -115,4 +115,12 @@ def test_logout(client):
     """Test the logout."""
     response = request(client.get, '/logout')
     assert 'Veuillez vous connecter' in response.data
+    response = request(client.get, '/archive')
 
+
+@with_client
+def test_login(client):
+    """Test the login."""
+    request(client.post, '/login',
+                       data={'login': 'test', 'passwd': ''})
+    request(client.post, '/login', data={'login': 'fake', 'passwd': 'lol'})
