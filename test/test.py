@@ -87,10 +87,9 @@ def test_reader(client):
             for dirs in root[2]:
                 models.append(os.path.join(root[0].rsplit('/')[-1], dirs))
         for model in models:
-            response = request(client.get, url_for('reader',
-                                                   path=os.path.join(
-                                                       koztumize.DOMAIN,
-                                                       model)))
+            response = request(
+                client.get, url_for(
+                    'reader', path=os.path.join(koztumize.DOMAIN, model)))
             assert '<head>' in response.data
 
 
@@ -100,3 +99,20 @@ def test_save(client):
     data = '<html><head><meta name="model" content="test/test"></head></html>'
     request(client.post, '/save', data={
         'html_content': data, 'filename': 'test', 'category': 'test'})
+
+
+@with_client
+def test_history_get(client):
+    """Test the history_get page."""
+    with client.application.test_request_context():
+        response = request(
+            client.get, url_for('history_get', author='Aymeric Bois'))
+        assert 'Aymeric Bois' in response.data
+
+
+@with_client
+def test_logout(client):
+    """Test the logout."""
+    response = request(client.get, '/logout')
+    assert 'Veuillez vous connecter' in response.data
+

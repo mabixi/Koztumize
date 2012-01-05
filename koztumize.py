@@ -12,7 +12,7 @@ import argparse
 import docutils.core
 from HTMLParser import HTMLParser
 from flask import (
-    Flask, request, render_template, send_file, url_for, current_app,
+    Flask, request, render_template, send_file, url_for,
     g, redirect, flash, session)
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive
@@ -54,13 +54,13 @@ def login():
     password = request.form['passwd']
     user = LDAP.search_s(LDAP_PATH, ldap.SCOPE_ONELEVEL, "uid=%s" % username)
     if not user or not password:
-        current_app.logger.warn("Unknown user %s" % username)
-        return False
+        flash(u"Erreur : Les identifiants sont incorrects.", 'error')
+        return render_template('login.html')
     try:
         LDAP.simple_bind_s(user[0][0], password)
     except ldap.INVALID_CREDENTIALS:
-        current_app.logger.warn("Invalid credentials for %s" % username)
-        return False
+        flash(u"Erreur : Les identifiants sont incorrects.", 'error')
+        return render_template('login.html')
     session["user"] = user[0][1]['cn'][0].decode('utf-8')
     session["usermail"] = user[0][1].get('mail', ["none"])[0].decode('utf-8')
     return redirect(url_for('index'))
@@ -201,9 +201,9 @@ def save():
     path_file = os.path.join(path_category, edited_file)
     path_message = os.path.join(
         g.domain, request.form['category'], edited_file)
-    if not os.path.exists(path_domain):  # pragma: no cover
+    if not os.path.exists(path_domain):
         os.mkdir(path_domain)
-    if not os.path.exists(path_category):  # pragma: no cover
+    if not os.path.exists(path_category):
         os.mkdir(path_category)
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
@@ -212,11 +212,11 @@ def save():
         g.git.commit(
             u"--author=%s <%s>'" % (session['user'], session['usermail']),
             message=u"Modify %s" % path_message)
-    except GitException:  # pragma: no cover
+    except GitException:
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
         g.git.push()
-        flash(u"Enregistrement effectué.", 'ok')   # pragma: no cover
+        flash(u"Enregistrement effectué.", 'ok')
 
     return redirect(url_for('modify',
                             path=os.path.join(g.domain,
