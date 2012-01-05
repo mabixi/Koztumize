@@ -21,14 +21,6 @@ class Koztumuser(DB.Model):
     login = DB.Column('uid', DB.String)
     password = DB.Column('userPassword', DB.String)
 
-    def __init__(self, user_id, name, firstname, login, password):
-        """Constructor of Koztumuser."""
-        self.user_id = user_id
-        self.name = name
-        self.firstname = firstname
-        self.login = login
-        self.password = password
-
 
 class GitCommit(DB.Model):
     """Create the commit table."""

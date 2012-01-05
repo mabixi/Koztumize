@@ -11,6 +11,7 @@ def with_client(function):
     """Create the test_client."""
     @wraps(function)
     def wrapper(*args, **kwargs):
+        """Decorator for the client login."""
         client = app.test_client()
         client.post('login', data={'login': 'test', 'passwd': 'pass'})
         return function(client=client, *args, **kwargs)
