@@ -33,6 +33,7 @@ getLogger('brigit').setLevel(logging.DEBUG)
 
 
 class Koztumize(Flask):
+    """The class which open the ldap."""
     @property
     def ldap(self):
         if 'LDAP' not in self.config:
@@ -108,7 +109,8 @@ def index():
 def history_get(author=None):
     """This is the route where the commit history is done."""
     history_query = db_model.GitCommit.query.filter(
-        db_model.GitCommit.message.like('Modify ' + app.config['DOMAIN'] + '%'))
+        db_model.GitCommit.message.like(
+            'Modify ' + app.config['DOMAIN'] + '%'))
     if author:
         history_query = history_query.filter(
                 db_model.GitCommit.author_name == author)

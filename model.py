@@ -6,6 +6,8 @@ The database is created here.
 import sys
 from flaskext.sqlalchemy import SQLAlchemy
 
+DATABASE = 'postgresql+psycopg2://koztumize:koztumize@macaron/koztumize'
+
 
 def init(app):
     DB = SQLAlchemy(app)
