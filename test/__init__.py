@@ -11,7 +11,8 @@ from brigit import Git
 
 def setup():  # pragma: no cover
     """Set up the git repository for the all the tests"""
-    koztumize.app.config.from_pyfile('test/config_test.py')
+    koztumize.app.config.from_pyfile(
+        os.environ.get('KOZTUMIZE_CONFIG', 'test/config_test.py'))
     koztumize.db_model.init(koztumize.app)
     domain_path = os.path.join(
         koztumize.app.config['ARCHIVE'], koztumize.app.config['DOMAIN'])

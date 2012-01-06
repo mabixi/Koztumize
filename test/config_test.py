@@ -16,4 +16,4 @@ DOMAIN = 'test'
 ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
 SQLALCHEMY_ECHO = True
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://koztumize:\
-koztumize@macaron/koztumize'
+koztumize@localhost/koztumize'
