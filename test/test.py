@@ -89,7 +89,7 @@ def test_reader(client):
         for model in models:
             response = request(
                 client.get, url_for(
-                    'reader', path=os.path.join(koztumize.DOMAIN, model)))
+                    'reader', path=os.path.join(koztumize.app.config['DOMAIN'], model)))
             assert '<head>' in response.data
 
 
@@ -106,8 +106,8 @@ def test_history_get(client):
     """Test the history_get page."""
     with client.application.test_request_context():
         response = request(
-            client.get, url_for('history_get', author='Aymeric Bois'))
-        assert 'Aymeric Bois' in response.data
+            client.get, url_for('history_get'))
+        assert 'Tester Tester' in response.data
 
 
 @with_client

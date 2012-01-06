@@ -22,8 +22,7 @@ from logging import getLogger
 from functools import wraps
 import logging
 import ldap
-from flaskext.sqlalchemy import SQLAlchemy
-from model import GitCommit
+import model as db_model
 
 
 HANDLER = make_colored_stream_handler()
@@ -34,15 +33,13 @@ getLogger('brigit').setLevel(logging.DEBUG)
 
 
 class Koztumize(Flask):
-
     @property
     def ldap(self):
-        if not hasattr(self, '_ldap'):
-            self._ldap = ldap.open(self.config['LDAP_HOST'])
-        return self._ldap
+        if 'LDAP' not in self.config:
+            self.config['LDAP'] = ldap.open(self.config['LDAP_HOST'])
+        return self.config['LDAP']
 
 app = Koztumize(__name__)  # pylint: disable=C0103
-DB = SQLAlchemy(app)
 
 
 @app.route('/login', methods=('POST',))
@@ -97,8 +94,8 @@ def index():
         for category in os.listdir(path_model)}
     print request.args.get('author_select')
 
-    authors_query = DB.session.query(
-        GitCommit.author_name.label('author_name')).distinct()
+    authors_query = db_model.DB.session.query(
+        db_model.GitCommit.author_name.label('author_name')).distinct()
     authors = []
     for author in authors_query:
         authors.append({'author_name': author.author_name})
@@ -110,10 +107,11 @@ def index():
 @auth
 def history_get(author=None):
     """This is the route where the commit history is done."""
-    history_query = GitCommit.query.filter(GitCommit.message.like('Modify%'))
+    history_query = db_model.GitCommit.query.filter(
+        db_model.GitCommit.message.like('Modify ' + app.config['DOMAIN'] + '%'))
     if author:
         history_query = history_query.filter(
-                GitCommit.author_name == author)
+                db_model.GitCommit.author_name == author)
     history = []
     for hist in history_query.limit(10).all():
         history.append({
@@ -332,5 +330,5 @@ if __name__ == '__main__':  # pragma: no cover
     CONFIG_FILE = getattr(args, 'config')
     if CONFIG_FILE:
         app.config.from_pyfile(CONFIG_FILE)
-    #app.ldap = ldap.open(app.config['LDAP_HOST'])
+    db_model.init(app)
     app.run(debug=True, threaded=True)
