@@ -1,3 +1,8 @@
+"""
+The default config file of kuztumize.
+
+"""
+
 import os
 
 

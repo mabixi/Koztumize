@@ -36,6 +36,7 @@ class Koztumize(Flask):
     """The class which open the ldap."""
     @property
     def ldap(self):
+        """Open the ldap."""
         if 'LDAP' not in self.config:
             self.config['LDAP'] = ldap.open(self.config['LDAP_HOST'])
         return self.config['LDAP']

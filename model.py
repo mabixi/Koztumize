@@ -10,6 +10,7 @@ DATABASE = 'postgresql+psycopg2://koztumize:koztumize@macaron/koztumize'
 
 
 def init(app):
+    """Create the init method."""
     DB = SQLAlchemy(app)
 
     class Koztumuser(DB.Model):
