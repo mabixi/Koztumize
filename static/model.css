@@ -10,15 +10,6 @@ display:none;
 
 @media screen{
 
-table,tr,th,td{
-    border:none;
-    vertical-align:top;
-    text-align:right;
-}
-
-table tr td:last-child{
-    text-align:left;
-}
 
 div[contenteditable=true] {
     position:relative;
