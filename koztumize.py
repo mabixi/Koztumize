@@ -308,10 +308,14 @@ class Editable(Directive):
         return [docutils.nodes.raw('', content, format='html')]
 
 
+# The signature of this function is given by docutils
+# pylint: disable=R0913,W0613
 def editable(name, rawtext, text, lineno, inliner, options=None,
-        content=None):
+             content=None):
+    """."""
     content = '<span contenteditable="true">%s</span>' % text
     return [docutils.nodes.raw('', content, format='html')], []
+# pylint: enable=R0913,W0613
 
 roles.register_canonical_role('editable', editable)
 
@@ -371,8 +375,8 @@ if __name__ == '__main__':  # pragma: no cover
         '-c', '--config',
         default='config_default.py',
         help='Choose your config file')
-    args = arg_parser.parse_args()  # pylint: disable=C0103
-    CONFIG_FILE = getattr(args, 'config')
+    parser_args = arg_parser.parse_args()  # pylint: disable=C0103
+    CONFIG_FILE = getattr(parser_args, 'config')
     if CONFIG_FILE:
         app.config.from_pyfile(CONFIG_FILE)
     db_model.init(app)
