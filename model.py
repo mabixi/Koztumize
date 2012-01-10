@@ -13,14 +13,6 @@ def init(app):
     """Create the init method."""
     DB = SQLAlchemy(app)
 
-    class Koztumuser(DB.Model):
-        """Create the user table for Koztumize."""
-        user_id = DB.Column('uidNumber', DB.Integer, primary_key=True)
-        name = DB.Column('sn', DB.String)
-        firstname = DB.Column('givenName', DB.String)
-        login = DB.Column('uid', DB.String)
-        password = DB.Column('userPassword', DB.String)
-
     class GitCommit(DB.Model):
         """Create the commit table."""
         __tablename__ = 'gitcommit'

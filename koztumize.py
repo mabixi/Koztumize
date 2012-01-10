@@ -140,7 +140,8 @@ def generate():
     temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
     document.write_to(temp_file)
     return send_file(temp_file.name, as_attachment=True,
-                     attachment_filename=request.form['filename'] + '.pdf')
+                     attachment_filename=request
+                     .form['filename'][:-4] + '.pdf')
 
 
 @app.route('/archive')
@@ -218,6 +219,7 @@ def save():
     except GitException:
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
+        print(g.git.path)
         g.git.push()
         flash(u"Enregistrement effectué.", 'ok')
 

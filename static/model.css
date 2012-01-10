@@ -4,42 +4,55 @@
   ----------
 */
 /* Desactive l'affichage du stylesheet */
-.docinfo{
-display:none;
+.docinfo {
+  display: none;
 }
 
-@media screen{
+
+/* - Table - */
+table, tr, th, td {
+  border: none;
+  text-align: right;
+  vertical-align: top;
+}
+
+table tr td:last-child{
+  text-align: left;
+}
 
 
+/* - DL / DT / DD - */
+dl {
+  display: block;
+  margin: 30px 0 80px;    
+}
+
+dt { 
+  float: left; 
+  font-weight: bold;
+}
+
+/* - Content Editable - */
 div[contenteditable=true] {
-    position:relative;
-    padding:0.25em;
-    min-height:2em;
-    max-width:30em;
-    background:#fff;
-    top:-0.25em;
+  border: 1px solid transparent;
+  line-height: 2em;
+  margin: 0.5em auto;
+  padding: 0.25em 0.1;
+  position: relative;
+  top: -0.25em;
 }
 
-div[contenteditable=true]:hover{
-    border:thin solid #eee;
+div[contenteditable=true]:hover {
+  border-color: #e4e4e4;
 }
 
 div[contenteditable=true]:empty:before {
-    content: attr(title);
-    display: block;
-    margin-bottom: -1em;
-    height: 1em;
-    opacity: 0.25;
+  content: attr(title);
+  display: block;
+  height: 1em;
+  margin-bottom: -1em;
+  opacity: 0.25;
 }
 
-}
 
-html{
-    font-family:sans-serif;
-
-}
-
-p{
-    text-align:justify;
-}
 
