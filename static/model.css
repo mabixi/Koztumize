@@ -1,36 +1,44 @@
 /*
-  ----------
-  - Iframe -
-  ----------
-*/
+    ----------
+    - Iframe -
+    ----------
+  */
+body{
+  font-family:sans-serif;
+}  
 /* Desactive l'affichage du stylesheet */
 .docinfo {
   display: none;
 }
 
+@media screen{
+  /* - Content Editable - */
+  div[contenteditable=true] {
+    border: 1px solid transparent;
+    line-height: 2em;
+    margin: 0.5em auto;
+    padding: 0.25em 0.1;
+    position: relative;
+    top: -0.25em;
+    min-height:1.25em;
+  }
 
-/* - Content Editable - */
-div[contenteditable=true] {
-  border: 1px solid transparent;
-  line-height: 2em;
-  margin: 0.5em auto;
-  padding: 0.25em 0.1;
-  position: relative;
-  top: -0.25em;
-  min-height:1.25em;
-}
+  div[contenteditable=true]:hover {
+    border-color: #e4e4e4;
+  }
 
-div[contenteditable=true]:hover {
-  border-color: #e4e4e4;
-}
+  div[contenteditable=true]:empty:before {
+    content: attr(title);
+    display:block;
+    height: 1em;
+    margin-bottom: -1em;
+    opacity: 0.25;
+  }
 
-div[contenteditable=true]:empty:before {
-  content: attr(title);
-  display: block;
-  height: 1em;
-  margin-bottom: -1em;
-  opacity: 0.25;
-}
+}/* Fin media screen */
 
-
-
+@media print{
+  div[contenteditable=true]:empty:before{
+    display:none;
+  }  
+}/* Fin media print */
