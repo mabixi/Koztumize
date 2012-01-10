@@ -23,7 +23,6 @@ def setup():  # pragma: no cover
     git = Git(domain_path)
     git.init()
     git.remote(
-        'add', '-t', 'archive', 'origin',
-        'git://github.com/Kozea/Koztumize.git')
+        'add', '-t', 'archive', 'origin', koztumize.app.config['GIT_REMOTE'])
     git.pull()
     git.checkout('test')
