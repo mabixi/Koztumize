@@ -9,19 +9,6 @@
 }
 
 
-@media screen {
-
-
-/* - Common - */
-html {
-  font: 1em verdana, sans-serif;
-}
-
-p {
-  text-align: justify;
-}
-
-
 /* - Table - */
 table, tr, th, td {
   border: none;

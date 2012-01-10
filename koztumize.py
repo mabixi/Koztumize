@@ -293,7 +293,7 @@ class ModelParser(HTMLParser):
 
 
 class Editable(Directive):
-    """A rest directive who create an editable div in HTML."""
+    """A rest directive which creates an editable div in HTML."""
     required_arguments = 0
     optional_arguments = 1
     final_argument_whitespace = True
@@ -305,6 +305,60 @@ class Editable(Directive):
         '<div contenteditable="true" class="%s" title="%s"></div>' % (
             ' '.join(self.options.get('class', [])),
             self.arguments[0] if self.arguments else ''))
+        return [docutils.nodes.raw('', content, format='html')]
+
+
+class Edith(Directive):
+    """A rest directive which creates an editable div in HTML."""
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = (
+        '<div contenteditable="true" title="%s"></div>' % (
+            self.arguments[0] if self.arguments else ''))
+        return [docutils.nodes.raw('', content, format='html')]
+
+
+class Script(Directive):
+    """A rest directive which creates a script tag in HTML."""
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = ('<script src="../../static/javascript/%s.js"\
+                   type="text/javascript"></script>' % (
+            self.arguments[0] if self.arguments else ''))
+        return [docutils.nodes.raw('', content, format='html')]
+
+
+class JQuery(Directive):
+    """A rest directive which includes JQuery."""
+    required_arguments = 0
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = ('<script src="http://code.jquery.com/jquery.min.js"\
+                   type="text/javascript"></script>')
+        return [docutils.nodes.raw('', content, format='html')]
+
+
+class Button(Directive):
+    """A rest directive who create a button in HTML."""
+    required_arguments = 2
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        content = ('<input type="button" value="%s" onclick="%s"/>'
+                   % (self.arguments[0], self.arguments[1]))
         return [docutils.nodes.raw('', content, format='html')]
 
 
@@ -324,6 +378,10 @@ class Checkbox(Directive):
 
 directives.register_directive('checkbox', Checkbox)
 directives.register_directive('editable', Editable)
+directives.register_directive('script', Script)
+directives.register_directive('jquery', JQuery)
+directives.register_directive('button', Button)
+directives.register_directive('edithn', Edith)
 
 app.secret_key = 'MNOPQR'
 

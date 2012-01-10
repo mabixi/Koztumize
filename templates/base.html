@@ -2,7 +2,7 @@
   {% block head %}
     <title>Koztumize - {{ filename }} </title>
   {% endblock head %}
-  {% block header %}<h2>{{ filename }}</h2>{% endblock header %}
+  {% block header %}<h2>{{ filename[:-4] }}</h2>{% endblock header %}
   {% block content %}
   <section class="toolbar">
     <ul>
