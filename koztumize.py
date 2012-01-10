@@ -7,7 +7,7 @@ The file which launch the Koztumize application.
 
 from brigit import Git, GitException
 import os
-import weasy
+from weasy.document import PDFDocument
 import argparse
 import docutils.core
 from HTMLParser import HTMLParser
@@ -37,7 +37,7 @@ class Koztumize(Flask):
     @property
     def ldap(self):
         """Open the ldap."""
-        if 'LDAP' not in self.config:
+        if 'LDAP' not in self.config:  # pragma: no cover
             self.config['LDAP'] = ldap.open(self.config['LDAP_HOST'])
         return self.config['LDAP']
 
@@ -59,7 +59,7 @@ def login():
         return render_template('login.html')
     try:
         current_app.ldap.simple_bind_s(user[0][0], password)
-    except ldap.INVALID_CREDENTIALS:
+    except ldap.INVALID_CREDENTIALS:  # pragma: no cover
         flash(u"Erreur : Les identifiants sont incorrects.", 'error')
         return render_template('login.html')
     session["user"] = user[0][1]['cn'][0].decode('utf-8')
@@ -136,7 +136,7 @@ def generate():
     The PDF is returned to the client.
 
     """
-    document = weasy.PDFDocument.from_string(request.form['html_content'])
+    document = PDFDocument.from_string(request.form['html_content'])
     temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
     document.write_to(temp_file)
     return send_file(temp_file.name, as_attachment=True,
@@ -216,7 +216,7 @@ def save():
         g.git.commit(
             u"--author=%s <%s>'" % (session['user'], session['usermail']),
             message=u"Modify %s" % path_message)
-    except GitException:
+    except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
         print(g.git.path)
