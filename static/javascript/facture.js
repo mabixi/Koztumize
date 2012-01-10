@@ -28,5 +28,7 @@ function RemLine(){
   Calculate();
 }
 
+$(function () {
+  $("span[contenteditable=true]").blur(function () { Calculate() });
+});
 
-     $('table.docutils:eq(0) tbody tr:eq(0) td:eq(1) span, table.docutils:eq(0) tbody tr:eq(0) td:eq(2) span, table.docutils:eq(0) tbody tr:eq(0) td:eq(4) span').change(alert('qpuc')  );
