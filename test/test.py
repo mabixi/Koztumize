@@ -107,8 +107,8 @@ def test_history_get(client):
     """Test the history_get page."""
     with client.application.test_request_context():
         response = request(
-            client.get, url_for('history_get', author=u"Jérémy James"))
-        assert 'Jérémy James' in response.data
+            client.get, url_for('history_get', author="Aymeric Bois"))
+        assert 'Aymeric Bois' in response.data
 
 
 @with_client
