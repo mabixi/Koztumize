@@ -15,7 +15,7 @@ from flask import (
     Flask, request, render_template, send_file, url_for,
     g, redirect, flash, session, current_app)
 from docutils.writers.html4css1 import Writer
-from docutils.parsers.rst import directives, Directive
+from docutils.parsers.rst import directives, Directive, roles
 from tempfile import NamedTemporaryFile
 from log_colorizer import make_colored_stream_handler
 from logging import getLogger
@@ -296,26 +296,22 @@ class Editable(Directive):
     optional_arguments = 1
     final_argument_whitespace = True
     has_content = False
+    option_spec = {'class': directives.class_option}
 
     def run(self):
         content = (
-        '<div contenteditable="true" title="%s"></div>' % (
+        '<div contenteditable="true" class="%s" title="%s"></div>' % (
+            ' '.join(self.options.get('class', [])),
             self.arguments[0] if self.arguments else ''))
         return [docutils.nodes.raw('', content, format='html')]
 
 
-class Edith(Directive):
-    """A rest directive which creates an editable div in HTML."""
-    required_arguments = 0
-    optional_arguments = 1
-    final_argument_whitespace = True
-    has_content = False
+def editable(name, rawtext, text, lineno, inliner, options=None,
+        content=None):
+    content = '<span contenteditable="true">%s</span>' % text
+    return [docutils.nodes.raw('', content, format='html')], []
 
-    def run(self):
-        content = (
-        '<div contenteditable="true" title="%s"></div>' % (
-            self.arguments[0] if self.arguments else ''))
-        return [docutils.nodes.raw('', content, format='html')]
+roles.register_canonical_role('editable', editable)
 
 
 class Script(Directive):
@@ -377,7 +373,7 @@ directives.register_directive('editable', Editable)
 directives.register_directive('script', Script)
 directives.register_directive('jquery', JQuery)
 directives.register_directive('button', Button)
-directives.register_directive('edithn', Edith)
+
 
 app.secret_key = 'MNOPQR'
 
