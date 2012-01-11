@@ -15,7 +15,7 @@ body{
   /* - Content Editable - */
   div[contenteditable=true] {
     border: 1px solid transparent;
-    line-height: 2em;
+    line-height: 1em;
     margin: 0.5em auto;
     padding: 0.25em 0.1;
     position: relative;
