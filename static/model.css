@@ -3,6 +3,11 @@
     - Iframe -
     ----------
   */
+@font-face{
+  src: url('Fontin.otf');
+  font-family: 'fontin';
+}
+
 body{
   font-family:sans-serif;
 }  
@@ -10,6 +15,15 @@ body{
 .docinfo {
   display: none;
 }
+
+.definition:before {
+  content: attr(title) " : ";
+}
+
+.definition:empty {
+  font-weight:bold;
+}
+
 
 @media screen{
   /* - Content Editable - */
@@ -40,5 +54,6 @@ body{
 @media print{
   div[contenteditable=true]:empty:before{
     display:none;
+    
   }  
 }/* Fin media print */
