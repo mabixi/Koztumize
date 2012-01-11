@@ -7,7 +7,7 @@ The file which launch the Koztumize application.
 
 from brigit import Git, GitException
 import os
-import weasy
+from weasy.document import PDFDocument
 import argparse
 import docutils.core
 from HTMLParser import HTMLParser
@@ -37,7 +37,7 @@ class Koztumize(Flask):
     @property
     def ldap(self):
         """Open the ldap."""
-        if 'LDAP' not in self.config:
+        if 'LDAP' not in self.config:  # pragma: no cover
             self.config['LDAP'] = ldap.open(self.config['LDAP_HOST'])
         return self.config['LDAP']
 
@@ -59,7 +59,7 @@ def login():
         return render_template('login.html')
     try:
         current_app.ldap.simple_bind_s(user[0][0], password)
-    except ldap.INVALID_CREDENTIALS:
+    except ldap.INVALID_CREDENTIALS:  # pragma: no cover
         flash(u"Erreur : Les identifiants sont incorrects.", 'error')
         return render_template('login.html')
     session["user"] = user[0][1]['cn'][0].decode('utf-8')
@@ -136,7 +136,7 @@ def generate():
     The PDF is returned to the client.
 
     """
-    document = weasy.PDFDocument.from_string(request.form['html_content'])
+    document = PDFDocument.from_string(request.form['html_content'])
     temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
     document.write_to(temp_file)
     return send_file(temp_file.name, as_attachment=True,
@@ -216,7 +216,7 @@ def save():
         g.git.commit(
             u"--author=%s <%s>'" % (session['user'], session['usermail']),
             message=u"Modify %s" % path_message)
-    except GitException:
+    except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
         print(g.git.path)
@@ -334,6 +334,23 @@ class Script(Directive):
         return [docutils.nodes.raw('', content, format='html')]
 
 
+class Button(Directive):
+    """A rest directive who create a button in HTML."""
+    required_arguments = 2
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = False
+    option_spec = {'class': directives.class_option}
+
+    def run(self):
+        content = ('<input type="button" class="%s" value="%s" onclick="%s"/>'
+                  % (
+                      ' '.join(self.options.get('class', [])),
+                      self.arguments[0], self.arguments[1],
+                  ))
+        return [docutils.nodes.raw('', content, format='html')]
+
+
 class JQuery(Directive):
     """A rest directive which includes JQuery."""
     required_arguments = 0
@@ -344,19 +361,6 @@ class JQuery(Directive):
     def run(self):
         content = ('<script src="http://code.jquery.com/jquery.min.js"\
                    type="text/javascript"></script>')
-        return [docutils.nodes.raw('', content, format='html')]
-
-
-class Button(Directive):
-    """A rest directive who create a button in HTML."""
-    required_arguments = 2
-    optional_arguments = 0
-    final_argument_whitespace = True
-    has_content = False
-
-    def run(self):
-        content = ('<input type="button" value="%s" onclick="%s"/>'
-                   % (self.arguments[0], self.arguments[1]))
         return [docutils.nodes.raw('', content, format='html')]
 
 
@@ -379,7 +383,6 @@ directives.register_directive('editable', Editable)
 directives.register_directive('script', Script)
 directives.register_directive('jquery', JQuery)
 directives.register_directive('button', Button)
-
 
 app.secret_key = 'MNOPQR'
 

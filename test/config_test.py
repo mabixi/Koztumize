@@ -25,4 +25,4 @@ ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
 SQLALCHEMY_ECHO = True
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://koztumize:\
 koztumize@localhost/koztumize'
-GIT_REMOTE = os.path.join('/home', 'lol', 'archive')
+GIT_REMOTE = 'git://github.com/Kozea/Koztumize.git'
