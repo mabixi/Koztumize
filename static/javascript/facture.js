@@ -29,6 +29,6 @@ function RemLine(){
 }
 
 $(function () {
-  $("span[contenteditable=true]").blur(function () { Calculate() });
+    $("table.table").on('blur', "span[contenteditable=true]", function () { Calculate() });
 });
 
