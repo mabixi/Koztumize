@@ -265,7 +265,6 @@ def model(category, filename):
     """This is the route that returns the model."""
     path_file = os.path.join(app.config['MODELS'],
                              g.domain, 'model', category, filename)
-    stylesheet = ''
     source = open(path_file).read().decode("utf-8") + u"""
 
 .. meta::
@@ -307,6 +306,7 @@ def stylesheet(path):
 
 @app.route('/model_static/<path:path>')
 def model_static(path):
+    """Return files from the model directory."""
     return send_from_directory(os.path.join(
         app.config['MODELS'], g.domain, 'model_styles'), path)
 
