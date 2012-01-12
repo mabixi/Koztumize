@@ -42,6 +42,7 @@ import logging
 import ldap
 import model as db_model
 import csstyle
+from datetime import date
 
 
 HANDLER = make_colored_stream_handler()
@@ -268,7 +269,9 @@ def model(category, filename):
     source = open(path_file).read().decode("utf-8") + u"""
 
 .. meta::
-   :model: %s/%s""" % (category, filename)
+   :model: %s/%s""" % (category, filename) + u"""
+   :date: %s""" % (date.today().strftime('%d/%m/%Y'))
+
     dom_tree = docutils.core.publish_doctree(source=source).asdom()
     list_field = dom_tree.getElementsByTagName('field')
     for field in list_field:
