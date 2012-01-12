@@ -36,7 +36,7 @@ class FakeLDAP(object):
 LDAP = FakeLDAP()
 LDAP_PATH = None
 DOMAIN = 'test'
-MODELS = os.path.join(os.path.expanduser('~/models'))
+MODELS = os.path.join('test', 'models')
 ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
 SQLALCHEMY_ECHO = True
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://koztumize:\

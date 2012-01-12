@@ -62,7 +62,7 @@ def test_model(client):
                 response = request(
                     client.get, url_for(
                         'model', category=category, filename=model))
-                assert 'test.css' in response.data
+                assert 'test' in response.data
 
 
 @with_client
