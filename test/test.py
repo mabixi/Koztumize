@@ -36,9 +36,9 @@ def test_edit(client):
     """Test the edit page."""
     models = {
         category: os.listdir(os.path.join(
-            koztumize.app.config['MODELS'], 'test', 'model', category))
+            koztumize.app.config['MODEL'], 'test', 'model', category))
         for category in os.listdir(os.path.join(
-            koztumize.app.config['MODELS'], 'test', 'model'))}
+            koztumize.app.config['MODEL'], 'test', 'model'))}
     with client.application.test_request_context():
         for category in models.keys():
             for model in models[category]:
@@ -53,9 +53,9 @@ def test_model(client):
     """Test the model page."""
     models = {
         category: os.listdir(os.path.join(
-            koztumize.app.config['MODELS'], 'test', 'model', category))
+            koztumize.app.config['MODEL'], 'test', 'model', category))
         for category in os.listdir(os.path.join(
-            koztumize.app.config['MODELS'], 'test', 'model'))}
+            koztumize.app.config['MODEL'], 'test', 'model'))}
     with client.application.test_request_context():
         for category in models.keys():
             for model in models[category]:

@@ -19,23 +19,34 @@ Testing suite for Koztumize.
 """
 
 import koztumize
+from tempfile import mkdtemp
 import os
 import shutil
 from brigit import Git
 
+TEMP_DIR = None
 
-def setup():  # pragma: no cover
+
+def setup():
     """Set up the git repository for the all the tests"""
+    global TEMP_DIR
+    TEMP_DIR = mkdtemp()
     koztumize.app.config.from_pyfile(
         os.environ.get('KOZTUMIZE_CONFIG', 'test/config_test.py'))
     koztumize.db_model.init(koztumize.app)
-    if os.path.exists(koztumize.app.config['ARCHIVE']):
-        shutil.rmtree(koztumize.app.config['ARCHIVE'])
-    os.mkdir(koztumize.app.config['ARCHIVE'])
     Git.push = lambda *args, **kwargs: None
-    git = Git(koztumize.app.config['ARCHIVE'])
-    git.init()
-    git.remote(
-        'add', '-t', 'archive', 'origin', koztumize.app.config['GIT_REMOTE'])
-    git.pull()
-    git.checkout('test')
+    for repo in ('archive', 'model'):
+        koztumize.app.config[repo.upper()] = os.path.join(TEMP_DIR, repo)
+        git = Git(koztumize.app.config[repo.upper()])
+        git.init()
+        git.remote(
+            'add', '-t', repo, 'origin',
+            koztumize.app.config['GIT_REMOTE'])
+        git.pull()
+        git.checkout(repo)
+
+
+def teardown():
+    """Remove the temp directory after the tests.0"""
+    if os.path.exists(TEMP_DIR):
+        shutil.rmtree(TEMP_DIR)

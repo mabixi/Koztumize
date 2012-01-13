@@ -18,8 +18,6 @@ The default config file of kuztumize.
 
 """
 
-import os
-
 
 # This class is a monkey, it does not use its arguments
 # pylint: disable=W0613,R0201
@@ -36,8 +34,8 @@ class FakeLDAP(object):
 LDAP = FakeLDAP()
 LDAP_PATH = None
 DOMAIN = 'test'
-MODELS = os.path.join('test', 'models')
-ARCHIVE = os.path.join(os.path.dirname(__file__), 'archive')
+MODEL = 'model'
+ARCHIVE = 'archive'
 SQLALCHEMY_ECHO = True
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://koztumize:\
 koztumize@localhost/koztumize'
