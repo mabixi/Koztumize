@@ -29,6 +29,8 @@ TEMP_DIR = None
 
 def setup():
     """Set up the git repository for the all the tests"""
+    # global variable shouldn't be used but is quite useful here
+    # pylint: disable=W0603
     global TEMP_DIR
     TEMP_DIR = mkdtemp()
     koztumize.app.config.from_pyfile(
