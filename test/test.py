@@ -96,17 +96,12 @@ def test_modify(client):
 @with_client
 def test_reader(client):
     """Test the html reader"""
-    models = []
     with client.application.test_request_context():
-        for root in os.walk('test/archive/test/test'):
-            for dirs in root[2]:
-                models.append(os.path.join(root[0].rsplit('/')[-1], dirs))
-        for model in models:
-            response = request(
-                client.get, url_for(
-                    'reader', path=os.path.join(
-                        koztumize.app.config['DOMAIN'], model)))
-            assert '<head>' in response.data
+        response = request(
+            client.get, url_for(
+                'reader', path=os.path.join(
+                    koztumize.app.config['DOMAIN'], 'test', 'test.html')))
+        assert '<head>' in response.data
 
 
 @with_client
