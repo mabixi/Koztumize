@@ -373,8 +373,9 @@ class Script(Directive):
     has_content = False
 
     def run(self):
-        path = url_for('model_static', path="%s.js" % (
-            self.arguments[0] if self.arguments else ''), _external=True)
+        path = url_for('model_static', path=os.path.join(
+            'javascript', '%s.js') % (
+                self.arguments[0] if self.arguments else ''), _external=True)
         content = ('<script src="%s" type="text/javascript"></script>' % path)
         return [docutils.nodes.raw('', content, format='html')]
 
