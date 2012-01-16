@@ -42,7 +42,7 @@ import logging
 import ldap
 import model as db_model
 import csstyle
-from datetime import date
+from datetime import datetime
 
 
 HANDLER = make_colored_stream_handler()
@@ -211,9 +211,10 @@ def modify(path, version=''):
              'commit': hist[commit]['hash'][:7],
              'author': hist[commit]['author']['name']})
     category, filename = path_model.rsplit('/', 1)
+    today = datetime.today().strftime('%d/%m/%Y %H:%M')
     return render_template('modify.html', category=category,
                            filename=filename, date_commit=date_commit,
-                           path=path)
+                           path=path, date=today)
 
 
 @app.route('/file/<path:path>')
@@ -278,7 +279,7 @@ def model(category, filename):
 
 .. meta::
    :model: %s/%s""" % (category, filename) + u"""
-   :date: %s""" % (date.today().strftime('%d/%m/%Y'))
+   :date: %s""" % (datetime.today().strftime('%d/%m/%Y %H:%M'))
 
     dom_tree = docutils.core.publish_doctree(source=source).asdom()
     list_field = dom_tree.getElementsByTagName('field')
