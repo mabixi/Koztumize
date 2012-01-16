@@ -22,15 +22,18 @@
       </form>
       </li>
       <li>
-        <input type="button" value="Modèle vierge" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';"/>
+        <input type="submit" value="Modèle vierge" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';"/>
       </li>
       <li>
-        <input type="button" id="btn_version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
+        <input type="submit" id="btn_version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
         <ul id="hist" onmouseover="document.getElementById('hist').style.display='block';" onmouseout="document.getElementById('hist').style.display='none';">
           {% for commit in date_commit %}
             <li><a href="{{ url_for('modify', path=path, version=commit['commit']) }}">{{ commit['date']}} {{ commit['author']}}</a></li>
           {% endfor %}
         </ul>
+      </li>
+      <li>
+        <input type="submit" value="Mettre à jour le style" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', 'Mon Jan 16 14:37:42');window.reload();"/>
       </li>
     <ul>
   </section>
