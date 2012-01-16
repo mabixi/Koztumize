@@ -191,6 +191,7 @@ def archive(path=''):
 @auth
 def modify(path, version=''):
     """This is the route where you can modify your models."""
+    g.git_archive.checkout("master")
     g.git_archive.pull()
     file_path = os.path.join(app.config['ARCHIVE'], path)
     parser = ModelParser()
@@ -198,7 +199,6 @@ def modify(path, version=''):
     path_model = parser.model
     date_model = parser.date
 
-    g.git_archive.checkout("master")
     g.git_model.checkout("master@{%s}" % date_model)
 
     hist = list(g.git_archive.pretty_log(file_path))
@@ -228,8 +228,8 @@ def reader(path):
 @auth
 def save():
     """This is the route where you can edit save your changes."""
-    g.git_archive.pull()
     g.git_archive.checkout("master")
+    g.git_archive.pull()
     edited_file = request.form['filename'][:-4] + '.html'
     path_domain = os.path.join(g.git_archive.path)
     path_category = os.path.join(path_domain, request.form['category'])
