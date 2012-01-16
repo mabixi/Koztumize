@@ -22,9 +22,9 @@ import os
 
 LDAP_HOST = "ldap.keleos.fr"
 LDAP_PATH = "ou=People,dc=keleos,dc=fr"
-DOMAIN = 'kozea'
-ARCHIVE = os.path.join(os.path.expanduser('~/archive'))
-MODEL = os.path.join(os.path.expanduser('~/models'))
+DOMAIN = 'your_domain'
+ARCHIVE = os.path.join(os.path.expanduser('your_archive_dir'))
+MODEL = os.path.join(os.path.expanduser('your_model_dir'))
 SQLALCHEMY_ECHO = True
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://koztumize:\
-koztumize@macaron/koztumize'
+koztumize@localhost/koztumize'
