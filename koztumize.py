@@ -107,7 +107,8 @@ def auth(func):
 def before_request():
     """Set variables before each request."""
     g.domain = app.config['DOMAIN'] or request.host.split('.')[0]
-    g.git = Git(os.path.join(app.config['ARCHIVE'], g.domain))
+    g.git_archive = Git(os.path.join(app.config['ARCHIVE'], g.domain))
+    g.git_model = Git(os.path.join(app.config['MODEL'], g.domain))
 
 
 @app.route('/', methods=('GET',))
@@ -191,9 +192,16 @@ def archive(path=''):
 def modify(path, version=''):
     """This is the route where you can modify your models."""
     file_path = os.path.join(app.config['ARCHIVE'], path)
-    g.git.checkout("master")
-    hist = list(g.git.pretty_log(file_path))
-    g.git.checkout("%s" % version)
+    parser = ModelParser()
+    parser.feed(open(file_path).read())
+    path_model = parser.model
+    date_model = parser.date
+
+    g.git_archive.checkout("master")
+    g.git_model.checkout("master@{%s}" % date_model)
+
+    hist = list(g.git_archive.pretty_log(file_path))
+    g.git_archive.checkout("%s" % version)
     date_commit = []
     for commit in range(len(hist)):
         date_commit.append(
@@ -201,9 +209,6 @@ def modify(path, version=''):
              .strftime("le %d/%m/%Y à %H:%M:%S").decode('utf-8'),
              'commit': hist[commit]['hash'][:7],
              'author': hist[commit]['author']['name']})
-    parser = ModelParser()
-    parser.feed(open(file_path).read())
-    path_model = parser.result
     category, filename = path_model.rsplit('/', 1)
     return render_template('modify.html', category=category,
                            filename=filename, date_commit=date_commit,
@@ -222,9 +227,9 @@ def reader(path):
 @auth
 def save():
     """This is the route where you can edit save your changes."""
-    g.git.checkout("master")
+    g.git_archive.checkout("master")
     edited_file = request.form['filename'][:-4] + '.html'
-    path_domain = os.path.join(g.git.path)
+    path_domain = os.path.join(g.git_archive.path)
     path_category = os.path.join(path_domain, request.form['category'])
     path_file = os.path.join(path_category, edited_file)
     path_message = os.path.join(
@@ -235,16 +240,16 @@ def save():
         os.mkdir(path_category)
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
-    g.git.add(".")
+    g.git_archive.add(".")
     try:
-        g.git.commit(
+        g.git_archive.commit(
             u"--author=%s <%s>'" % (session['user'], session['usermail']),
             message=u"Modify %s" % path_message)
     except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
-        print(g.git.path)
-        g.git.push()
+        print(g.git_archive.path)
+        g.git_archive.push()
         flash(u"Enregistrement effectué.", 'ok')
 
     return redirect(url_for('modify',
@@ -264,6 +269,7 @@ def edit(category, filename):
 @auth
 def model(category, filename):
     """This is the route that returns the model."""
+    g.git_model.checkout("master")
     path_file = os.path.join(app.config['MODEL'],
                              g.domain, 'model', category, filename)
     source = open(path_file).read().decode("utf-8") + u"""
@@ -326,15 +332,17 @@ def logout():
 class ModelParser(HTMLParser):
     """A class which parse the HTML from the model."""
     def __init__(self):
-        self.result = ''
+        self.model = ''
+        self.date = ''
         HTMLParser.__init__(self)
 
     def handle_starttag(self, tag, attrs):
         if tag == 'meta':
             meta = dict(attrs)
-            if 'name' in meta.keys():
-                if meta['name'] == "model":
-                    self.result = meta['content']
+            if meta.get('name') == "model":
+                self.model = meta['content']
+            if meta.get('name') == "date":
+                self.date = meta['content']
 
 
 class Editable(Directive):
