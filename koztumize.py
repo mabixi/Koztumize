@@ -191,6 +191,7 @@ def archive(path=''):
 @auth
 def modify(path, version=''):
     """This is the route where you can modify your models."""
+    g.git_archive.pull()
     file_path = os.path.join(app.config['ARCHIVE'], path)
     parser = ModelParser()
     parser.feed(open(file_path).read())
@@ -227,6 +228,7 @@ def reader(path):
 @auth
 def save():
     """This is the route where you can edit save your changes."""
+    g.git_archive.pull()
     g.git_archive.checkout("master")
     edited_file = request.form['filename'][:-4] + '.html'
     path_domain = os.path.join(g.git_archive.path)
