@@ -10,16 +10,16 @@
         <form action="{{ url_for('generate') }}" method="post">    
           <input type="hidden"id="gen_html_content" value="" name="html_content" />
           <input type="hidden" value="{{ filename }}" name="filename" />
-          <input type="submit" value="Générer le PDF" onclick="document.getElementById('gen_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="generate"/>
+          <input type="submit" value="Générer le PDF" onclick="document.getElementById('gen_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;$('span[contenteditable=true]:eq(1)').html().replace('.',',');" name="generate"/>
         </form>
       </li>
       <li>
-       <form action="{{ url_for('save') }}" method="post">    
+       <form action="{{ url_for('save') }}" method="post" name="save">    
         <input type="hidden" id="save_html_content" value="" name="html_content" />
         <input type="hidden" value="{{ filename }}" name="filename" />
         <input type="hidden" value="{{ category }}" name="category" />
         <input type="submit" value="Enregistrer le document" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save"/>
-      </form>
+      </form>	
       </li>
       <li>
         <input type="submit" value="Modèle vierge" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';"/>
@@ -33,7 +33,7 @@
         </ul>
       </li>
       <li>
-        <input type="submit" value="Mettre à jour le style" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}');window.reload();"/>
+        <input type="submit" value="Mettre à jour le style" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); $('form[name=save]').submit();"/>
       </li>
     <ul>
   </section>
