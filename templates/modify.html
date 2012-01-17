@@ -18,7 +18,7 @@
         <input type="hidden" id="save_html_content" value="" name="html_content" />
         <input type="hidden" value="{{ filename }}" name="filename" />
         <input type="hidden" value="{{ category }}" name="category" />
-        <input type="submit" value="Enregistrer le document" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save"/>
+        <input type="submit" value="Enregistrer le document" onclick="document.getElementById('save_html_content').value=$('#iframe')[0].contentDocument.documentElement.innerHTML;" name="save"/>
       </form>	
       </li>
       <li>
@@ -33,7 +33,7 @@
         </ul>
       </li>
       <li>
-        <input type="submit" value="Mettre à jour le style" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); $('form[name=save]').submit();"/>
+        <input type="submit" value="Mettre à jour le style" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); $('form[name=save]').children()[0].value=$('#iframe')[0].contentDocument.documentElement.innerHTML; $('form[name=save]').submit();"/>
       </li>
     <ul>
   </section>
