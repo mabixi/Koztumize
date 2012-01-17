@@ -175,6 +175,7 @@ def generate():
 @auth
 def archive(path=''):
     """The route where you can access your archived files."""
+    g.git_archive.checkout('master')
     archived_dirs = []
     archived_files = []
     for element in os.listdir(os.path.join(app.config['ARCHIVE'], path)):
