@@ -46,13 +46,13 @@ from datetime import datetime
 
 
 HANDLER = make_colored_stream_handler()
-getLogger('brigit').addHandler(HANDLER)
+"""getLogger('brigit').addHandler(HANDLER)
 getLogger('werkzeug').addHandler(HANDLER)
 getLogger('werkzeug').setLevel(logging.INFO)
 getLogger('brigit').setLevel(logging.DEBUG)
 getLogger('WEASYPRINT').setLevel(logging.INFO)
 getLogger('WEASYPRINT').addHandler(logging.StreamHandler())
-
+"""
 mimetypes.add_type("image/svg+xml", "svg")
 
 
@@ -66,6 +66,7 @@ class Koztumize(Flask):
         return self.config['LDAP']
 
 app = Koztumize(__name__)  # pylint: disable=C0103
+format = '%Y-%m-%d %H:%M:%S'
 
 
 @app.route('/login', methods=('POST',))
@@ -191,18 +192,17 @@ def archive(path=''):
 @auth
 def modify(path, version=''):
     """This is the route where you can modify your models."""
-    g.git_archive.checkout("master")
-    g.git_archive.pull()
     file_path = os.path.join(app.config['ARCHIVE'], path)
+
+    g.git_archive.checkout('master')
+    hist = list(g.git_archive.pretty_log(file_path))
+
+    g.git_archive.checkout("%s" % version)
     parser = ModelParser()
     parser.feed(open(file_path).read())
     path_model = parser.model
     date_model = parser.date
-
-    g.git_model.checkout("master@{%s}" % date_model)
-
-    hist = list(g.git_archive.pretty_log(file_path))
-    g.git_archive.checkout("%s" % version)
+    g.git_model.checkout('master@{%s}' % date_model)
     date_commit = []
     for commit in range(len(hist)):
         date_commit.append(
@@ -211,7 +211,7 @@ def modify(path, version=''):
              'commit': hist[commit]['hash'][:7],
              'author': hist[commit]['author']['name']})
     category, filename = path_model.rsplit('/', 1)
-    today = datetime.today().strftime('%d/%m/%Y %H:%M')
+    today = datetime.today().strftime(format)
     return render_template('modify.html', category=category,
                            filename=filename, date_commit=date_commit,
                            path=path, date=today)
@@ -241,6 +241,7 @@ def save():
         os.mkdir(path_domain)
     if not os.path.exists(path_category):  # pragma: no cover
         os.mkdir(path_category)
+    g.git_archive.pull()
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
     g.git_archive.add(".")
@@ -251,7 +252,6 @@ def save():
     except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
-        print(g.git_archive.path)
         g.git_archive.push()
         flash(u"Enregistrement effectué.", 'ok')
 
@@ -279,7 +279,7 @@ def model(category, filename):
 
 .. meta::
    :model: %s/%s""" % (category, filename) + u"""
-   :date: %s""" % (datetime.today().strftime('%d/%m/%Y %H:%M'))
+   :date: %s""" % (datetime.today().strftime(format))
 
     dom_tree = docutils.core.publish_doctree(source=source).asdom()
     list_field = dom_tree.getElementsByTagName('field')
@@ -320,7 +320,7 @@ def stylesheet(path):
 def model_static(path):
     """Return files from the model directory."""
     return send_from_directory(os.path.join(
-        app.config['MODEL'], g.domain, 'model_styles'), path)
+        app.config['MODEL'], g.domain, 'model_styles'), path, cache_timeout=0)
 
 
 @app.route('/logout')
