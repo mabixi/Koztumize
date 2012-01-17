@@ -28,7 +28,7 @@
         <input type="submit" id="btn_version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
         <ul id="hist" onmouseover="document.getElementById('hist').style.display='block';" onmouseout="document.getElementById('hist').style.display='none';">
           {% for commit in date_commit %}
-            <li><a href="{{ url_for('modify', path=path, version=commit['commit']) }}">{{ commit['date']}} {{ commit['author']}}</a></li>
+            <li><a href="{{ url_for('modify', path=path, version=commit.commit) }}">{{ commit['date']}} {{ commit['author']}}</a></li>
           {% endfor %}
         </ul>
       </li>
@@ -37,7 +37,7 @@
       </li>
     <ul>
   </section>
-  <iframe id="iframe" src="{{ url_for('reader',path=path) }}"></iframe>
+  <iframe id="iframe" src="{{ url_for('reader', path=path) }}"></iframe>
   
  
   {% endblock content %}
