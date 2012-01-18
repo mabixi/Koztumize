@@ -9,5 +9,5 @@ setup(
     name="Koztumize",
     packages=find_packages(),
     install_requires=[
-        "CSStyle", "Flask", "SQLAlchemy", "docutils", "CairoSVG",
+        "CSStyle", "Flask-SQLAlchemy", "docutils", "CairoSVG",
         "psycopg2", "WeasyPrint", "Brigit"])
