@@ -46,13 +46,13 @@ from datetime import datetime
 
 
 HANDLER = make_colored_stream_handler()
-"""getLogger('brigit').addHandler(HANDLER)
+getLogger('brigit').addHandler(HANDLER)
 getLogger('werkzeug').addHandler(HANDLER)
 getLogger('werkzeug').setLevel(logging.INFO)
 getLogger('brigit').setLevel(logging.DEBUG)
 getLogger('WEASYPRINT').setLevel(logging.INFO)
 getLogger('WEASYPRINT').addHandler(logging.StreamHandler())
-"""
+
 mimetypes.add_type("image/svg+xml", "svg")
 
 

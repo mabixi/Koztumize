@@ -1,0 +1,5 @@
+-e git://github.com/Kozea/WeasyPrint.git#egg=WeasyPrint
+-e git://github.com/Kozea/CSStyle.git#egg=CSStyle
+-e git://github.com/Kozea/CairoSVG.git#egg=CairoSVG
+-e git://github.com/Kozea/Brigit.git#egg=Brigit
+-e .
