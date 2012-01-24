@@ -2,8 +2,8 @@
 {% block head %}
   <title>Koztumize - {{ filename }} </title>
 {% endblock head %}
-  {% block header %}<h2>{{ filename }}</h2>{% endblock header %}
   {% block content %}
+  <h3>{{ filename[:-4] }}</h3>
   <section class="toolbar">
     <ul>
       <li>
@@ -37,6 +37,12 @@
       </li>
     <ul>
   </section>
+  <aside>
+    <a href="/">index</a>
+    {% for parent in path.split('/')%}
+      / <a href="{{ url_for('archive', path=parent)}}">{{parent}}</a>
+    {% endfor %}
+  </aside>
   <iframe id="iframe" src="{{ url_for('reader', path=path) }}"></iframe>
   
  

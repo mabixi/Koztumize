@@ -2,8 +2,8 @@
   {% block head %}
     <title>Koztumize - {{ filename }} </title>
   {% endblock head %}
-  {% block header %}<h2>{{ filename[:-4] }}</h2>{% endblock header %}
   {% block content %}
+  <h3>{{ filename[:-4] }}</h3>
   <section class="toolbar">
     <ul>
       <li>
@@ -26,5 +26,6 @@
       </li>
     <ul>
   </section>
-  <iframe id="iframe" src="{{ url_for('model', category=category, filename=filename) }}" width="100%" height="600"></iframe>
+  <div><iframe id="iframe" src="{{ url_for('model', category=category, filename=filename) }}" ></iframe></div>
   {% endblock content %}
+

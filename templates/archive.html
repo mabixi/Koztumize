@@ -2,20 +2,24 @@
   <title>Koztumize - Vos archives </title>
 {% endblock head %}
 {% extends "layout.html" %}
-{% block header %}
-<h1>Vos archives</h1>
-{% endblock header %}
 {% block content %}
+<h3>Vos archives</h3>
 <aside>
+  <a href="/">index</a>
+  {% for parent in path.split('/')%}
+    / <a href="{{ url_for('archive', path=parent)}}">{{parent}}</a>
+  {% endfor %}
+</aside>
+<aside>
+  <ul>
   {% for dir in archived_dirs %}
-  <ul>
-    <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>   
-  </ul>
+    <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>    
   {% endfor %}
+   </ul>
+   <ul>
   {% for file in archived_files %}
-  <ul>
-      <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1] }}</a></li> 
-  </ul>
+     <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1] }}</a></li> 
   {% endfor %}
+  </ul>
 </aside>
 {% endblock content %}
