@@ -108,7 +108,7 @@ def auth(func):
 def before_request():
     """Set variables before each request."""
     g.domain = app.config['DOMAIN'] or request.host.split('.')[0]
-    g.git_archive = Git(os.path.join(app.config['ARCHIVE'], g.domain))
+    g.git_archive = Git(app.config['ARCHIVE'])
     g.git_model = Git(os.path.join(app.config['MODEL'], g.domain))
 
 
@@ -230,10 +230,12 @@ def reader(path):
 @auth
 def save():
     """This is the route where you can edit save your changes."""
-    g.git_archive.checkout("master")
-    g.git_archive.pull()
     edited_file = request.form['filename'][:-4] + '.html'
-    path_domain = os.path.join(g.git_archive.path)
+    path_domain = os.path.join(os.path.join(
+        g.git_archive.path, g.domain))
+    if os.path.exists(path_domain):
+        g.git_archive.checkout("master")
+        g.git_archive.pull()
     path_category = os.path.join(path_domain, request.form['category'])
     path_file = os.path.join(path_category, edited_file)
     path_message = os.path.join(
@@ -242,7 +244,8 @@ def save():
         os.mkdir(path_domain)
     if not os.path.exists(path_category):  # pragma: no cover
         os.mkdir(path_category)
-    g.git_archive.pull()
+    if os.path.exists(path_domain):
+        g.git_archive.pull()
     open(path_file, 'w').write(request.form['html_content'].encode("utf-8"))
     open(path_file, "a+").close()
     g.git_archive.add(".")
@@ -253,7 +256,7 @@ def save():
     except GitException:  # pragma: no cover
         flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
     else:
-        g.git_archive.push()
+        g.git_archive.push("origin", "master")
         flash(u"Enregistrement effectué.", 'ok')
 
     return redirect(url_for('modify',
