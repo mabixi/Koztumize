@@ -485,16 +485,6 @@ section aside a {
   
 }
 
-#toolbar:before{
-  content: "KoztumizeToolbar";
-  position:absolute;
-  margin-top:-1.25em;
-  margin-left:-8.1em;
-  font-size:1em;
-  text-shadow:0 0 1px #dadada;
-  color:#ddd;
-  -moz-transform:;
-}
 
 #toolbar ul{
   list-style:none;
