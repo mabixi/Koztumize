@@ -4,41 +4,15 @@
   
 {% endblock head %}
   {% block content %}
-  <section class="toolbar">
-    <ul>
-      <li>
-        <form action="{{ url_for('generate') }}" method="post">    
-          <input type="hidden"id="gen_html_content" value="" name="html_content" />
-          <input type="hidden" value="{{ filename }}" name="filename" />
-          <input type="submit" value="Générer le PDF" onclick="document.getElementById('gen_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;$('span[contenteditable=true]:eq(1)').html().replace('.',',');" name="generate"/>
-        </form>
-      </li>
-      <li>
-        <form action="{{ url_for('save') }}" method="post" name="save">    
-          <input type="hidden" id="save_html_content" value="" name="html_content" />
-          <input type="hidden" value="{{ filename }}" name="filename" />
-          <input type="hidden" value="{{ category }}" name="category" />
-          <input type="submit" value="Enregistrer le document" onclick="document.getElementById('save_html_content').value=$('#iframe')[0].contentDocument.documentElement.innerHTML;" name="save"/>
-        </form>	
-      </li>
-      <li>
-        <input type="submit" value="Modèle vierge" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';"/>
-      </li>
-      <li>
-        <input type="submit" id="btn-version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
-        <ul id="hist" onmouseover="document.getElementById('hist').style.display='block';" onmouseout="document.getElementById('hist').style.display='none';">
-          {% for commit in date_commit %}
-            <li><a href="{{ url_for('modify', path=path, version=commit.commit) }}">{{ commit['date']}} {{ commit['author']}}</a></li>
-          {% endfor %}
-        </ul>
-      </li>
-      <li>
-        <input type="submit" value="Mettre à jour le style" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); $('form[name=save]').children()[0].value=$('#iframe')[0].contentDocument.documentElement.innerHTML; $('form[name=save]').submit();"/>
-      </li>
-      <li>
-        <input type="button" value="G" onclick="document.execCommand('bold', false, '')"/>
-      </li>
-    </ul>
+  <section class="version">
+    <input type="submit" value="Version" onclick="if($('#hist').css('display')=='none') $('#hist').show('fast'); else $('#hist').hide('fast');"/>
+    <nav id="hist">
+      <ul >
+      {% for commit in date_commit %}
+        <li><a href="{{ url_for('modify', path=path, version=commit.commit) }}">{{ commit['date']}} {{ commit['author']}}</a></li>
+      {% endfor %}
+      </ul>
+    </nav>
   </section>
   <aside>
     <a href="/">index</a>
@@ -106,6 +80,12 @@
         <input type="hidden" value="{{ category }}" name="category" />
         <input type="submit" value="" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save" class="save" title="Enregistrer le document"/>
       </form>
+      </li>
+      <li>
+        <input type="submit" value="" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); $('form[name=save]').children()[0].value=$('#iframe')[0].contentDocument.documentElement.innerHTML; $('form[name=save]').submit();" class="update" title="Mettre à jour le style"/>
+      </li>
+      <li>
+        <input type="button" value="" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';" class="documentnew" title="Revenir au modèle vierge"/>
       </li>
     </ul>
    </nav>
