@@ -24,7 +24,7 @@ html {
   background: url(img/wrapper-back.png) repeat-x left 120px,
               url(img/wrapper.png) no-repeat center 120px, 
               #1c1c1c;
-  border-top: 5px solid #cb00ac;
+  border-top: 5px solid #CA378F;
 }
 
 body{
@@ -413,14 +413,15 @@ section.toolbar input[type=submit]:hover, section.toolbar input[type=submit]:foc
   -moz-transition: 0.3s linear;
 }
 
-#btn_version {
+#btn-version {
   border-radius: 4px 4px 0 0;
   cursor: default;
   width: 14em;
 }
 
 #hist {
-  background: #222;
+  background: -webkit-linear-gradient(#393939, #1c1c1c);
+  background: -moz-linear-gradient(#393939, #1c1c1c);
   display: none;
   font-family: 'helvetica',sans-serif;
   font-size: 0.8em;
@@ -470,6 +471,149 @@ section aside a {
 }
 
 
+/* ----------
+   - Editor -
+   ----------
+*/
+#toolbar{
+  position:absolute;
+  top:20em;
+  left:0em;
+  z-index:10;
+  background:rgba(60,60,60,0.7);
+  box-shadow:0 0 5px #fff;
+  border:1px solid #efefef;
+  width:8em;
+  padding:0;
+  margin:1.75em;
+}
+
+#toolbar:before{
+  content: "KoztumizeToolbar";
+  position:absolute;
+  margin-top:-1.25em;
+  margin-left:-8.1em;
+  font-size:1em;
+  text-shadow:0 0 1px #dadada;
+  color:#ddd;
+  -moz-transform:;
+}
+
+#toolbar ul{
+  list-style:none;
+  padding:0;
+  margin:1em;
+}
+
+#toolbar ul:first-child{
+  border-bottom:1px solid #999;
+  padding-bottom:0.75em;
+}
+
+#toolbar li{
+ display:inline-block;
+ margin-bottom:0.5em;
+
+}
+
+#toolbar li input{
+  width:3em;
+  height:3em;
+  background: #333;
+  background: #333;
+  color:#fefefe;
+  border-radius:2px;
+  border:1px solid #444;
+  box-shadow:
+  0px 2px 2px 0px rgba(0, 0, 0, 0.5),
+  0px 2px 2px 0px rgba(255, 255, 255, 0.5) inset;
+  cursor:pointer;
+}
+
+#toolbar input.bold{
+  background:#333 url(img/icons/bold.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.italic{
+  background:#333 url(img/icons/italic.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.underline{
+  background:#333 url(img/icons/underline.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.strikethrough{
+  background:#333 url(img/icons/strikethrough.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.paragraph{
+  background:#333 url(img/icons/paragraph.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.list{
+  background:#333 url(img/icons/list.png) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.left{
+  background:#333 url(img/icons/left.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.right{
+  background:#333 url(img/icons/right.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.center{
+  background:#333 url(img/icons/center.svg) no-repeat;
+  background-size:100% 100%;
+}
+#toolbar input.justify{
+  background:#333 url(img/icons/justify.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.bigger{
+  background:#333 url(img/icons/bigger.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.lower{
+  background:#333 url(img/icons/lower.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.undo{
+  background:#333 url(img/icons/undo.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.redo{
+  background:#333 url(img/icons/redo.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.hidden{
+  visibility:hidden;
+}
+
+#toolbar input.generate{
+  background:#333 url(img/icons/pdf.png) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.save{
+  background:#333 url(img/icons/save.svg) no-repeat;
+  background-size:100% 100%;
+}
+
+
 /*
   ----------
   - Footer -
@@ -477,7 +621,7 @@ section aside a {
 */
 
 footer {
-  background: #cb00ac;
+  background: #CA378F;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5) inset;
   font-family: 'patinio';
   font-size: 0.85em;

@@ -5,13 +5,57 @@
   {% block content %}
   <h2>
   {{category}}/{{ filename[:-4] }}</h2>
-  <section class="toolbar">
+   <nav id="toolbar">
+    <ul>
+      <li>
+        <input type="button" value="" class="bold" onclick="document.getElementById('iframe').contentWindow.document.execCommand('bold', false, '')" title="Mettre le texte en gras"/>
+      </li>
+      <li>
+        <input type="button" value="" class="italic" onclick="document.getElementById('iframe').contentWindow.document.execCommand('italic', false, '')" title="Mettre le texte en italique"/>
+      </li>
+      <li>
+        <input type="button" value="" class="underline" onclick="document.getElementById('iframe').contentWindow.document.execCommand('underline', false, '')" title="Mettre le texte en souligné"/>
+      </li>
+       <li>
+        <input type="button" value="" class="strikethrough" onclick="document.getElementById('iframe').contentWindow.document.execCommand('strikethrough', false, '')" title="Mettre le texte en barré"/>
+      </li>
+      <li>
+        <input type="button" value="" class="bigger" onclick="document.getElementById('iframe').contentWindow.document.execCommand('increaseFontSize', false, '')" title="Agrandir la taille du texte"/>
+      </li>
+      <li>
+        <input type="button" value="" class="lower" onclick="document.getElementById('iframe').contentWindow.document.execCommand('decreaseFontSize', false, '')" title="Réduire la taille du texte"/>
+      </li>
+      <li>
+        <input type="button" value="" class="paragraph" onclick="document.getElementById('iframe').contentWindow.document.execCommand('formatblock', false, '<p>')" title="Ajouter un paragraphe"/>
+      </li>
+      <li>
+        <input type="button" value="" class="list" onclick="document.getElementById('iframe').contentWindow.document.execCommand('insertUnorderedList', false, '')" title="Ajouter une liste"/>
+      </li>
+      <li>
+        <input type="button" value="" class="left" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyLeft', false, '')" title="Aligner le texte à gauche"/>
+      </li>
+      <li>
+        <input type="button" value="" class="right" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyRight', false, '')" title="Aligner le texte à droite"/>
+      </li>
+      <li>
+        <input type="button" value="" class="center" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyCenter', false, '')" title="Centrer le texte"/>
+      </li>
+      <li>
+        <input type="button" value="" class="justify" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyFull', false, '')" title="Justifier le texte"/>
+      </li>
+      <li>
+        <input type="button" value="" class="undo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('undo', false, '')" title="Annuler"/>
+      </li>
+      <li>
+        <input type="button" value="" class="redo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('redo', false, '')" title="Refaire"/>
+      </li>
+    </ul>
     <ul>
       <li>
         <form action="{{ url_for('generate') }}" method="post">    
-          <input type="hidden"id="html_content" value="" name="html_content" />
-          <input type="hidden"id="html_content" value="{{ filename }}" name="filename" />
-          <input type="submit" value="Générer le PDF" onclick="document.getElementById('html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="generate"/>
+          <input type="hidden"id="gen_html_content" value="" name="html_content" />
+          <input type="hidden" value="{{ filename }}" name="filename" />
+          <input type="submit" value="" onclick="document.getElementById('gen_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;$('span[contenteditable=true]:eq(1)').html().replace('.',',');" name="generate" class="generate" title="Générer le PDF"/>
         </form>
       </li>
       <li>
@@ -19,14 +63,11 @@
         <input type="hidden" id="save_html_content" value="" name="html_content" />
         <input type="hidden" value="{{ filename }}" name="filename" />
         <input type="hidden" value="{{ category }}" name="category" />
-        <input type="submit" value="Enregistrer le document" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save"/>
+        <input type="submit" value="" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save" class="save" title="Enregistrer le document"/>
       </form>
       </li>
-      <li>
-        <input type="button" value="Réinitialiser" onclick="window.location.reload();"/>
-      </li>
-    <ul>
-  </section>
+    </ul>
+   </nav>
   <div><iframe id="iframe" src="{{ url_for('model', category=category, filename=filename) }}" ></iframe></div>
   {% endblock content %}
 
