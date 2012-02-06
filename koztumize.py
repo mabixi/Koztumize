@@ -188,6 +188,14 @@ def archive(path=''):
                            archived_files=archived_files, path=path)
 
 
+@app.route('/archive_get', methods=('GET',))
+@auth
+def archive_get():
+    """This is the route where you can get the archives by name."""
+    return render_template('archive_ajax.html',
+                           filename=request.form['search'])
+
+
 @app.route('/modify/<path:path>')
 @app.route('/modify/<path:path>/<version>')
 @auth
@@ -230,7 +238,7 @@ def reader(path):
 @auth
 def save():
     """This is the route where you can edit save your changes."""
-    edited_file = request.form['filename'][:-4] + '.html'
+    edited_file = request.form['filename'] + '.html'
     path_domain = os.path.join(os.path.join(
         g.git_archive.path, g.domain))
     if os.path.exists(path_domain):
@@ -358,12 +366,14 @@ class Editable(Directive):
     optional_arguments = 1
     final_argument_whitespace = True
     has_content = False
-    option_spec = {'class': directives.class_option}
+    option_spec = {'class': directives.class_option,
+                   'id': directives.class_option}
 
     def run(self):
         content = (
-        '<div contenteditable="true" class="%s" title="%s"></div>' % (
+        '<div contenteditable="true" class="%s" id="%s" title="%s"></div>' % (
             ' '.join(self.options.get('class', [])),
+            ' '.join(self.options.get('id', [])),
             self.arguments[0] if self.arguments else ''))
         return [docutils.nodes.raw('', content, format='html')]
 
