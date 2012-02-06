@@ -44,6 +44,9 @@
         <input type="button" value="" class="paragraph" onclick="document.getElementById('iframe').contentWindow.document.execCommand('formatblock', false, '<p>')" title="Ajouter un paragraphe"/>
       </li>
       <li>
+        <input type="button" value="F" class="font" onclick="document.getElementById('iframe').contentWindow.document.execCommand('fontname', false, null)" title="Changer la police"/>
+      </li>
+      <li>
         <input type="button" value="" class="list" onclick="document.getElementById('iframe').contentWindow.document.execCommand('insertUnorderedList', false, '')" title="Ajouter une liste"/>
       </li>
       <li>
@@ -64,6 +67,19 @@
       <li>
         <input type="button" value="" class="redo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('redo', false, '')" title="Refaire"/>
       </li>
+      <li>
+        <select name="fontselect" onchange="var font=$(this).val();document.getElementById('iframe').contentWindow.document.execCommand('fontname', false, font)">
+          <option value="fontin">Fontin</option>
+          <option value="monospace">Monospace</option>
+          <option value="serif">Serif</option>
+        </select>
+        <script>
+          $('select[name=fontselect]').on('mouseover','select[name=fontselect] option', function(){
+            var font=$(this).val();
+            document.getElementById('iframe').contentWindow.document.execCommand('fontname', false, font);
+          });
+        </script>
+      </li>
     </ul>
     <ul>
       <li>
@@ -78,7 +94,7 @@
         <input type="hidden" id="save_html_content" value="" name="html_content" />
         <input type="hidden" value="{{ filename }}" name="filename" />
         <input type="hidden" value="{{ category }}" name="category" />
-        <input type="submit" value="" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save" class="save" title="Enregistrer le document"/>
+        <input type="submit" value="" onclick="var saved_as=prompt('Enregistrer sous :' , '{{ filename[:-4] }}');if(saved_as==null){alert('Veuillez spécifier un nom pour le document'); return false } else{$('input[name=filename]').val(saved_as);} $;document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save" class="save" title="Enregistrer le document"/>
       </form>
       </li>
       <li>
