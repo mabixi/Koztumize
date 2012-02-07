@@ -1,5 +1,29 @@
 {% block head %}
   <title>Koztumize - Vos archives </title>
+  <script type="text/javascript">
+    $(function(){
+      $('input[name=search]').val('Rechercher une archive');
+      $('input[name=search]').focus(function(){
+        $(this).val('');
+      });
+      $('input[name=search]').blur(function(){
+        $('input[name=search]').val('Rechercher une archive');
+      });
+    });
+  
+    function submitSearch(filename){
+      $.ajax({
+       type: 'GET',
+        url: "{{ url_for('archive_get', _external=True)}}",
+        data: 'search='+filename,
+        success: function (res) {
+                  $("#archive").hide();
+                  $("#archive-result").html(res);
+                  $("#archive-result").show();
+                 }
+      }); 
+    }  
+  </script>
 {% endblock head %}
 {% extends "layout.html" %}
 {% block content %}
@@ -10,7 +34,10 @@
     / <a href="{{ url_for('archive', path=parent)}}">{{parent}}</a>
   {% endfor %}
 </aside>
-<aside>
+
+<input type="text" name="search" title="Rechercher une archive" oninput="if($(this).val().length!=0){submitSearch($(this).val()); }else {$('#archive').show();$('#archive-result').hide();}"/>
+
+<aside id="archive">
   <ul>
   {% for dir in archived_dirs %}
     <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>    
@@ -18,8 +45,10 @@
    </ul>
    <ul>
   {% for file in archived_files %}
-     <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1] }}</a></li> 
+     <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1][:-5] }}</a></li> 
   {% endfor %}
   </ul>
+</aside>
+<aside id="archive-result">
 </aside>
 {% endblock content %}

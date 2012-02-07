@@ -2,7 +2,7 @@
   <ul>
     <a href="{{ url_for('modify', path=hist['link'], version=hist['commit']) }}">
     <li><span class="strong">Auteur :</span> {{ hist['author_name'] }}</li>
-    <li><span class="strong">Fichier :</span> {{ hist['message'] }}</li>
+    <li><span class="strong">Fichier :</span> {{ hist['message'][:-5] }}</li>
     <li><span class="strong">Date :</span> {{ hist['date'] }}</li>
     </a>
 </ul>

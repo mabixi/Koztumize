@@ -1,0 +1,11 @@
+{% if files|length != 0 %}
+  <span>Résultats de la recherche pour "<i>{{ sought_file }}</i>" :</span>
+  <ul>
+    {% for file in files %}
+      <li><a href="{{ url_for('modify', path=file['link'], version=file['commit']) }}">{{ file['filename'][:-5] }} <span class="archive-info">enregistré {{ file['date'] }} par {{ file['author'] }}</span></a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <span>Pas de résultats pour "<i>{{ sought_file }}</i>".</span>
+{% endif %}
+

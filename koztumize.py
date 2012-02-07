@@ -107,7 +107,7 @@ def auth(func):
 @app.before_request
 def before_request():
     """Set variables before each request."""
-    g.domain = app.config['DOMAIN'] or request.host.split('.')[0]
+    g.domain = request.host.split('.')[0] or app.config['DOMAIN']
     g.git_archive = Git(app.config['ARCHIVE'])
     g.git_model = Git(os.path.join(app.config['MODEL'], g.domain))
 
@@ -137,7 +137,7 @@ def history_get(author=None):
     """This is the route where the commit history is done."""
     history_query = db_model.GitCommit.query.filter(
         db_model.GitCommit.message.like(
-            'Modify ' + app.config['DOMAIN'] + '%'))
+            'Modify ' + g.domain + '%'))
     if author:
         history_query = history_query.filter(
                 db_model.GitCommit.author_name == author)
@@ -192,8 +192,20 @@ def archive(path=''):
 @auth
 def archive_get():
     """This is the route where you can get the archives by name."""
+    sought_file = request.args.get('search')
+    history_query = db_model.GitCommit.query.filter(
+        db_model.GitCommit.message.like(
+            'Modify ' + g.domain + '/%' + sought_file + '%'))
+    files = []
+    for hist in history_query.all():
+        files.append({'filename': hist.message.rsplit('/')[-1],
+                      'author': hist.author_name,
+                      'date': hist.date.strftime(
+                          "le %d/%m/%Y à %H:%M:%S").decode('utf-8'),
+                      'commit': hist.commit[:7],
+                      'link': hist.message[7:]})
     return render_template('archive_ajax.html',
-                           filename=request.form['search'])
+                           files=files, sought_file=sought_file)
 
 
 @app.route('/modify/<path:path>')

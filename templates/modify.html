@@ -1,7 +1,22 @@
 {% extends "layout.html" %}
 {% block head %}
-  <title>Koztumize - {{ filename }} </title>
-  
+  <title>Koztumize - {{ path.split('/')[-1] }} </title>
+  <script>
+    function saveDoc(){
+      var saved_as=prompt("Enregistrer sous :" , "{{ path.split('/')[-1][:-5] }}");
+      if(saved_as==null) 
+        return false; 
+      if(saved_as.length==0){
+        alert('Veuillez spécifier un nom pour le document'); 
+        return false;
+      } else {
+        $('input[name=filename]').val(saved_as);
+      } 
+      
+      $('input[name=html_content]').val(document.getElementById('iframe').contentDocument.documentElement.innerHTML);
+      return true;
+    }
+  </script>
 {% endblock head %}
   {% block content %}
   <section class="version">
@@ -16,7 +31,8 @@
   </section>
   <aside>
     <a href="/">index</a>
-    {% for parent in path.split('/')%}
+    {% set path_trunc=path[:-5] %}
+    {% for parent in path_trunc.split('/')%}
       / <a href="{{ url_for('archive', path=parent)}}">{{parent}}</a>
     {% endfor %}
   </aside>
@@ -88,10 +104,10 @@
       </li>
       <li>
       <form action="{{ url_for('save') }}" method="post" name="save">    
-        <input type="hidden" id="save_html_content" value="" name="html_content" />
+        <input type="hidden" value="" name="html_content" />
         <input type="hidden" value="{{ filename }}" name="filename" />
         <input type="hidden" value="{{ category }}" name="category" />
-        <input type="submit" value="" onclick="var saved_as=prompt('Enregistrer sous :' , '{{ filename[:-4] }}');if(saved_as==null){alert('Veuillez spécifier un nom pour le document'); return false } else{$('input[name=filename]').val(saved_as);} $;document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save" class="save" title="Enregistrer le document"/>
+        <input type="submit" value="" onclick="return saveDoc();" name="save" class="save" title="Enregistrer le document"/>
       </form>
       </li>
       <li>

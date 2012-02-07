@@ -67,7 +67,7 @@
       <li>
         <form action="{{ url_for('generate') }}" method="post">    
           <input type="hidden"id="gen_html_content" value="" name="html_content" />
-          <input type="hidden" value="{{ filename }}" name="filename" />
+          <input type="hidden" value="{{ filename[:-4] }}" name="filename" />
           <input type="submit" value="" onclick="document.getElementById('gen_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="generate" class="generate" title="Générer le PDF"/>
         </form>
       </li>
