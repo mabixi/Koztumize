@@ -107,7 +107,7 @@ def auth(func):
 @app.before_request
 def before_request():
     """Set variables before each request."""
-    g.domain = request.host.split('.')[0] or app.config['DOMAIN']
+    g.domain = app.config.get('DOMAIN', None) or request.host.split('.')[0]
     g.git_archive = Git(app.config['ARCHIVE'])
     g.git_model = Git(os.path.join(app.config['MODEL'], g.domain))
 
