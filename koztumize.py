@@ -326,8 +326,8 @@ def model(category, filename):
         'embed_stylesheet': False}
     parts = docutils.core.publish_parts(
         source=source, writer=Writer(), settings_overrides=arguments)
-    text = parts['whole']
-    return text
+    content = parts['whole']
+    return content
 
 
 @app.route('/model_static/<path:path>.css')
