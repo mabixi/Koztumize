@@ -175,6 +175,10 @@ def generate():
 @auth
 def archive(path=''):
     """The route where you can access your archived files."""
+    path_domain = os.path.join(os.path.join(
+        g.git_archive.path, g.domain))
+    if not os.path.exists(path_domain):  # pragma: no cover
+        os.mkdir(path_domain)
     g.git_archive.checkout('master')
     archived_dirs = []
     archived_files = []

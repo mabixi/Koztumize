@@ -38,16 +38,20 @@
 <input type="text" name="search" title="Rechercher une archive" oninput="if($(this).val().length!=0){submitSearch($(this).val()); }else {$('#archive').show();$('#archive-result').hide();}"/>
 
 <aside id="archive">
-  <ul>
-  {% for dir in archived_dirs %}
-    <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>    
-  {% endfor %}
-   </ul>
-   <ul>
-  {% for file in archived_files %}
-     <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1][:-5] }}</a></li> 
-  {% endfor %}
-  </ul>
+  {% if not archived_dirs %}
+    <span>Vous n'avez aucune archive !</span>
+  {% else %}
+    <ul>
+    {% for dir in archived_dirs %}
+      <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>    
+    {% endfor %}
+    </ul>
+    <ul>
+      {% for file in archived_files %}
+      <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1][:-5] }}</a></li> 
+      {% endfor %}
+    </ul>
+  {% endif %}
 </aside>
 <aside id="archive-result">
 </aside>
