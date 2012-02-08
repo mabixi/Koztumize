@@ -8,6 +8,9 @@
     };
   </script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/new.js')}}"></script>
+  <script>
+    $(function(){$('.nav ul li:eq(0)').addClass('current')});
+  </script>
 {% endblock head %}
 
 {% block header %}
@@ -25,7 +28,7 @@
   {% endfor %}
 </aside>
 <aside class="last_commits">
-  <h6>Dernières modifications</h6>
+  <h3>Dernières modifications</h3>
   <form name="author_form">
     Auteur :
     <select name="author_select">

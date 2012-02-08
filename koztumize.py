@@ -123,7 +123,9 @@ def index():
     print request.args.get('author_select')
 
     authors_query = db_model.DB.session.query(
-        db_model.GitCommit.author_name.label('author_name')).distinct()
+        db_model.GitCommit.author_name.label('author_name')).filter(
+        db_model.GitCommit.message.like(
+            'Modify ' + g.domain + '%')).distinct()
     authors = []
     for author in authors_query:
         authors.append({'author_name': author.author_name})

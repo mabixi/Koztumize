@@ -108,17 +108,21 @@ nav  ul li  {
 
 nav ul li a {
   display: block;
-  color: #949494;
+  color: #666;
   padding: 0.5em 5px; 
   text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3);
 }
 
 
 nav ul li a:hover, nav ul li a:focus {
-  color: #626262;
+  color: #222;
   text-decoration: none;
 }
 
+nav .current a{
+  font-weight:bold;
+  color:#444 ;
+}
 
 /* 
    ---------
@@ -300,8 +304,9 @@ p.ok:before {
 
 aside.last_commits {
   display: inline-block;
-  margin: 5px 0 0 8%;
+  margin: 0px 0 0 8%;
   width: 25%;
+  border:1px solid #eee; 
 }
 
 aside.last_commits h3 {
@@ -314,17 +319,33 @@ aside.last_commits h3 {
   font-weight: normal;
   padding: 0.1em 5px;
   text-align: center;
+  margin-top:0px;
+}
+
+aside.last_commits #history{
+  border-top:1px solid #eee;
+  margin-bottom:0;
 }
 
 aside.last_commits form {
   color: #444;
   font-size: 0.8em;
   text-align: center;
+  width:80%;
+  margin:auto;
 }
 
 aside.last_commits form select {
-  color:#444;
   height: 1.5em;
+  width:50%;
+  background:#fefefe;
+  color:#666;
+  border-radius:2px;
+  border:1px solid #ddd;
+  box-shadow:
+  0px 2px 2px 0px rgba(0, 0, 0, 0.5),
+  0px 2px 2px 0px rgba(255, 255, 255, 0.5) inset;
+  overflow:hidden;
 }
 
 aside.last_commits div {
@@ -369,6 +390,7 @@ aside.last_commits div a ul li {
 aside.last_commits div a ul li .strong {
   font-weight: bold;
 }
+
 
 /* Search */
 input[name=search]{
@@ -484,12 +506,16 @@ iframe {
 section aside {
   font-size: 0.8em;
   margin: 15px 5%;
+  color: #707070;
 }
 
 section aside a {
   color: #707070;
 }
 
+section aside a:hover{
+  color:#505050;
+}
 
 /* ----------
    - Editor -
