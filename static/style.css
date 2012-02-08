@@ -1,14 +1,4 @@
 @font-face{
-  font-family: 'hanzo';
-  src:url('hanzo.otf');
-}
-
-@font-face{
-  font-family: 'josefin';
-  src:url('Josefin.otf');
-}
-
-@font-face{
   font-family: 'patinio';
   src: url('Patinio Futura.ttf');
 }
@@ -529,7 +519,7 @@ section aside a:hover{
   background:rgba(60,60,60,0.7);
   box-shadow:0 0 5px #fff;
   border:1px solid #999;
-  width:8em;
+  width:8%;
   padding:0;
   margin:1.75em;
   
