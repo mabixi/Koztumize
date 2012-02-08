@@ -167,7 +167,7 @@ def generate():
     document.write_to(temp_file)
     return send_file(temp_file.name, as_attachment=True,
                      attachment_filename=request
-                     .form['filename'][:-4] + '.pdf')
+                     .form['filename'] + '.pdf')
 
 
 @app.route('/archive')

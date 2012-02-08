@@ -32,7 +32,7 @@
   <aside>
     <a href="/">index</a>
     {% set path_trunc=path[:-5] %}
-    {% for parent in path_trunc.split('/')%}
+    {% for parent in path_trunc.split('/') %}
       / <a href="{{ url_for('archive', path=parent)}}">{{parent}}</a>
     {% endfor %}
   </aside>
@@ -105,7 +105,7 @@
       <li>
       <form action="{{ url_for('save') }}" method="post" name="save">    
         <input type="hidden" value="" name="html_content" />
-        <input type="hidden" value="{{ filename }}" name="filename" />
+        <input type="hidden" value="{{ path_trunc.split('/')[-1] }}" name="filename" />
         <input type="hidden" value="{{ category }}" name="category" />
         <input type="submit" value="" onclick="return saveDoc();" name="save" class="save" title="Enregistrer le document"/>
       </form>
