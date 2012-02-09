@@ -18,7 +18,7 @@
         <li><a href="{{ url_for('archive', path=g.domain) }}">Accéder à vos documents enregistrés</a></li>  
       </ul>
     </nav>
-    <aside>
+    <aside class="user">
       {% if session.user %}
       <ul>
         <li>{{ session.user }}</li>

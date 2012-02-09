@@ -41,7 +41,7 @@
 <input type="text" name="search" title="Rechercher une archive" oninput="if($(this).val().length!=0){submitSearch($(this).val()); }else {$('#archive').show();$('#archive-result').hide();}"/>
 
 <aside id="archive">
-  {% if not archived_dirs %}
+  {% if not archived_dirs and not archived_files%}
     <span>Vous n'avez aucune archive !</span>
   {% else %}
     <ul>
