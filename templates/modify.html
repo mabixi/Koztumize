@@ -17,7 +17,7 @@
           alert('Veuillez spécifier un nom pour le document'); 
           return false;
         } else {
-          $('.saveload').show();
+          $('.saveload').html('Enregistrement en cours...').css('color','#222').show();
           filename=saved_as;
 
           var html_content = $('iframe').contents().find('html').html();
@@ -40,6 +40,27 @@
         }
       }
 
+      function updateStyle(filename, category){
+          $('.saveload').html('Mise à jour en cours...').css('color','#222').show();
+        
+          var html_content = $('iframe').contents().find('html').html();
+          
+          $.ajax({
+            url: "{{ url_for('save') }}",
+            data: "html_content="+html_content.replace(/&nbsp;/g,' ')+"&filename="+filename+"&category="+category,
+            type: "POST",
+            success: function(response){
+              if(response=="0"){
+                $('.saveload').html('Erreur: le document n\'a pas été mis à jour.').css('color','red');
+                $('.saveload').fadeOut(6000);
+              }else{ 
+                window.location.href=response;
+                $('.saveload').html('La mise à jour a été effectuée.').css('color','green');
+              }
+            }
+            
+          });
+      }
   
       function generate(html_content){
         $('.loading').fadeIn(500);
@@ -143,7 +164,7 @@
         <input type="button" value="" onclick="saveDoc('{{ filename[:-4] }}','{{ category }}');" name="save" class="save" title="Enregistrer le document"/>
       </li>
       <li>
-        <input type="button" value="" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); saveDoc('{{ filename[:-4] }}','{{ category }}');" class="update" title="Mettre à jour le style"/>
+        <input type="button" value="" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); updateStyle('{{ filename[:-4] }}','{{ category }}');" class="update" title="Mettre à jour le style"/>
       </li>
       <li>
         <input type="button" value="" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';" class="documentnew" title="Revenir au modèle vierge"/>
