@@ -729,6 +729,24 @@ section aside a:hover{
   z-index:99;
 }
 
+
+.saveload{
+  display:none;
+  height:30px;
+  width:20%;
+  position:fixed;
+  z-index:1000;
+  top:0;
+  left:40%;
+  font-size:0.9em;
+  background:rgba(222,222,220,0.8);
+  padding-top:8px;
+  text-align:center;
+  border-radius:0px 0px 3px 3px;
+  border:1px solid #dadada;
+  text-shadow:0 0 1px #dadada inset;
+  color:#222;
+}
 /*
   ----------
   - Footer -

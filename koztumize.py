@@ -288,15 +288,12 @@ def save():
             u"--author=%s <%s>'" % (session['user'], session['usermail']),
             message=u"Modify %s" % path_message)
     except GitException:  # pragma: no cover
-        flash(u"Erreur : Le fichier n'a pas été modifié.", 'error')
+        return "0"
     else:
         g.git_archive.push("origin", "master")
-        flash(u"Enregistrement effectué.", 'ok')
-
-    return redirect(url_for('modify',
-                            path=os.path.join(g.domain,
+    return url_for('modify', path=os.path.join(g.domain,
                                               request.form['category'],
-                                              edited_file), version='master'))
+                                              edited_file), version='master')
 
 
 @app.route('/edit/<category>/<filename>')
@@ -317,7 +314,8 @@ def model(category, filename):
 
 .. meta::
    :model: %s/%s""" % (category, filename) + u"""
-   :date: %s""" % (datetime.today().strftime(format))
+   :date: %s""" % (datetime.today().strftime(format)) + u"""
+   :author: %s""" % session.get('user')
 
     dom_tree = docutils.core.publish_doctree(source=source).asdom()
     list_field = dom_tree.getElementsByTagName('field')

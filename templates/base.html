@@ -2,7 +2,7 @@
   {% block head %}
     <title>Koztumize - {{ filename }} </title>
     <script>
-      function saveDoc(){
+      function saveDoc(filename, category){
         var saved_as=prompt("Enregistrer sous :" , "{{ filename[:-4] }}");
         if(saved_as==null) 
           return false; 
@@ -10,11 +10,26 @@
           alert('Veuillez spécifier un nom pour le document'); 
           return false;
         } else {
-          $('input[name=filename]').val(saved_as);
-        } 
-        
-        $('input[name=html_content]').val(document.getElementById('iframe').contentDocument.documentElement.innerHTML);
-        return true;
+          $('.saveload').show();
+          filename=saved_as;
+
+          var html_content = $('iframe').contents().find('html').html();
+          
+          $.ajax({
+            url: "{{ url_for('save') }}",
+            data: "html_content="+html_content.replace(/&nbsp;/g,' ')+"&filename="+filename+"&category="+category,
+            type: "POST",
+            success: function(response){
+              if(response=="0"){
+                $('.saveload').html('Erreur: le document n\'a pas été modifié.').css('color','red');  
+              }else{ 
+                window.location.href=response;
+                $('.saveload').html('Le document a été enregistré.').css('color','green');
+              }
+            }
+            
+          });
+        }
       }
 
       function generate(html_content){
@@ -99,21 +114,19 @@
     </ul>
     <ul>
       <li> 
-          <input type="hidden"id="gen_html_content" value="" name="html_content" />
-          <input type="hidden" value="{{ filename[:-4] }}" name="filename" />
-          <input type="button" value="" onclick="$('#gen_html_content').val($('iframe').contents().find('html').html());generate($('input[name=html_content]').val());" name="generate" class="generate" title="Générer le PDF"/>  
+        <input type="hidden" value="{{ filename[:-4] }}" name="filename" />
+        <input type="button" value="" onclick="generate($('iframe').contents().find('html').html());" name="generate" class="generate" title="Générer le PDF"/>  
       </li>
-      <li>
-      <form action="{{ url_for('save') }}" method="post">    
-        <input type="hidden" id="save_html_content" value="" name="html_content" />
+      <li>     
         <input type="hidden" value="{{ filename[:-4] }}" name="filename" />
         <input type="hidden" value="{{ category }}" name="category" />
-        <input type="submit" value="" onclick="saveDoc();" name="save" class="save" title="Enregistrer le document"/>
-      </form>
-      
+        <input type="button" value="" onclick="saveDoc($('input[name=filename]').val(),$('input[name=category]').val());" name="save" class="save" title="Enregistrer le document"/>
       </li>
     </ul>
    </nav>
+   <div class="saveload">
+    Enregistrement en cours...
+   </div>
    <div class="loading"> 
      <span onclick="$(this).parent().fadeOut(500);" class="close">x</span>
      <div id="loader"><img src="{{ url_for('static', filename='img/icons/loader.gif') }}"/>Veuillez patienter...</div>
