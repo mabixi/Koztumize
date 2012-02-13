@@ -137,18 +137,13 @@
     </ul>
     <ul>
       <li>   
-          <input type="hidden" id="gen_html_content" value="" name="html_content" />
-          <input type="hidden" value="{{ filename }}" name="filename" />
-          <input type="button" value="" onclick="$('#gen_html_content').val($('iframe').contents().find('html').html()); generate($('input[name=html_content]').val());" name="generate" class="generate" title="Générer le PDF"/>
+          <input type="button" value="" onclick="generate($('iframe').contents().find('html').html());" name="generate" class="generate" title="Générer le PDF"/>
       </li>
      <li>     
-        <input type="hidden" id="save_html_content" value="" name="html_content" />
-        <input type="hidden" value="{{ filename[:-4] }}" name="filename" />
-        <input type="hidden" value="{{ category }}" name="category" />
-        <input type="button" value="" onclick="saveDoc($('input[name=filename]').val(),$('input[name=category]').val());" name="save" class="save" title="Enregistrer le document"/>
+        <input type="button" value="" onclick="saveDoc('{{ filename[:-4] }}','{{ category }}');" name="save" class="save" title="Enregistrer le document"/>
       </li>
       <li>
-        <input type="submit" value="" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); $('form[name=save]').children()[0].value=$('#iframe')[0].contentDocument.documentElement.innerHTML; $('form[name=save]').submit();" class="update" title="Mettre à jour le style"/>
+        <input type="button" value="" onclick="$('#iframe').contents().find('meta[name=date]').attr('content', '{{ date }}'); saveDoc('{{ filename[:-4] }}','{{ category }}');" class="update" title="Mettre à jour le style"/>
       </li>
       <li>
         <input type="button" value="" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';" class="documentnew" title="Revenir au modèle vierge"/>

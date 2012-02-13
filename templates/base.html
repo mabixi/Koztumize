@@ -114,13 +114,10 @@
     </ul>
     <ul>
       <li> 
-        <input type="hidden" value="{{ filename[:-4] }}" name="filename" />
         <input type="button" value="" onclick="generate($('iframe').contents().find('html').html());" name="generate" class="generate" title="Générer le PDF"/>  
       </li>
       <li>     
-        <input type="hidden" value="{{ filename[:-4] }}" name="filename" />
-        <input type="hidden" value="{{ category }}" name="category" />
-        <input type="button" value="" onclick="saveDoc($('input[name=filename]').val(),$('input[name=category]').val());" name="save" class="save" title="Enregistrer le document"/>
+        <input type="button" value="" onclick="saveDoc('{{ filename[:-4] }}','{{ category }}');" name="save" class="save" title="Enregistrer le document"/>
       </li>
     </ul>
    </nav>
