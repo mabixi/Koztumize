@@ -24,7 +24,7 @@
           
           $.ajax({
             url: "{{ url_for('save') }}",
-            data: "html_content="+html_content.replace(/&nbsp;/g,' ')+"&filename="+filename+"&category="+category,
+            data: "html_content="+encodeURIComponent(html_content)+"&filename="+filename+"&category="+category,
             type: "POST",
             success: function(response){
               if(response=="0"){
