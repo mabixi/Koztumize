@@ -164,12 +164,20 @@ def generate():
     The PDF is returned to the client.
 
     """
+    print (request.form['html_content'])
     document = PDFDocument.from_string(request.form['html_content'])
-    temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
+    temp_file = NamedTemporaryFile(suffix='.pdf', delete=False)
     document.write_to(temp_file)
-    return send_file(temp_file.name, as_attachment=True,
-                     attachment_filename=request
-                     .form['filename'] + '.pdf')
+    session['pdf_link'] = temp_file.name
+    return 'ok'
+
+
+@app.route('/get_pdf/<string:filename>')
+@auth
+def get_pdf(filename=''):
+    """The route where you get the pdf document."""
+    return send_file(session.get('pdf_link'), as_attachment=True,
+                     attachment_filename=filename + '.pdf')
 
 
 @app.route('/archive')

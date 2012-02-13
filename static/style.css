@@ -669,6 +669,66 @@ section aside a:hover{
   border-right:1px solid #444;
   border-left:1px solid #444;
 }
+
+/* Loading */
+.loading{
+  position:absolute;
+  width:200px;
+  height:200px;
+  border:2px solid #999;
+  box-shadow:0px 0px 4px #999;
+  background:#dadada;
+  color:white;
+  display:none;
+  text-align:center;
+  z-index:100;  
+}
+
+.loading .close{
+  cursor:pointer;
+  float:right;
+  color:black;
+  opacity:0.25;
+  margin-top:-5px;
+  margin-right:1px;
+  font-size:1.1em;
+}
+
+.loading #PDF-link{
+  color:#444;
+  margin-top:20px;
+  display:none;
+  text-align:center;
+  width:200px;
+}
+
+.loading #PDF-link:hover{
+  text-shadow:0 0 1px #aaa;
+}
+
+.loading #PDF-link img{
+
+}
+
+.loading #loader{
+  margin-top:90px;
+  display:none;
+  color:#444;
+}
+
+#backgroundPopup{
+  display:none;
+  position:fixed;
+  _position:absolute; /* hack for internet explorer 6*/
+  height:100%;
+  width:100%;
+  top:0;
+  left:0;
+  background:#000000;
+  border:1px solid #cecece;
+  z-index:99;
+}
+
 /*
   ----------
   - Footer -

@@ -122,6 +122,24 @@ def test_history_get(client):
 
 
 @with_client
+def test_archive_get(client):
+    """Test the archive_get page."""
+    with client.application.test_request_context():
+        response = request(
+        client.get, 'archive_get?search=courrier')
+        assert 'courrier' in response.data
+
+
+@with_client
+def test_model_static(client):
+    """Test the page which returns CSS."""
+    with client.application.test_request_context():
+        response = request(
+        client.get, url_for('stylesheet', path='test'))
+        assert 'css' in response.data
+
+
+@with_client
 def test_logout(client):
     """Test the logout."""
     response = request(client.get, '/logout')
