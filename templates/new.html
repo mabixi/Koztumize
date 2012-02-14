@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <title>Koztumize - Nouveau document </title>
+  <script type="text/javascript">
+    window.Koztumize = {
+      history_url: "{{ url_for('history_get', author='author') }}"
+    };
+  </script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/new.js')}}"></script>
+{% endblock head %}
+
+{% block header %}
+<h1>Créer un nouveau document</h1>
+{% endblock header %}
+{% block content %}
+<aside class="index">
+  {% for category in models.keys() %}
+  <h2>{{ category }}</h2>
+    <ul>
+      {% for model in models[category] %}
+      <li><a href="{{ url_for('edit', category=category, filename=model) }}">{{ model.rsplit('.', 1)[0] }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</aside>
+<aside class="last_commits">
+  <h6>Dernières modifications</h6>
+  <form name="author_form">
+    Auteur :
+    <select name="author_select">
+      <option value="">Tous</option>
+      {% for author in authors %}
+        <option value="{{ author['author_name'] }}"> {{ author['author_name'] }}</option>
+      {% endfor %}
+    </select>
+  </form>
+  <div id="history">
+  </div>
+</aside>
+{% endblock content %}

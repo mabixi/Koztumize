@@ -1,0 +1,424 @@
+@font-face{
+    font-family: 'hanzo';
+    src:url('hanzo.otf');
+}
+
+@font-face{
+    font-family: 'josefin';
+    src:url('Josefin.otf');
+}
+
+/*
+  -------------
+  - HTML/Body -
+  -------------
+*/
+html{
+    background:url('img/bkgd.png');
+    margin:0;
+}
+
+body{
+    
+    margin:0;
+}
+
+/*
+  ----------
+  - Common -
+  ----------
+*/
+
+a{
+    text-decoration:none;
+}
+a:hover{
+    text-decoration:underline;
+}
+
+/* 
+   ----------
+   - layout -
+   ----------
+*/
+header>h1{
+    font-family:'josefin';
+    text-align:center;
+    font-size:2.1em;
+    padding:0.3em;
+    background:rgba(255,255,255,0.25);
+    border:1px solid #fff;
+}
+
+header>h2{
+    font-family:'josefin';
+    text-align:center;
+    padding:0.3em;
+    background:rgba(255,255,255,0.25);
+    border:1px solid #fff;
+}
+
+body>nav{
+    background:rgba(255,255,255,0.2);
+    text-align:center;
+    width:90%;
+    margin:0 auto;
+}
+
+body>nav>ul>{
+    margin:0 auto;
+}
+
+body>nav>ul>li{
+    display:inline-block;
+    padding:0.5em;
+}
+
+body>nav>ul>li a{
+    color:#222;
+    text-shadow:0 0 0.05em #555;
+}
+
+/* info user + logout */
+body>aside{
+  position:absolute;
+  top:0;
+  right:1em;
+  margin:0;
+  padding:0;
+}
+
+body>aside>ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+body>aside>ul li{
+  display:inline-block;
+  padding-right:0.5em;
+  padding-left:0.5em;
+}
+
+body>aside>ul li:first-child{
+  border-right:1px solid #222;
+}
+
+body>aside>ul li a{
+  color:#222;
+}
+
+section>aside{
+    width:60%;
+    padding:1em;
+    margin:auto;
+    background:rgba(255,255,255,0.2);
+    border:thin solid #fff;
+    box-shadow:0 0 5px #ddd;
+}
+
+section>aside.index{
+    margin-left:8em;
+    height:25em;
+    overflow:auto;
+}
+
+section>aside h2{
+    background:rgba(254,217,143,0.2);
+    border-radius:5px;
+    padding:0.2em;
+    text-shadow:0 0 0.03em #000;
+    font-family:'josefin';
+    clear:left;
+}
+
+section>aside ul{
+    list-style:none;
+    font-family:'hanzo',sans-serif;
+}
+
+section>aside ul li{
+    padding:0.25em;
+}
+
+section>aside ul li a{
+    color:#222;
+    text-decoration:none;
+    font-family:'hanzo',sans-serif;
+}
+
+/* style for dirs */
+.dir{
+  text-transform:uppercase;
+}
+
+/* error flash message */
+p.error{
+    background:rgba(244,41,41,0.55);
+    border:1px solid #B31B1B;
+    color:#B31B1B;
+    max-width:30em;
+    margin:0 auto;
+    text-align:center;
+    font-family:sans-serif;
+    font-weight:bold;
+}
+
+/* ok flash message */
+p.ok{
+    background:rgba(40,196,1,0.55);
+    border:1px solid #21A200;
+    color:#21A200;
+    max-width:30em;
+    margin:0 auto;
+    text-align:center;
+    font-family:sans-serif;
+    font-weight:bold;
+}
+
+
+/* 
+   ------------
+   - New Page -
+   ------------
+*/
+
+aside.last_commits{
+    float:right;
+    margin-top:-27em;
+    margin-right:7em;
+    width:17%;
+    height:26em;
+    font-family:sans-serif; 
+    padding-right:0;
+    padding-bottom:0;
+    overflow:hidden;
+}
+
+aside.last_commits>h6{
+    margin:-0.5em 1em 1em 0;
+    padding:0;
+    font-size:0.8em;
+    text-align:center;
+    font-weight:normal;
+    text-transform:uppercase;
+    text-shadow:0px 0 1px #222;
+}
+
+aside.last_commits>form{
+    font-size:0.8em;
+    color:#444;
+}
+
+aside.last_commits>form>select{
+    height:1.5em;
+    min-width:8em;
+    background:transparent;
+    border:thin solid #444;
+    color:#444;
+}
+
+aside.last_commits>form>select option{
+    font-size:0.8em;
+    background:transparent;
+    color:#444;
+}
+
+aside.last_commits>div{
+    margin:1em 0 0 0;
+    padding:0;
+    height:22em;
+    overflow:auto;
+    width:100%;
+}
+
+aside.last_commits>div ul{   
+    margin:0;
+    padding:0.5em 0 0.5em 0em;  
+    border-bottom:thin solid rgb(254, 217, 143);
+}
+
+aside.last_commits>div ul a{
+    color:#111;
+    outline:none;
+}
+
+aside.last_commits>div ul a:hover{
+    text-shadow:0 0 0.05em #666;
+}
+
+aside.last_commits>div ul:first-child{
+    padding-top:0;
+}
+
+aside.last_commits>div ul:last-child{
+    border:none;
+}
+
+aside.last_commits>div ul li{
+    margin:0;
+    padding:0;
+    font-family:sans-serif;
+    font-size:0.8em;
+}
+
+aside.last_commits>div ul li span.strong{
+    font-weight:700;
+}
+
+
+/*
+  -------------
+  - Edit Page -
+  -------------
+*/
+
+/* page titles */
+
+
+/* toolbar */
+section.toolbar{
+    position:relative;
+    top:0;
+    left:0;
+    padding:0;
+    margin:0;
+    text-align:center;
+}
+section.toolbar ul{
+    
+    marign:0;
+    padding:0;
+}
+
+section.toolbar ul li{
+    display:inline-block;
+}
+
+section.toolbar input[type=button],
+section.toolbar input[type=submit]{
+    background:#222;
+    border:1px solid #222;
+    color:#fff;
+    border-radius:5px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#btn_version{
+    width:14em;
+    border-bottom-right-radius:0px;
+    border-bottom-left-radius:0px;
+    cursor:default;
+    margin:0;
+}
+
+#hist{
+    display:none;
+    background:#222;
+    font-family:'helvetica',sans-serif;
+    position:absolute;
+    z-index:100;
+    list-style:none;
+    width:14em;
+    max-height:7em;
+    overflow-y:auto;
+}
+
+#hist li{
+    display:list-item;
+    margin:0;
+    padding:0.15em 0;
+}
+
+#hist a{
+    color:#777;
+}
+
+#hist a:hover{
+    text-decoration:none;
+    color:#fff;
+}
+
+/* iframe */
+iframe{
+  position:relative;
+  border:1px solid #222;
+  width:90%;
+  left:5%;
+  background:#fff;
+  height:40em;
+}
+
+/*
+  ----------
+  - Footer -
+  ----------
+*/
+footer {
+  font-family:'josefin', sans-serif;
+  font-size:1em;
+  margin-top: 50px;
+  padding: 3px 0 0 0;
+  text-align: center;
+}
+
+footer ul {
+  background: url(img/footer.png) no-repeat top center;
+  padding: 20px 0;
+}
+
+footer li { 
+  display: inline;
+}
+
+footer li a {
+  color: #222 !important;
+  padding: 0 5px;
+}
+
+footer li a:hover {
+  color: black !important;
+}
+
+section.connection p{
+  text-align: center;
+}
+
+section.connection form{
+  width: 20em;
+  margin: 0 auto 8em auto;
+}
+
+section.connection label {
+    clear: right;
+    color: #222222;
+    display: block;
+    float: left;
+    font-family: trebuchet ms,alibri,sans-serif;
+    margin: 0 -1px;
+    text-align: right;
+    width: 45%;
+}
+
+section.connection input {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid;
+    color: #111111;
+    display: block;
+    float: right;
+    font-family: trebuchet ms,calibri,sans-serif;
+    margin-bottom: 0.5em;
+    width: 50%;
+}
+
+section.connection input[type=submit],input[type=button]
+{
+	border:2px solid #111;
+	background:#222;
+	color:#fff;
+	/*font-weight:bold;*/
+	font-family:trebuchet ms,alibri,sans-serif;
+	font-size:12pt;
+	cursor:pointer;
+}

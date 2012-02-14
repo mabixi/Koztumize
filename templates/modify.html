@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block head %}
+  <title>Koztumize - {{ filename }} </title>
+{% endblock head %}
+  {% block header %}<h2>{{ filename }}</h2>{% endblock header %}
+  {% block content %}
+  <section class="toolbar">
+    <ul>
+      <li>
+        <form action="{{ url_for('generate') }}" method="post">    
+          <input type="hidden"id="gen_html_content" value="" name="html_content" />
+          <input type="hidden" value="{{ filename }}" name="filename" />
+          <input type="submit" value="Générer le PDF" onclick="document.getElementById('gen_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="generate"/>
+        </form>
+      </li>
+      <li>
+       <form action="{{ url_for('save') }}" method="post">    
+        <input type="hidden" id="save_html_content" value="" name="html_content" />
+        <input type="hidden" value="{{ filename }}" name="filename" />
+        <input type="hidden" value="{{ category }}" name="category" />
+        <input type="submit" value="Enregistrer le document" onclick="document.getElementById('save_html_content').value=document.getElementById('iframe').contentDocument.documentElement.innerHTML;" name="save"/>
+      </form>
+      </li>
+      <li>
+        <input type="button" value="Modèle vierge" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';"/>
+      </li>
+      <li>
+        <input type="button" id="btn_version" value="Version" onmouseover="document.getElementById('hist').style.display='block';"          onmouseout="document.getElementById('hist').style.display='none';"/>
+        <ul id="hist" onmouseover="document.getElementById('hist').style.display='block';" onmouseout="document.getElementById('hist').style.display='none';">
+          {% for commit in date_commit %}
+            <li><a href="{{ url_for('modify', path=path, version=commit['commit']) }}">{{ commit['date']}} {{ commit['author']}}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+    <ul>
+  </section>
+  <iframe id="iframe" src="{{ url_for('reader',path=path) }}"></iframe>
+  
+ 
+  {% endblock content %}
