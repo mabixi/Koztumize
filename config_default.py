@@ -25,7 +25,6 @@ LDAP_PATH = "your_ldap_path"
 DOMAIN = 'your_domain'
 ARCHIVE = os.path.join(os.path.expanduser('your_archive_dir'))
 MODEL = os.path.join(os.path.expanduser('your_model_dir'))
-DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 SQLALCHEMY_ECHO = True
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://koztumize:\
 koztumize@localhost/koztumize'
