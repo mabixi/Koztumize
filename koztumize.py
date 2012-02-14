@@ -66,7 +66,7 @@ class Koztumize(Flask):
         return self.config['LDAP']
 
 app = Koztumize(__name__)  # pylint: disable=C0103
-format = '%Y-%m-%d %H:%M:%S'
+date_format = '%Y-%m-%d %H:%M:%S'
 
 
 @app.route('/login', methods=('POST',))
@@ -246,7 +246,7 @@ def modify(path, version=''):
              'commit': hist[commit]['hash'][:7],
              'author': hist[commit]['author']['name']})
     category, filename = path_model.rsplit('/', 1)
-    today = datetime.today().strftime(format)
+    today = datetime.today().strftime(date_format)
     return render_template('modify.html', category=category,
                            filename=filename, date_commit=date_commit,
                            path=path, date=today)
@@ -314,7 +314,7 @@ def model(category, filename):
 
 .. meta::
    :model: %s/%s""" % (category, filename) + u"""
-   :date: %s""" % (datetime.today().strftime(format)) + u"""
+   :date: %s""" % (datetime.today().strftime(date_format)) + u"""
    :author: %s""" % session.get('user')
 
     dom_tree = docutils.core.publish_doctree(source=source).asdom()

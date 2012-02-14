@@ -20,8 +20,8 @@ The default config file of kuztumize.
 
 import os
 
-LDAP_HOST = "ldap.keleos.fr"
-LDAP_PATH = "ou=People,dc=keleos,dc=fr"
+LDAP_HOST = "your_ldap_host"
+LDAP_PATH = "your_ldap_path"
 DOMAIN = 'your_domain'
 ARCHIVE = os.path.join(os.path.expanduser('your_archive_dir'))
 MODEL = os.path.join(os.path.expanduser('your_model_dir'))

@@ -1,3 +1,5 @@
+CREATE EXTENSION multicorn;
+
 CREATE SERVER multicorn_git FOREIGN DATA WRAPPER multicorn
 options (                           
  wrapper 'multicorn.gitfdw.GitFdw'
@@ -11,4 +13,3 @@ CREATE FOREIGN TABLE GitCommit (
     "hash" character varying,
     "date" timestamp) SERVER multicorn_git
 OPTIONS (path 'path_to/archive.git');
-
