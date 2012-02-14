@@ -40,3 +40,4 @@ SQLALCHEMY_ECHO = True
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://koztumize:\
 koztumize@localhost/koztumize'
 GIT_REMOTE = 'git://github.com/Kozea/Koztumize.git'
+DATE_FORMAT = '%Y-%m-%d %H:%M:%S'

@@ -68,10 +68,18 @@ def test_model(client):
 @with_client
 def test_generate(client):
     """Test the PDF generation."""
-    data = '<html>'
+    data = '<html></html>'
     response = request(
-        client.post, '/generate', content_type='application/pdf',
-        data={'html_content': data, 'filename': 'test'})
+        client.post, url_for('generate'), data={'html_content': data,
+                                        'filename': 'test'})
+    assert response.data == 'ok'
+
+
+@with_client
+def test_get_pdf(client):
+    """Test the route where you can get the PDF."""
+    response = request(
+        client.post, url_for('get_pdf', filename='test'))
     assert response.data[:4] == '%PDF'
 
 
@@ -135,7 +143,8 @@ def test_model_static(client):
     """Test the page which returns CSS."""
     with client.application.test_request_context():
         response = request(
-        client.get, url_for('stylesheet', path='test'))
+        client.get, url_for('stylesheet', path='test'),
+            content_type='text/css')
         assert 'css' in response.data
 
 
