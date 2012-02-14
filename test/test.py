@@ -152,7 +152,7 @@ def test_model_static(client):
     with client.application.test_request_context():
         response = request(
         client.get, url_for('model_static', path=os.path.join(
-            'javascript', 'test.js')), content_type='text/javascript')
+            'javascript', 'test.js')), content_type='application/x-javascript')
         assert 'function' in response.data
 
 
