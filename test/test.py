@@ -70,19 +70,15 @@ def test_generate(client):
     """Test the PDF generation."""
     data = '<html></html>'
     with client.application.test_request_context():
+
         response = request(
             client.post, url_for('generate'), data={'html_content': data,
                                         'filename': 'test'})
-    assert response.data == 'ok'
-
-
-@with_client
-def test_get_pdf(client):
-    """Test the route where you can get the PDF."""
-    with client.application.test_request_context():
+        assert response.data == 'ok'
         response = request(
-            client.get, url_for('get_pdf', filename='test'))
-    assert response.data[:4] == '%PDF'
+            client.get, url_for('get_pdf', filename='test'),
+            content_type='application/pdf')
+        assert response.data[:4] == '%PDF'
 
 
 @with_client
@@ -141,12 +137,23 @@ def test_archive_get(client):
 
 
 @with_client
-def test_model_static(client):
+def test_stylesheet(client):
     """Test the page which returns CSS."""
     with client.application.test_request_context():
         response = request(
-        client.get, url_for('stylesheet', path='test'))
+        client.get, url_for('stylesheet', path='test'),
+            content_type='text/css')
         assert 'CSS' in response.data
+
+
+@with_client
+def test_model_static(client):
+    """Test the model_static page."""
+    with client.application.test_request_context():
+        response = request(
+        client.get, url_for('model_static', path=os.path.join(
+            'javascript', 'test.js')), content_type='text/javascript')
+        assert 'function' in response.data
 
 
 @with_client
