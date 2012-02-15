@@ -21,27 +21,28 @@ The file which launch the Koztumize application.
 
 """
 
-from brigit import Git, GitException
+
 import os
 import mimetypes
-from weasy.document import PDFDocument
-from copy import deepcopy
 import argparse
 import docutils.core
-from HTMLParser import HTMLParser
+import logging
+import ldap
+import model as db_model
+import csstyle
 from flask import (
     Flask, request, render_template, send_file, url_for,
     g, redirect, flash, session, current_app, Response, send_from_directory)
+from brigit import Git, GitException
+from weasy.document import PDFDocument
+from HTMLParser import HTMLParser
+from copy import deepcopy
 from docutils.writers.html4css1 import Writer
 from docutils.parsers.rst import directives, Directive, roles
 from tempfile import NamedTemporaryFile
 from log_colorizer import make_colored_stream_handler
 from logging import getLogger
 from functools import wraps
-import logging
-import ldap
-import model as db_model
-import csstyle
 from datetime import datetime
 
 
@@ -69,6 +70,18 @@ app = Koztumize(__name__)  # pylint: disable=C0103
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
+def auth(func):
+    """Check if the user is logged in, ask for authentication instead."""
+    @wraps(func)
+    def auth_func(*args, **kwargs):
+        """Decorator of the auth function."""
+        if session.get('user'):
+            return func(*args, **kwargs)
+        else:
+            return render_template('login.html')
+    return auth_func
+
+
 @app.route('/login', methods=('POST',))
 def login():
     """This function is called to check if a username /
@@ -92,16 +105,13 @@ def login():
     return redirect(url_for('index'))
 
 
-def auth(func):
-    """Check if the user is logged in, ask for authentication instead."""
-    @wraps(func)
-    def auth_func(*args, **kwargs):
-        """Decorator of the auth function."""
-        if session.get('user'):
-            return func(*args, **kwargs)
-        else:
-            return render_template('login.html')
-    return auth_func
+@app.route('/logout')
+@auth
+def logout():
+    """This is the route where the user can log out."""
+    session.pop('user')
+    session.pop('usermail')
+    return render_template('login.html')
 
 
 @app.before_request
@@ -129,7 +139,7 @@ def index():
     authors = []
     for author in authors_query:
         authors.append({'author_name': author.author_name})
-    return render_template('new.html', models=models, authors=authors)
+    return render_template('models.html', models=models, authors=authors)
 
 
 @app.route('/history/get/', methods=('GET',))
@@ -149,11 +159,11 @@ def history_get(author=None):
             'author_name': hist.author_name,
             'author_email': hist.author_email,
             'commit': hist.commit[:7],
-            'message': hist.message.rsplit('/')[-1],
+            'filename': hist.message.rsplit('/')[-1],
             'date':  hist.date.strftime(
                 "le %d/%m/%Y à %H:%M:%S").decode('utf-8'),
             'link': hist.message[7:]})
-    return render_template('new_ajax.html', history=history)
+    return render_template('history.html', history=history)
 
 
 @app.route('/generate', methods=('POST',))
@@ -164,12 +174,11 @@ def generate():
     The PDF is returned to the client.
 
     """
-    print (request.form['html_content'])
     document = PDFDocument.from_string(request.form['html_content'])
     temp_file = NamedTemporaryFile(suffix='.pdf', delete=False)
     document.write_to(temp_file)
     session['pdf_link'] = temp_file.name
-    return 'ok'
+    return 'Done'
 
 
 @app.route('/get_pdf/<string:filename>')
@@ -357,15 +366,6 @@ def model_static(path):
     """Return files from the model directory."""
     return send_from_directory(os.path.join(
         app.config['MODEL'], g.domain, 'model_styles'), path, cache_timeout=0)
-
-
-@app.route('/logout')
-@auth
-def logout():
-    """This is the route where the user can log out."""
-    session.pop('user')
-    session.pop('usermail')
-    return render_template('login.html')
 
 
 class ModelParser(HTMLParser):

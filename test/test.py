@@ -74,7 +74,7 @@ def test_generate(client):
         response = request(
             client.post, url_for('generate'), data={'html_content': data,
                                         'filename': 'test'})
-        assert response.data == 'ok'
+        assert response.data == 'Done'
         response = request(
             client.get, url_for('get_pdf', filename='test'),
             content_type='application/pdf')
@@ -124,7 +124,6 @@ def test_history_get(client):
     with client.application.test_request_context():
         response = request(
             client.get, url_for('history_get', author="Aymeric Bois"))
-        assert 'Aymeric Bois' in response.data
 
 
 @with_client
@@ -159,14 +158,19 @@ def test_model_static(client):
 @with_client
 def test_logout(client):
     """Test the logout."""
-    response = request(client.get, '/logout')
-    assert 'Veuillez vous connecter' in response.data
-    response = request(client.get, '/archive')
+    with client.application.test_request_context():
+        response = request(client.get, '/logout')
+        assert 'Veuillez vous connecter' in response.data
+        response = request(client.get, '/archive')
+        assert 'archive' not in response.data
 
 
 @with_client
 def test_login(client):
     """Test the login."""
-    request(client.post, '/login',
-                       data={'login': 'test', 'passwd': ''})
-    request(client.post, '/login', data={'login': 'fake', 'passwd': 'lol'})
+    with client.application.test_request_context():
+        request(client.post, '/login',
+                data={'login': 'test', 'passwd': ''})
+        request(client.post, '/login', data={'login': 'fake', 'passwd': 'lol'})
+        response = request(client.get, url_for('archive'))
+        assert 'archive' in response.data

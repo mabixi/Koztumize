@@ -48,6 +48,13 @@
           
         });
       }
+      
+      $(function(){
+        $('select[name=fontselect] option').each(function(){
+          $(this).css('font-family', $(this).html());
+        });
+        
+      });
     </script>
     <script src="{{url_for('static', filename='javascript/popup.js') }}"></script>
   {% endblock head %}
@@ -103,6 +110,7 @@
           <option value="fontin">Fontin</option>
           <option value="monospace">Monospace</option>
           <option value="serif">Serif</option>
+          <option value="sans-serif">Sans-serif</option>
         </select>
         <script>
           $('select[name=fontselect]').on('mouseover','select[name=fontselect] option', function(){
