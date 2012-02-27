@@ -24,6 +24,7 @@ The file which launch the Koztumize application.
 
 import os
 import mimetypes
+from weasyprint import HTML
 import argparse
 import docutils.core
 import logging
@@ -34,7 +35,6 @@ from flask import (
     Flask, request, render_template, send_file, url_for,
     g, redirect, flash, session, current_app, Response, send_from_directory)
 from brigit import Git, GitException
-from weasy.document import PDFDocument
 from HTMLParser import HTMLParser
 from copy import deepcopy
 from docutils.writers.html4css1 import Writer
@@ -174,9 +174,8 @@ def generate():
     The PDF is returned to the client.
 
     """
-    document = PDFDocument.from_string(request.form['html_content'])
-    temp_file = NamedTemporaryFile(suffix='.pdf', delete=False)
-    document.write_to(temp_file)
+    temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
+    HTML(string=request.form['html_content']).write_pdf(temp_file)
     session['pdf_link'] = temp_file.name
     return 'Done'
 
