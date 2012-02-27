@@ -174,7 +174,7 @@ def generate():
     The PDF is returned to the client.
 
     """
-    temp_file = NamedTemporaryFile(suffix='.pdf', delete=True)
+    temp_file = NamedTemporaryFile(suffix='.pdf', delete=False)
     HTML(string=request.form['html_content']).write_pdf(temp_file)
     session['pdf_link'] = temp_file.name
     return 'Done'
