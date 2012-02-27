@@ -24,7 +24,7 @@ The file which launch the Koztumize application.
 from brigit import Git, GitException
 import os
 import mimetypes
-from weasy.document import PDFDocument
+from weasyprint import HTML
 from copy import deepcopy
 import argparse
 import docutils.core
@@ -164,10 +164,8 @@ def generate():
     The PDF is returned to the client.
 
     """
-    print (request.form['html_content'])
-    document = PDFDocument.from_string(request.form['html_content'])
     temp_file = NamedTemporaryFile(suffix='.pdf', delete=False)
-    document.write_to(temp_file)
+    HTML(string=request.form['html_content']).write_pdf(temp_file)
     session['pdf_link'] = temp_file.name
     return 'ok'
 
