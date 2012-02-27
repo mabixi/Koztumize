@@ -368,6 +368,14 @@ def model_static(path):
         app.config['MODEL'], g.domain, 'model_styles'), path, cache_timeout=0)
 
 
+@app.route('/unlink_pdf')
+def unlink_pdf():
+    """Delete temporary PDF."""
+    os.remove(session.get('pdf_link'))
+    session.pop('pdf_link')
+    return 'ok'
+
+
 class ModelParser(HTMLParser):
     """A class which parse the HTML from the model."""
     def __init__(self):

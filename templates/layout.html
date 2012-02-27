@@ -4,7 +4,12 @@
     <meta charset="UTF-8" />
     <link href="{{url_for('static',filename='style.css')}}" media="screen" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script> 
-    
+    <script type="text/javascript">
+      window.Koztumize = {
+        history_url: "{{ url_for('history_get', author='author') }}",
+        unlink_pdf_url: "{{ url_for('unlink_pdf') }}"
+      };
+    </script>
     {% block head %}
     
     {% endblock head %}

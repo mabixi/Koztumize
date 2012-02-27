@@ -29,6 +29,13 @@ function disablePopup(){
 		$("#backgroundPopup").fadeOut("slow");
 		$(".loading").fadeOut("slow");
 		popupStatus = 0;
+
+		$.ajax({
+		  url: window.Koztumize.unlink_pdf_url,
+		  success: function(res){
+		   /* alert(res);*/
+		  }
+		});
 	}
 }
 
