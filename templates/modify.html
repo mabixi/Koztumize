@@ -17,7 +17,7 @@
           alert('Veuillez spécifier un nom pour le document'); 
           return false;
         } else {
-          $('.saveload').html('Enregistrement en cours...').css('color','#222').show();
+          $('.saveload').append('Enregistrement en cours...').css('color','#222').show();
           filename=saved_as;
 
           var html_content = $('iframe').contents().find('html').html();
@@ -81,23 +81,22 @@
    <script src="{{url_for('static', filename='javascript/popup.js') }}"></script>
 {% endblock head %}
   {% block content %}
-  <section class="version">
-    <input type="submit" value="Version" onclick="if($('#hist').css('display')=='none') $('#hist').show('fast'); else $('#hist').hide('fast');"/>
-    <nav id="hist">
-      <ul >
+   <nav id="hist">
+      <a href="javascript:" onclick="$('#hist').hide();" class="close">x</a>
+      <h3>Historique des versions</h3>
+      <ul>
       {% for commit in date_commit %}
         <li><a href="{{ url_for('modify', path=path, version=commit.commit) }}">{{ commit['date']}} {{ commit['author']}}</a></li>
       {% endfor %}
       </ul>
-    </nav>
-  </section>
-  <aside>
+   </nav>
+   <aside class="breadcrumb">
     <a href="/">index</a>
     {% set path_trunc=path[:-5] %}
     {% for parent in path_trunc.split('/') %}
       / <a href="{{ url_for('archive', path=parent)}}">{{parent}}</a>
     {% endfor %}
-  </aside>
+   </aside>
    <nav id="toolbar">
     <ul>
       <li>
@@ -154,6 +153,7 @@
         <input type="button" value="" class="justify" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyFull', false, '')" title="Justifier le texte"/>
       </li>
     </ul>
+    <hr>
     <ul>
       <li>
         <input type="button" value="" class="undo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('undo', false, '')" title="Annuler"/>
@@ -179,12 +179,12 @@
     </ul>
     <ul>
       <li>
-        <input type="button" value="V" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';" class="version" title="Historique des versions"/>
+        <input type="button" value="" onclick="$('#hist').toggle();" class="version" title="Historique des versions"/>
       </li>
     </ul>
    </nav>
    <div class="saveload">
-    Enregistrement en cours...
+    <span id="loader"><img src="{{ url_for('static', filename='img/icons/loader.gif') }}"/></span>
    </div>
    <div class="loading"> 
      <span onclick="$(this).parent().fadeOut(500);" class="close">x</span>
