@@ -2,11 +2,6 @@
 
 {% block head %}
   <title>Koztumize - Nouveau document </title>
-  <script type="text/javascript">
-    window.Koztumize = {
-      history_url: "{{ url_for('history_get', author='author') }}"
-    };
-  </script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/new.js')}}"></script>
   <script>
     $(function(){$('.nav ul li:eq(0)').addClass('current')});

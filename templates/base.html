@@ -48,6 +48,13 @@
           
         });
       }
+      
+      $(function(){
+        $('select[name=fontselect] option').each(function(){
+          $(this).css('font-family', $(this).html());
+        });
+        
+      });
     </script>
     <script src="{{url_for('static', filename='javascript/popup.js') }}"></script>
   {% endblock head %}
@@ -74,6 +81,24 @@
       <li>
         <input type="button" value="" class="lower" onclick="document.getElementById('iframe').contentWindow.document.execCommand('decreaseFontSize', false, '')" title="Réduire la taille du texte"/>
       </li>
+    </ul>
+    <ul>
+      <li>
+        <select name="fontselect" onchange="var font=$(this).val();document.getElementById('iframe').contentWindow.document.execCommand('fontname', false, font)">
+          <option value="fontin">Fontin</option>
+          <option value="monospace">Monospace</option>
+          <option value="serif">Serif</option>
+          <option value="sans-serif">Sans-serif</option>
+        </select>
+        <script>
+          $('select[name=fontselect]').on('mouseover','select[name=fontselect] option', function(){
+            var font=$(this).val();
+            document.getElementById('iframe').contentWindow.document.execCommand('fontname', false, font);
+          });
+        </script>
+      </li>
+    </ul>
+    <ul>
       <li>
         <input type="button" value="" class="paragraph" onclick="document.getElementById('iframe').contentWindow.document.execCommand('formatblock', false, '<p>')" title="Ajouter un paragraphe"/>
       </li>
@@ -92,26 +117,17 @@
       <li>
         <input type="button" value="" class="justify" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyFull', false, '')" title="Justifier le texte"/>
       </li>
+    </ul>
+    <hr>
+    <ul>
       <li>
         <input type="button" value="" class="undo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('undo', false, '')" title="Annuler"/>
       </li>
       <li>
         <input type="button" value="" class="redo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('redo', false, '')" title="Refaire"/>
       </li>
-      <li>
-        <select name="fontselect" onchange="var font=$(this).val();document.getElementById('iframe').contentWindow.document.execCommand('fontname', false, font)">
-          <option value="fontin">Fontin</option>
-          <option value="monospace">Monospace</option>
-          <option value="serif">Serif</option>
-        </select>
-        <script>
-          $('select[name=fontselect]').on('mouseover','select[name=fontselect] option', function(){
-            var font=$(this).val();
-            document.getElementById('iframe').contentWindow.document.execCommand('fontname', false, font);
-          });
-        </script>
-      </li>
     </ul>
+    <hr>
     <ul>
       <li> 
         <input type="button" value="" onclick="generate($('iframe').contents().find('html').html());" name="generate" class="generate" title="Générer le PDF"/>  
