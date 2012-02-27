@@ -2,13 +2,14 @@
 {% block head %}
   <title>Koztumize - {{ path.split('/')[-1] }} </title>
   <script>
-    $(function(){
+    /*$(function(){
       $('.saveload').show();
     });  
   
     $('body').ready(function(){
       $('.saveload').hide();
-    });
+    });*/
+    
     function saveDoc(filename, category){
         var saved_as=prompt("Enregistrer sous :" , "{{ filename[:-4] }}");
         if(saved_as==null) 
@@ -124,6 +125,8 @@
           <option value="fontin">Fontin</option>
           <option value="monospace">Monospace</option>
           <option value="serif">Serif</option>
+          <option value="sans-serif">Sans serif</option>
+          <option value="courier new">Courier New</option>
         </select>
         <script>
           $('select[name=fontselect]').on('mouseover','select[name=fontselect] option', function(){
@@ -161,8 +164,8 @@
       <li>
         <input type="button" value="" class="redo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('redo', false, '')" title="Refaire"/>
       </li>
-      
     </ul>
+    <hr>
     <ul>
       <li>   
           <input type="button" value="" onclick="generate($('iframe').contents().find('html').html());" name="generate" class="generate" title="Générer le PDF"/>
@@ -177,6 +180,7 @@
         <input type="button" value="" onclick="window.location.href='{{ url_for('edit',category=category, filename=filename) }}';" class="documentnew" title="Revenir au modèle vierge"/>
       </li>
     </ul>
+    <hr>
     <ul>
       <li>
         <input type="button" value="" onclick="$('#hist').toggle();" class="version" title="Historique des versions"/>
@@ -184,7 +188,7 @@
     </ul>
    </nav>
    <div class="saveload">
-    <span id="loader"><img src="{{ url_for('static', filename='img/icons/loader.gif') }}"/></span>
+    <img src="{{ url_for('static', filename='img/icons/loader.gif') }}"/>
    </div>
    <div class="loading"> 
      <span onclick="$(this).parent().fadeOut(500);" class="close">x</span>
