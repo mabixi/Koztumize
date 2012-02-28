@@ -832,18 +832,17 @@ section aside.breadcrumb span{
 
 .saveload{
   display:none;
-  height:30px;
+  height:25px;
   width:20%;
   position:fixed;
-  z-index:1000;
-  top:10px;
-  left:70%;
+  z-index:100;
+  top:55px;
+  right:0;
   font-size:0.9em;
- /* background:rgba(222,222,220,0.8);*/
+  background:rgba(222,222,220,0.8);
   padding-top:8px;
   text-align:center;
-  border-radius:0px 0px 3px 3px;
- /* border:1px solid #dadada;*/
+  border-radius:0px 0px 0px 3px;
   text-shadow:0 0 1px #dadada inset;
   color:#222;
 }

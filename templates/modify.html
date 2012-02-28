@@ -144,12 +144,6 @@
        <li>
         <input type="button" value="" class="strikethrough" onclick="document.getElementById('iframe').contentWindow.document.execCommand('strikethrough', false, '')" title="Mettre le texte en barré"/>
       </li>
-      <li>
-        <input type="button" value="" class="bigger" onclick="document.getElementById('iframe').contentWindow.document.execCommand('increaseFontSize', false, '')" title="Agrandir la taille du texte"/>
-      </li>
-      <li>
-        <input type="button" value="" class="lower" onclick="document.getElementById('iframe').contentWindow.document.execCommand('decreaseFontSize', false, '')" title="Réduire la taille du texte"/>
-      </li>
     </ul>
     <ul>
       <li>
@@ -167,7 +161,7 @@
         </script>
       </li>
       <li>
-        <select name="fontsize" onchange="var fontsize=$(this).val();document.getElementById('iframe').contentWindow.document.execCommand('fontsize', false, fontsize)">
+        <select name="fontsize">
           <option value="1">1 (8pt)</option>
           <option value="2">2 (10pt)</option>
           <option value="3">3 (12pt)</option>
@@ -213,6 +207,20 @@
         <input type="button" value="" class="olist" onclick="document.getElementById('iframe').contentWindow.document.execCommand('insertOrderedList', false, '')" title="Ajouter une liste ordonnée"/>
       </li>
     </ul>
+    <ul>
+      <li>
+        <input type="button" value="" class="left" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyLeft', false, '')" title="Aligner le texte à gauche"/>
+      </li>
+      <li>
+        <input type="button" value="" class="right" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyRight', false, '')" title="Aligner le texte à droite"/>
+      </li>
+      <li>
+        <input type="button" value="" class="center" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyCenter', false, '')" title="Centrer le texte"/>
+      </li>
+      <li>
+        <input type="button" value="" class="justify" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyFull', false, '')" title="Justifier le texte"/>
+      </li>
+    </ul>
     <hr>
     <ul>
       <li>
@@ -226,6 +234,15 @@
         <img src="" id="uploadedimage" onclick=""/>
         <input type="button" value="Ajouter l'image" id="addimage"/>
       </div>
+    </ul>
+    <hr>
+    <ul>
+      <li>
+        <input type="button" value="" class="undo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('undo', false, '')" title="Annuler"/>
+      </li>
+      <li>
+        <input type="button" value="" class="redo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('redo', false, '')" title="Refaire"/>
+      </li>
     </ul>
     <hr>
     <ul>
