@@ -39,7 +39,7 @@
         
         $.ajax({
           url: "{{ url_for('generate') }}",
-          data: "html_content="+html_content.replace(/&nbsp;/g,' '),
+          data: {html_content: html_content.replace(/&nbsp;/g,' ')},
           type: "POST",
           success: function(response){
             $('#loader').hide();     
@@ -57,6 +57,21 @@
       });
     </script>
     <script src="{{url_for('static', filename='javascript/popup.js') }}"></script>
+    <script type="text/javascript" src="{{  url_for('static', filename='javascript/jquery.html5uploader.min.js')  }}"></script>
+    <script type="text/javascript">
+    $(function() {
+	    $("#imageuploader").html5Uploader({
+		    name: "image",
+		    postUrl: "{{ url_for('upload_image') }}",
+		    onSuccess: function(e,file,res){
+		      $('#uploadedimage').attr('src',"{{ url_for('uploaded_files', _external=True) }}"+"/"+res).show();
+		      $('#addimage').on('click',function(){
+		        document.getElementById('iframe').contentWindow.document.execCommand('insertimage', false, "{{ url_for('uploaded_files', _external=True) }}"+"/"+res);
+		      }).show();
+		    }
+	    });
+    });
+    </script>
   {% endblock head %}
   {% block content %}
   <h2>
@@ -97,14 +112,54 @@
           });
         </script>
       </li>
+      <li>
+        <select name="fontsize" onchange="var fontsize=$(this).val();document.getElementById('iframe').contentWindow.document.execCommand('fontsize', false, fontsize)">
+          <option value="1">1 (8pt)</option>
+          <option value="2">2 (10pt)</option>
+          <option value="3">3 (12pt)</option>
+          <option value="4">4 (14pt)</option>
+          <option value="5">5 (18pt)</option>
+          <option value="6">6 (24pt)</option>
+          <option value="7">7 (36pt)</option>
+        </select>
+        <script>
+          $('select[name=fontsize]').on('mouseover','select[name=fontsize] option', function(){
+            var fontsize=$(this).val();
+            document.getElementById('iframe').contentWindow.document.execCommand('fontsize', false, fontsize);
+          });
+        </script>
+      </li>
+      <li>
+        <select name="formatselect">
+          <option value="h1">Titre 1</option>
+          <option value="h2">Titre 2</option>
+          <option value="h3">Titre 3</option>
+          <option value="h4">Titre 4</option>
+          <option value="h5">Titre 5</option>
+          <option value="h6">Titre 6</option>
+          <option value="p">Paragraphe</option>
+          <option value="pre">Texte préformaté</option>
+        </select>
+        <script>
+          $('select[name=formatselect]').on('mouseover','select[name=formatselect] option', function(){
+            var format=$(this).val();
+            document.getElementById('iframe').contentWindow.document.execCommand('formatblock', false, '<'+format+'>');
+          });
+        </script>
+      </li>
     </ul>
     <ul>
-      <li>
-        <input type="button" value="" class="paragraph" onclick="document.getElementById('iframe').contentWindow.document.execCommand('formatblock', false, '<p>')" title="Ajouter un paragraphe"/>
-      </li>
+      <!--<li>
+        <input type="button" value="X" class="" onclick="document.getElementById('iframe').contentWindow.document.execCommand('removeformat', false, '')" title="Retirer le format"/>
+      </li>-->
       <li>
         <input type="button" value="" class="list" onclick="document.getElementById('iframe').contentWindow.document.execCommand('insertUnorderedList', false, '')" title="Ajouter une liste"/>
       </li>
+      <li>
+        <input type="button" value="" class="list" onclick="document.getElementById('iframe').contentWindow.document.execCommand('insertOrderedList', false, '')" title="Ajouter une liste ordonnée"/>
+      </li>
+    </ul>
+    <ul>
       <li>
         <input type="button" value="" class="left" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyLeft', false, '')" title="Aligner le texte à gauche"/>
       </li>
@@ -117,6 +172,19 @@
       <li>
         <input type="button" value="" class="justify" onclick="document.getElementById('iframe').contentWindow.document.execCommand('justifyFull', false, '')" title="Justifier le texte"/>
       </li>
+    </ul>
+    <hr>
+    <ul>
+      <li>
+        <input type="button" value="" onclick="$('#imageform').toggle();" name="Upload" class="image" title="Ajouter une image"/>
+      </li>
+      <div id="imageform" class="frame">
+        <span onclick="$(this).parent().fadeOut(500);" class="close">x</span>
+        <h3>Ajouter une image</h3>
+        <input type="file" id="imageuploader"/>
+        <img src="" id="uploadedimage" onclick=""/>
+        <input type="button" value="Ajouter l'image" id="addimage"/>
+      </div>
     </ul>
     <hr>
     <ul>
@@ -136,6 +204,7 @@
         <input type="button" value="" onclick="saveDoc('{{ filename[:-4] }}','{{ category }}');" name="save" class="save" title="Enregistrer le document"/>
       </li>
     </ul>
+   
    </nav>
    <div class="saveload">
      <img src="{{ url_for('static', filename='img/icons/loader.gif') }}"/>

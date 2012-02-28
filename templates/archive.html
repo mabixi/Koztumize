@@ -21,11 +21,14 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2>Vos archives</h2>
-<aside>
+<aside class="breadcrumb">
   <a href="/">index</a>
-  {% for parent in path.split('/')%}
-    / <a href="{{ url_for('archive', path=parent)}}">{{parent}}</a>
+  {% set parent = '' %}
+  {% for current in path.split('/')[:-1] %}
+      / <a href="{{ url_for('archive', path=parent+current)}}">{{current}}</a>
+    {% set parent = current %}
   {% endfor %}
+  / <span>{{ path.split('/')[-1] }}</span>
 </aside>
 
 <input type="text" name="search" placeholder="Rechercher une archive" title="Rechercher une archive" oninput="if($(this).val().length!=0){submitSearch($(this).val()); }else {$('#archive').show();$('#archive-result').hide();}"/>
@@ -34,16 +37,20 @@
   {% if not archived_dirs and not archived_files%}
     <span>Vous n'avez aucune archive !</span>
   {% else %}
-    <ul>
-    {% for dir in archived_dirs %}
-      <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>    
-    {% endfor %}
-    </ul>
-    <ul>
-      {% for file in archived_files %}
-      <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1][:-5] }}</a></li> 
+    {% if archived_dirs %}
+      <ul>
+      {% for dir in archived_dirs %}
+        <li><a href="{{ url_for('archive', path=dir) }}" class="dir">{{ dir.split('/')[-1] }}</a></li>    
       {% endfor %}
-    </ul>
+      </ul>
+    {% endif %}
+    {% if archived_files %}
+      <ul>
+        {% for file in archived_files %}
+        <li><a href="{{ url_for('modify', path=file, version='master') }}" class="file">{{ file.split('/')[-1][:-5] }}</a></li> 
+        {% endfor %}
+      </ul>
+    {% endif %}
   {% endif %}
 </aside>
 <aside id="archive-result">

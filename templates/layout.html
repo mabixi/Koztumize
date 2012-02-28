@@ -7,7 +7,8 @@
     <script type="text/javascript">
       window.Koztumize = {
         history_url: "{{ url_for('history_get', author='author') }}",
-        unlink_pdf_url: "{{ url_for('unlink_pdf') }}"
+        unlink_pdf_url: "{{ url_for('unlink_pdf') }}",
+        uploaded_files_url: "{{ url_for('uploaded_files') }}"
       };
     </script>
     {% block head %}

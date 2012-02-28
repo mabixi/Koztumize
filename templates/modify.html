@@ -80,9 +80,24 @@
       }
    </script>
    <script src="{{url_for('static', filename='javascript/popup.js') }}"></script>
+   <script type="text/javascript" src="{{  url_for('static', filename='javascript/jquery.html5uploader.min.js')  }}"></script>
+   <script type="text/javascript">
+    $(function() {
+      $("#imageuploader").html5Uploader({
+	      name: "image",
+	      postUrl: "{{ url_for('upload_image') }}",
+	      onSuccess: function(e,file,res){
+	        $('#uploadedimage').attr('src',"{{ url_for('uploaded_files', _external=True) }}"+"/"+res).show();
+	        $('#addimage').on('click',function(){
+	          document.getElementById('iframe').contentWindow.document.execCommand('insertimage', false, "{{ url_for('uploaded_files', _external=True) }}"+"/"+res);
+	        }).show();
+	      }
+      });
+    });
+   </script>
 {% endblock head %}
   {% block content %}
-   <nav id="hist">
+   <nav id="hist" class="frame">
       <a href="javascript:" onclick="$('#hist').hide();" class="close">x</a>
       <h3>Historique des versions</h3>
       <ul>
@@ -164,6 +179,19 @@
       <li>
         <input type="button" value="" class="redo" onclick="document.getElementById('iframe').contentWindow.document.execCommand('redo', false, '')" title="Refaire"/>
       </li>
+    </ul>
+    <hr>
+    <ul>
+      <li>
+        <input type="button" value="" onclick="$('#imageform').toggle();" name="Upload" class="image" title="Ajouter une image"/>
+      </li>
+      <div id="imageform" class="frame">
+        <span onclick="$(this).parent().fadeOut(500);" class="close">x</span>
+        <h3>Ajouter une image</h3>
+        <input type="file" id="imageuploader"/>
+        <img src="" id="uploadedimage" onclick=""/>
+        <input type="button" value="Ajouter l'image" id="addimage"/>
+      </div>
     </ul>
     <hr>
     <ul>

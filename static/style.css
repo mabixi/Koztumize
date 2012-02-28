@@ -397,10 +397,6 @@ input[name=search]{
   width: 230px;
 }
 
-input[name=search]:empty:before{
-  content: "Rechercher une archive";
-  color:#dadada;
-}
 
 .archive-info{
   opacity:0.5;
@@ -408,6 +404,9 @@ input[name=search]:empty:before{
   font-size:0.9em;
 }
 
+#archive ul li a{
+  font-size:1em;
+}
 /*
   -------------
   - Edit Page -
@@ -442,7 +441,7 @@ section.version>input:focus,section.version>input:hover{
   
 }*/
 
-#hist{
+.frame{
   background: rgba(25,25,25,0.9);
   display: none;
   font-size: 0.9em;
@@ -460,7 +459,7 @@ section.version>input:focus,section.version>input:hover{
   text-align:left;
 }
 
-#hist h3{
+.frame h3{
   background: -moz-linear-gradient(#333, #444);
   background: -webkit-linear-gradient(#333, #444);
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
@@ -473,7 +472,7 @@ section.version>input:focus,section.version>input:hover{
   margin-top:0px;
 }
 
-#hist .close{
+.frame .close{
   cursor:pointer;
   float:right;
   color:#ababab;
@@ -536,6 +535,10 @@ section aside.breadcrumb a {
 
 section aside.breadcrumb a:hover{
   color:#505050;
+}
+
+section aside.breadcrumb span{
+  font-weight:bold;
 }
 
 /* ----------
@@ -668,7 +671,7 @@ section aside.breadcrumb a:hover{
 }
 
 #toolbar input.generate{
-  background:url(img/icons/pdf.png) no-repeat;
+  background:url(img/icons/pdf.svg) no-repeat;
   background-size:100% 100%;
 }
 
@@ -687,8 +690,13 @@ section aside.breadcrumb a:hover{
   background-size:100% 100%;
 }
 
+#toolbar input.image{
+  background:url(img/icons/image.svg) no-repeat;
+  background-size:100% 100%;
+}
+
 #toolbar input.version{
-  background:url(img/icons/history.png) no-repeat;
+  background:url(img/icons/history.svg) no-repeat;
   background-size:100% 100%;
 }
 
@@ -721,6 +729,28 @@ section aside.breadcrumb a:hover{
   width:1px;
   height:50px;
   margin:12px 25px;
+}
+
+#imageform{
+  display:none;
+  position:absolute;
+  margin-top:-40px;
+  margin-left:50px;
+  background:
+}
+
+#uploadedimage{
+  display:none;
+  max-width:80%;
+  max-height:80%;
+  margin:auto;
+  display:block;
+}
+  
+#addimage{
+  display:none;
+  margin:10px 25%;
+  width:50%;
 }
 
 /* Loading */
