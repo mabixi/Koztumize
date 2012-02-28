@@ -369,17 +369,9 @@ def model_static(path):
         app.config['MODEL'], g.domain, 'model_styles'), path, cache_timeout=0)
 
 
-@app.route('/uploaded_files')
-@app.route('/uploaded_files/<path:path>')
-def uploaded_files(path=''):
-    """Return files from the model directory."""
-    return send_from_directory(os.path.join(
-        app.config['UPLOAD_FOLDER']), path, cache_timeout=0)
-
-
 @app.route('/unlink_pdf')
 def unlink_pdf():
-    """Delete the temporary PDF file."""
+    """Delete temporary PDF."""
     os.remove(session.get('pdf_link'))
     session.pop('pdf_link')
     return 'ok'
@@ -387,13 +379,29 @@ def unlink_pdf():
 
 @app.route('/upload_image', methods=['GET', 'POST'])
 def upload_image():
-    print 'ich bin da'
+    allowed_extension = set(['png', 'jpg', 'jpeg', 'gif'])
+
+    def allowed_file(filename):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1] in allowed_extension
+
     if request.method == 'POST':
         file = request.files['image']
-        if file:
+        if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return filename
+        else:
+            return 'error'
+
+
+@app.route('/uploaded_files')
+@app.route('/uploaded_files/<path:path>')
+def uploaded_files(path=''):
+    """Return files from the model directory."""
+    return send_from_directory(os.path.join(
+        app.config['UPLOAD_FOLDER']), path, cache_timeout=0)
+
 
 
 class ModelParser(HTMLParser):

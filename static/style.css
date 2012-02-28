@@ -622,8 +622,13 @@ section aside.breadcrumb span{
   background-size:100% 100%;
 }
 
-#toolbar input.list{
+#toolbar input.ulist{
   background:url(img/icons/list.png) no-repeat;
+  background-size:100% 100%;
+}
+
+#toolbar input.olist{
+  background:url(img/icons/ordered_list.png) no-repeat;
   background-size:100% 100%;
 }
 
@@ -739,6 +744,17 @@ section aside.breadcrumb span{
   background:
 }
 
+
+#imageform p{
+  color:red;
+}
+
+#imageform .progress{
+  width:80%;
+  margin:10px 10%;
+  display:none;
+}
+
 #uploadedimage{
   display:none;
   max-width:80%;
@@ -752,6 +768,7 @@ section aside.breadcrumb span{
   margin:10px 25%;
   width:50%;
 }
+
 
 /* Loading */
 .loading{
