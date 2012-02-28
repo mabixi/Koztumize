@@ -369,7 +369,7 @@ def model_static(path):
 
 @app.route('/unlink_pdf')
 def unlink_pdf():
-    """Delete temporary PDF."""
+    """Delete the temporary PDF file."""
     os.remove(session.get('pdf_link'))
     session.pop('pdf_link')
     return 'ok'
