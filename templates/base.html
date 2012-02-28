@@ -10,7 +10,7 @@
           alert('Veuillez spécifier un nom pour le document'); 
           return false;
         } else {
-          $('.saveload').show();
+          $('.saveload').append('Enregistrement en cours...').css('color','#222').show();
           filename=saved_as;
 
           var html_content = $('iframe').contents().find('html').html();
@@ -44,6 +44,9 @@
           success: function(response){
             $('#loader').hide();     
             $('#PDF-link').css('display','block');
+          },
+          error: function(response){
+            $('body').append(response);
           }
           
         });
