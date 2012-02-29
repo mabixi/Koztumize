@@ -5,7 +5,7 @@
         $.ajax({
            type: 'GET',
            url: "{{ url_for('archive_get', _external=True)}}",
-           data: 'search='+filename,
+           data: 'search='+filename.toLowerCase(),
            success: function (res) {
                   $("#archive").hide();
                   $("#archive-result").html(res);
@@ -26,7 +26,7 @@
   {% set parent = '' %}
   {% for current in path.split('/')[:-1] %}
       / <a href="{{ url_for('archive', path=parent+current)}}">{{current}}</a>
-    {% set parent = current %}
+    {% set parent = parent + current + "/" %}
   {% endfor %}
   / <span>{{ path.split('/')[-1] }}</span>
 </aside>
