@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
   {% block head %}
     <title>Koztumize - {{ filename }} </title>
+   <script>
+      $(function(){
+        $('html').css({'margin-top':$('#toolbar').height()+'px'});
+        $('.user').css({'top':$('#toolbar').height()+'px'});
+      });
+    </script>
     <script>
       function saveDoc(filename, category){
         var saved_as=prompt("Enregistrer sous :" , "{{ filename[:-4] }}");

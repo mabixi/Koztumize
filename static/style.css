@@ -24,7 +24,6 @@ body{
   margin: 0;
   min-height: 100%;
   width: 100%;
-  margin-top:60px;
 }
 
 
@@ -121,7 +120,7 @@ nav .current a{
    ---------
 */
 
-body> aside {
+body> aside.user {
   margin:0;
   padding:0;
   position:absolute;
@@ -130,19 +129,19 @@ body> aside {
   z-index: 10;
 }
 
-body > aside ul {
+body > aside.user ul {
   padding: 0; 
   margin: 0;
 }
 
-body > aside ul li {
+body > aside.user ul li {
   color: #c3c3c3;
   display:inline-block;
   font-family: 'patinio';
   font-size: 0.8em;
 }
 
-body > aside ul li a {  
+body > aside.user ul li a {  
   background: -moz-linear-gradient(#4f4f4f, #1c1c1c);
   background: -webkit-linear-gradient(#4f4f4f, #1c1c1c);
   display: block; 
@@ -150,7 +149,7 @@ body > aside ul li a {
   padding: 0.8em 10px; 
 }
 
-body > aside ul li a:hover, body > aside ul li a:focus {
+body > aside.user ul li a:hover, body > aside.user ul li a:focus {
   color: #cb00ac;
   text-decoration: none;  
 }
@@ -555,7 +554,7 @@ section aside.breadcrumb span{
   border:1px solid #999;
   width:100%;
   height:60px;
-  padding:5px 0;
+  padding:7.5px 0;
   display:block;
   -moz-user-select: none;
   background: -moz-linear-gradient(center bottom , #C6C6C6 0%, #E2E1E2 100%) repeat scroll 0 0 #DDDDDD;
@@ -837,12 +836,12 @@ section aside.breadcrumb span{
   position:fixed;
   z-index:100;
   top:55px;
-  right:0;
+  left:40%;
   font-size:0.9em;
-  background:rgba(222,222,220,0.8);
+  background:rgba(222,222,220,0.9);
   padding-top:8px;
   text-align:center;
-  border-radius:0px 0px 0px 3px;
+  border-radius:0px 0px 3px 3px;
   text-shadow:0 0 1px #dadada inset;
   color:#222;
 }
