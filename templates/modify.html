@@ -129,7 +129,7 @@
       / <a href="{{ url_for('archive', path=parent+current)}}">{{current}}</a>
     {% set parent = parent + current + "/" %}
     {% endfor %}
-    / <span>{{ path.split('/')[-1] }}</span>
+    / <span>{{ path_trunc.split('/')[-1] }}</span>
    </aside>
    <nav id="toolbar">
     <ul>
