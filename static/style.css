@@ -733,7 +733,7 @@ section aside.breadcrumb span{
   float:left;
   width:1px;
   height:50px;
-  margin:12px 25px;
+  margin:12px 8px;
 }
 
 #imageform{
@@ -839,7 +839,7 @@ section aside.breadcrumb span{
   top:55px;
   right:0;
   font-size:0.9em;
-  background:rgba(222,222,220,0.8);
+  background:rgba(222,222,220,0.9);
   padding-top:8px;
   text-align:center;
   border-radius:0px 0px 0px 3px;
