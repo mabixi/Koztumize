@@ -218,7 +218,7 @@ def archive_get():
     """This is the route where you can get the archives by name."""
     sought_file = request.args.get('search')
     history_query = db_model.GitCommit.query.filter(
-        db_model.GitCommit.message.like(
+        db_model.GitCommit.message.ilike(
             'Modify ' + g.domain + '/%' + sought_file + '%'))
     files = []
     for hist in history_query.all():

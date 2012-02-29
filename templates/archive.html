@@ -5,7 +5,7 @@
         $.ajax({
            type: 'GET',
            url: "{{ url_for('archive_get', _external=True)}}",
-           data: 'search='+filename,
+           data: 'search='+filename.toLowerCase(),
            success: function (res) {
                   $("#archive").hide();
                   $("#archive-result").html(res);
