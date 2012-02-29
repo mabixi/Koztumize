@@ -163,18 +163,22 @@
       </li>
       <li>
         <select name="fontsize">
-          <option value="1">1 (8pt)</option>
-          <option value="2">2 (10pt)</option>
-          <option value="3">3 (12pt)</option>
-          <option value="4">4 (14pt)</option>
-          <option value="5">5 (18pt)</option>
-          <option value="6">6 (24pt)</option>
-          <option value="7">7 (36pt)</option>
+          <option value="8pt">1 (8pt)</option>
+          <option value="10pt">2 (10pt)</option>
+          <option value="12pt">3 (12pt)</option>
+          <option value="14pt">4 (14pt)</option>
+          <option value="18pt">5 (18pt)</option>
+          <option value="24pt">6 (24pt)</option>
+          <option value="36pt ">7 (36pt)</option>
         </select>
         <script>
           $('select[name=fontsize]').on('click','select[name=fontsize] option', function(){
-            var fontsize=$(this).val();
-            document.getElementById('iframe').contentWindow.document.execCommand('fontsize', false, fontsize);
+            var size=$(this).val();
+            /*document.getElementById('iframe').contentWindow.document.execCommand('fontsize', false, size);*/
+            document.getElementById('iframe').contentWindow.getSelection().anchorNode.parentNode.style.fontSize=size;
+           /* var newNode = document.getElementById('iframe').contentWindow.document.createElement("span");
+            newNode.setAttribute('style', 'font-size:'+size);
+            document.getElementById('iframe').contentWindow.getSelection().getRangeAt(0).surroundContents(newNode);*/
           });
         </script>
       </li>
